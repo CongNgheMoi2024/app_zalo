@@ -10,6 +10,11 @@ class BoardingScreen extends StatefulWidget {
 class _BoardingScreenState extends State<BoardingScreen> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+        body: SafeArea(
+      child: const Center(
+        child: Text('Boarding Screen'),
+      ),
+    ));
   }
 }
