@@ -16,7 +16,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     Timer(
-      const Duration(milliseconds: 50),
+      const Duration(milliseconds: 2500),
       () {
         Navigator.pushReplacementNamed(context, RouterName.dashboardScreen);
       },
@@ -26,13 +26,14 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: whiteColor,
         body: SafeArea(
-            child: Container(
-      color: Colors.red,
-      height: 500.sp,
-      child: Center(
-        child: Text('Splash Screen'),
-      ),
-    )));
+            child: Center(
+          child: ImageAssets.pngAsset(
+            Png.logoZalo,
+            width: 100,
+            height: 100,
+          ),
+        )));
   }
 }
