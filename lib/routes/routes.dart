@@ -42,17 +42,10 @@ RouteFactory routes() {
       //   );
       //   break;
 
-<<<<<<< Updated upstream
-=======
       case RouterName.inputNameScreen:
         screen = InputNameScreen();
         break;
 
-      case RouterName.onBoardingScreen:
-        screen = BoardingScreen();
-        break;
-
->>>>>>> Stashed changes
       case RouterName.onBoardingScreen:
         screen = BoardingScreen();
         break;
