@@ -30,10 +30,14 @@ class _Onboarding2State extends State<Onboarding2> {
             ),
           ),
         ),
-        Expanded(
-            child: Text(
-          "Meet the needs of the holidays",
-        ))
+        Container(
+          margin: EdgeInsets.symmetric(horizontal: 30.sp),
+          child: Text(
+            "Kết Nối Mọi Người - Sợi Dây Liên Lạc Vô Tận",
+            textAlign: TextAlign.center,
+            style: text18.regular.bgColor,
+          ),
+        )
       ]),
     );
   }

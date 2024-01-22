@@ -30,10 +30,14 @@ class _Onboarding1State extends State<Onboarding1> {
             ),
           ),
         ),
-        const Expanded(
-            child: Text(
-          "Best travel destinations in the world",
-        ))
+        Container(
+          margin: EdgeInsets.symmetric(horizontal: 30.sp),
+          child: Text(
+            "Nói chuyện là rẻ tiền, vì vậy hãy trò chuyện bằng trái tim của bạn.",
+            textAlign: TextAlign.center,
+            style: text18.regular.bgColor,
+          ),
+        )
       ]),
     );
   }

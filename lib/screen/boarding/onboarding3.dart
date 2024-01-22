@@ -29,10 +29,14 @@ class _Onboarding3State extends State<Onboarding3> {
             ),
           ),
         ),
-        Expanded(
-            child: Text(
-          "Go on holiday with a smile",
-        ))
+        Container(
+          margin: EdgeInsets.symmetric(horizontal: 30.sp),
+          child: Text(
+            "Ứng dụng cộng đồng tốt nhất hiện tại",
+            textAlign: TextAlign.center,
+            style: text18.regular.bgColor,
+          ),
+        )
       ]),
     );
   }
