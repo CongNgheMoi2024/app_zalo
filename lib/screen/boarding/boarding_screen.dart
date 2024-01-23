@@ -100,8 +100,7 @@ class _BoardingScreenState extends State<BoardingScreen> {
                   child: Center(
                     child: GestureDetector(
                       onTap: () {
-                        Navigator.pushNamed(
-                            context, RouterName.inputNameScreen);
+                        Navigator.pushNamed(context, RouterName.registerScreen);
                       },
                       child: Container(
                         margin: EdgeInsets.only(
