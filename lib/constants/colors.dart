@@ -13,4 +13,4 @@ const greyIcTop = Color.fromARGB(255, 83, 83, 83);
 
 const blackColor = Color(0xff000000);
 
-const whiteColor = Color(0xffffffff);
+const whiteColor = Color(0xfffef6e7);
