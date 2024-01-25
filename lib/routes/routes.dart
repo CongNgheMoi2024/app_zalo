@@ -1,4 +1,6 @@
+import 'package:app_zalo/screen/boarding/boarding_screen.dart';
 import 'package:app_zalo/screen/dashboard/ui/dashboard.dart';
+import 'package:app_zalo/screen/register/ui/register_screen.dart';
 import 'package:app_zalo/screen/splash/splash_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -10,8 +12,9 @@ RouteFactory routes() {
 
     switch (name) {
       case RouterName.initScreen:
-        screen = SplashScreen();
+        // screen = SplashScreen();
         // screen = DashboardScreen();
+        screen = BoardingScreen();
         break;
 
       case RouterName.dashboardScreen:
@@ -39,6 +42,14 @@ RouteFactory routes() {
       //   );
       //   break;
 
+      case RouterName.onBoardingScreen:
+        screen = BoardingScreen();
+        break;
+
+      case RouterName.registerScreen:
+        screen = RegisterScreen();
+        break;
+
       default:
         screen = const SplashScreen();
         break;
@@ -54,5 +65,7 @@ RouteFactory routes() {
 abstract class RouterName {
   static const String initScreen = '/';
   static const String dashboardScreen = '/dashboardScreen';
-  static const String loginScreen = '/login';
+  static const String onBoardingScreen = '/onBoardingScreen';
+  static const String registerScreen = '/registerScreen';
+  static const String loginScreen = '/loginScreen';
 }

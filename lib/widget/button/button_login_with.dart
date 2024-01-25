@@ -37,11 +37,6 @@ class _ButtonLoginWithState extends State<ButtonLoginWith> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    // ImageAssets.pngAsset(
-                    //   Png.icGoogleB,
-                    //   width: 24.sp,
-                    //   height: 24.sp,
-                    // ),
                     SizedBox(
                       width: 10.sp,
                     ),
