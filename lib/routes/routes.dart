@@ -1,7 +1,7 @@
-import 'package:app_zalo/screen/boarding/boarding_screen.dart';
-import 'package:app_zalo/screen/dashboard/ui/dashboard.dart';
-import 'package:app_zalo/screen/register/ui/register_screen.dart';
-import 'package:app_zalo/screen/splash/splash_screen.dart';
+import 'package:app_zalo/screens/boarding/boarding_screen.dart';
+import 'package:app_zalo/screens/dashboard/ui/dashboard.dart';
+import 'package:app_zalo/screens/register/ui/register_screen.dart';
+import 'package:app_zalo/screens/splash/splash_screen.dart';
 import 'package:flutter/material.dart';
 
 RouteFactory routes() {
