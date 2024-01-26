@@ -1,8 +1,15 @@
+<<<<<<< HEAD
 import 'package:app_zalo/screens/boarding/boarding_screen.dart';
 import 'package:app_zalo/screens/dashboard/ui/dashboard.dart';
 import 'package:app_zalo/screens/login/ui/login_screen.dart';
 import 'package:app_zalo/screens/register/ui/register_screen.dart';
 import 'package:app_zalo/screens/splash/splash_screen.dart';
+=======
+import 'package:app_zalo/screen/boarding/boarding_screen.dart';
+import 'package:app_zalo/screen/dashboard/ui/dashboard.dart';
+import 'package:app_zalo/screen/register/ui/input_name_screen.dart';
+import 'package:app_zalo/screen/splash/splash_screen.dart';
+>>>>>>> parent of 25d73fc (register)
 import 'package:flutter/material.dart';
 
 RouteFactory routes() {
@@ -44,12 +51,12 @@ RouteFactory routes() {
       //   );
       //   break;
 
-      case RouterName.onBoardingScreen:
-        screen = BoardingScreen();
+      case RouterName.inputNameScreen:
+        screen = InputNameScreen();
         break;
 
-      case RouterName.registerScreen:
-        screen = RegisterScreen();
+      case RouterName.onBoardingScreen:
+        screen = BoardingScreen();
         break;
 
       default:
@@ -67,7 +74,7 @@ RouteFactory routes() {
 abstract class RouterName {
   static const String initScreen = '/';
   static const String dashboardScreen = '/dashboardScreen';
+  static const String inputNameScreen = '/inputNameScreen';
+  static const String loginScreen = '/login';
   static const String onBoardingScreen = '/onBoardingScreen';
-  static const String registerScreen = '/registerScreen';
-  static const String loginScreen = '/loginScreen';
 }
