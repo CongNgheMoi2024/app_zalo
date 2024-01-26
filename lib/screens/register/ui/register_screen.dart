@@ -1,4 +1,5 @@
 import 'package:app_zalo/constants/index.dart';
+import 'package:app_zalo/routes/routes.dart';
 import 'package:app_zalo/utils/regex.dart';
 import 'package:app_zalo/widget/button/button_bottom_navigated.dart';
 import 'package:app_zalo/widget/dismiss_keyboard_widget.dart';
@@ -210,7 +211,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 onPressed: () {},
               ),
               GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  Navigator.pushNamed(context, RouterName.loginScreen);
+                },
                 child: Container(
                   margin: EdgeInsets.only(top: 8.sp),
                   child: RichText(
