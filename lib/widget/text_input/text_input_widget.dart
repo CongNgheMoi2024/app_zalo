@@ -28,7 +28,7 @@ class _TextInputWidgetState extends State<TextInputWidget> {
   Widget build(BuildContext context) {
     return Container(
       height: 56.sp,
-      margin: EdgeInsets.only(left: 20.sp, right: 20.sp, top: 20.sp),
+      margin: EdgeInsets.only(left: 20.sp, right: 20.sp, top: 0.sp),
       child: TextField(
         controller: _controller,
         cursorColor: greyIcTop,
