@@ -1,5 +1,6 @@
 import 'package:app_zalo/screens/boarding/boarding_screen.dart';
 import 'package:app_zalo/screens/dashboard/ui/dashboard.dart';
+import 'package:app_zalo/screens/login/ui/login_screen.dart';
 import 'package:app_zalo/screens/register/ui/register_screen.dart';
 import 'package:app_zalo/screens/splash/splash_screen.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +15,8 @@ RouteFactory routes() {
       case RouterName.initScreen:
         // screen = SplashScreen();
         // screen = DashboardScreen();
-        screen = BoardingScreen();
+        //screen = BoardingScreen();
+        screen = LoginScreen();
         break;
 
       case RouterName.dashboardScreen:
