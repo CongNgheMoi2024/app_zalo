@@ -41,6 +41,8 @@ dependencies:
   injectable: ^2.3.2
   hive_flutter: ^1.1.0
   smooth_page_indicator: ^1.1.0
+  pin_code_fields: ^8.0.1
+  image_picker: ^1.0.7
 
 dev_dependencies:
   flutter_test:

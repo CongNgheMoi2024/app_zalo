@@ -3,6 +3,8 @@ import 'package:app_zalo/screens/dashboard/ui/dashboard.dart';
 import 'package:app_zalo/screens/login/ui/login_screen.dart';
 import 'package:app_zalo/screens/register/ui/register_screen.dart';
 import 'package:app_zalo/screens/splash/splash_screen.dart';
+import 'package:app_zalo/screens/upload_avatar/upload_avatar_screen.dart';
+import 'package:app_zalo/screens/verify_register/verify_register_screen.dart';
 import 'package:flutter/material.dart';
 
 RouteFactory routes() {
@@ -13,33 +15,12 @@ RouteFactory routes() {
 
     switch (name) {
       case RouterName.initScreen:
-        screen = BoardingScreen();
+        screen = const BoardingScreen();
         break;
 
       case RouterName.dashboardScreen:
-        screen = DashboardScreen();
+        screen = const DashboardScreen();
         break;
-
-      // case RouterName.changePasswordScreen:
-      //   screen = BlocProvider(
-      //       create: (context) => ChangePasswordCubit(),
-      //       child: ChangePasswordScreen());
-      //   break;
-
-      // case RouterName.updateInfoAccount:
-      //   screen = MultiBlocProvider(
-      //     providers: [
-      //       BlocProvider<UpdateAccountCubit>(
-      //         create: (BuildContext context) => UpdateAccountCubit(),
-      //       ),
-      //       BlocProvider<ProvinceCubit>(
-      //         create: (BuildContext context) =>
-      //             ProvinceCubit(ProvinceRepository()),
-      //       ),
-      //     ],
-      //     child: UpdateInfoAccount(),
-      //   );
-      //   break;
 
       case RouterName.onBoardingScreen:
         screen = BoardingScreen();
@@ -47,6 +28,12 @@ RouteFactory routes() {
 
       case RouterName.registerScreen:
         screen = RegisterScreen();
+        break;
+      case RouterName.verifyRegisterScreen:
+        screen = VerifyRegisterScreen();
+        break;
+      case RouterName.uploadAvatarScreen:
+        screen = const UploadAvatarScreen();
         break;
 
       case RouterName.loginScreen:
@@ -71,4 +58,6 @@ abstract class RouterName {
   static const String onBoardingScreen = '/onBoardingScreen';
   static const String registerScreen = '/registerScreen';
   static const String loginScreen = '/loginScreen';
+  static const String verifyRegisterScreen = '/verifyRegisterScreen';
+  static const String uploadAvatarScreen = '/uploadAvatarScreen';
 }

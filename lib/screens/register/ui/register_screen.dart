@@ -207,8 +207,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               ButtonBottomNavigated(
-                title: "Đăng ký",
-                onPressed: () {},
+                title: "Tiếp tục",
+                onPressed: () {
+                  Navigator.pushNamed(context, RouterName.verifyRegisterScreen);
+                },
               ),
               GestureDetector(
                 onTap: () {
