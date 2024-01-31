@@ -18,10 +18,6 @@ class _HomeChatScreenState extends State<HomeChatScreen> {
         child: Scaffold(
             body: SafeArea(
                 child: Column(children: [
-      HeaderActionsBar(
-        icon1: Icons.qr_code_scanner_outlined,
-        icon2: Icons.add,
-      ),
       Expanded(
           child: SingleChildScrollView(
               child: Column(

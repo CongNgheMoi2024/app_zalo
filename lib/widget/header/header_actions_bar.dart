@@ -18,7 +18,7 @@ class _HeaderActionsBarState extends State<HeaderActionsBar> {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     return Container(
-      height: 66.sp,
+      height: 71.sp,
       width: width,
       padding: EdgeInsets.only(top: 3.sp),
       color: primaryColor.withOpacity(0.9),

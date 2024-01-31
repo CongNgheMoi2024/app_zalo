@@ -16,7 +16,6 @@ class _HomeAccountScreenState extends State<HomeAccountScreen> {
         child: Scaffold(
             body: SafeArea(
                 child: Column(children: [
-      HeaderActionsBar(),
       Expanded(
           child: SingleChildScrollView(
               child: Column(
