@@ -38,10 +38,13 @@ class _DashboardScreenState extends State<DashboardScreen>
     return SafeArea(
       child: Scaffold(
           appBar: AppBar(
+            toolbarHeight: 63.sp,
             backgroundColor: Colors.transparent,
             flexibleSpace: HeaderActionsBar(
-              icon1: Icons.qr_code_scanner_outlined,
-              icon2: Icons.add,
+              icon1: isSelectedB[0] == true
+                  ? Icons.qr_code_scanner_outlined
+                  : null,
+              icon2: isSelectedB[0] == true ? Icons.add : null,
             ),
             automaticallyImplyLeading: false,
           ),

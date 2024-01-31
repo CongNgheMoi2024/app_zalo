@@ -18,10 +18,24 @@ class _HeaderActionsBarState extends State<HeaderActionsBar> {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     return Container(
-      height: 71.sp,
+      height: 66.sp,
       width: width,
       padding: EdgeInsets.only(top: 3.sp),
-      color: primaryColor.withOpacity(0.9),
+      decoration: BoxDecoration(
+          gradient: LinearGradient(
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+        stops: [
+          0.1,
+          0.6,
+          0.9,
+        ],
+        colors: [
+          primaryColor.withOpacity(0.9),
+          primaryColor.withOpacity(0.7),
+          primaryColor.withOpacity(0.6)
+        ],
+      )),
       child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -37,7 +51,10 @@ class _HeaderActionsBarState extends State<HeaderActionsBar> {
             ),
             Container(
               height: 56.sp,
-              width: width * 0.69 - 57.sp,
+              width: width * 0.69 -
+                  57.sp +
+                  (widget.icon1 == null ? 48.sp : 0) +
+                  (widget.icon2 == null ? 48.sp : 0),
               padding: EdgeInsets.only(left: 5.sp, right: 5.sp, bottom: 6.sp),
               child: TextField(
                 cursorColor: grey03,
@@ -65,10 +82,7 @@ class _HeaderActionsBarState extends State<HeaderActionsBar> {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               widget.icon1 == null
-                  ? Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(width: 0.sp),
-                    )
+                  ? Container(width: 0.sp)
                   : GestureDetector(
                       onTap: widget.action1 == null
                           ? () {}
@@ -85,10 +99,7 @@ class _HeaderActionsBarState extends State<HeaderActionsBar> {
                       ),
                     ),
               widget.icon2 == null
-                  ? Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(width: 0.sp),
-                    )
+                  ? Container(width: 0.sp)
                   : GestureDetector(
                       onTap: widget.action2 == null
                           ? () {}
