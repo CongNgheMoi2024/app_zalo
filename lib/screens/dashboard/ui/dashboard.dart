@@ -1,4 +1,5 @@
 import 'package:app_zalo/constants/index.dart';
+import 'package:app_zalo/screens/fast_contact/fast_contact_screen.dart';
 import 'package:app_zalo/screens/home_account/home_account_screen.dart';
 import 'package:app_zalo/screens/home_chat/home_chat_screen.dart';
 import 'package:app_zalo/widget/header/header_actions_bar.dart';
@@ -230,10 +231,7 @@ class _DashboardScreenState extends State<DashboardScreen>
             controller: _tabController,
             children: [
               const HomeChatScreen(),
-              Container(
-                color: Colors.blue,
-                child: Text("Text1"),
-              ),
+              FastContactScreen(),
               Container(
                 color: Colors.yellow,
                 child: Text("Text1"),
