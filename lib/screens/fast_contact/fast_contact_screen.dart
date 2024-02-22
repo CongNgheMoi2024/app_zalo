@@ -1,3 +1,5 @@
+import 'package:app_zalo/constants/index.dart';
+import 'package:contacts_service/contacts_service.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -9,33 +11,63 @@ class FastContactScreen extends StatefulWidget {
 }
 
 class _FastContactScreenState extends State<FastContactScreen> {
+  List<Contact> contacts = [];
+
   @override
   void initState() {
     super.initState();
-    fetchContacts();
+    getContactPermission();
   }
 
-  Future<void> fetchContacts() async {
+  Future<void> getContactPermission() async {
     if (await Permission.contacts.isGranted) {
-      print('Permission is granted');
+      fetchContacts();
     } else {
       print('Permission is not grantedKKKKKKKKKKKKKKKKK');
       await Permission.contacts.request();
     }
   }
 
+  void fetchContacts() async {
+    ContactsService.getContacts().then((value) {
+      setState(() {
+        contacts = value.toList();
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
+    print('contacts: ${contacts}');
     return Scaffold(
-        // body: ListView.builder(
-        //   itemCount: contacts.length,
-        //   itemBuilder: (context, index) {
-        //     return ListTile(
-        //       title: Text(contacts[index].displayName),
-        //       subtitle: Text(contacts[index].phoneNumber),
-        //     );
-        //   },
-        // ),
-        );
+      body: SingleChildScrollView(
+        child: Wrap(
+            children: contacts
+                .map((e) => Container(
+                      height: 45.sp,
+                      width: width,
+                      color: Colors.red,
+                      child: Row(
+                        children: [
+                          // ignore: unrelated_type_equality_checks
+                          e.avatar != null && e.avatar!.isNotEmpty
+                              ? CircleAvatar(
+                                  backgroundImage: MemoryImage(e.avatar!))
+                              : Container(),
+                          // ClipRRect(
+                          //   borderRadius: BorderRadius.circular(60),
+                          //   child: Image.asset(
+                          //     'assets/images/user')),
+                          Text(e.displayName == null
+                              ? "Khoong tenn"
+                              : e.displayName!),
+                        ],
+                      ),
+                    ))
+                .toList()),
+      ),
+    );
   }
 }
