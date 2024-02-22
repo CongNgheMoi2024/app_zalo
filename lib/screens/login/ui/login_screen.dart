@@ -1,11 +1,7 @@
-import 'package:app_zalo/constants/colors.dart';
 import 'package:app_zalo/constants/index.dart';
 import 'package:app_zalo/screens/boarding/boarding_screen.dart';
-import 'package:app_zalo/screens/register/ui/register_screen.dart';
 import 'package:app_zalo/widget/text_input/text_input_login.dart';
 import 'package:app_zalo/widget/text_input/text_input_password.dart';
-import 'package:app_zalo/widget/text_input/text_input_phone.dart';
-import 'package:app_zalo/widget/text_input/text_input_widget.dart';
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -52,7 +48,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   TextInputLogin(
                     title: 'Tài khoản',
                   ),
-                  TextInputPassword(title: 'Mật khẩu',)
+                  TextInputPassword(
+                    title: 'Mật khẩu',
+                  )
                 ],
               ),
             )
