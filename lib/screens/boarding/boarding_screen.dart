@@ -88,7 +88,7 @@ class _BoardingScreenState extends State<BoardingScreen> {
               child: ButtonBottomNavigated(
                 title: "Đăng nhập",
                 onPressed: () {
-                  // Navigator.pushNamed(context, loginScreen);
+                  Navigator.pushNamed(context, RouterName.loginScreen);
                 },
               ),
             ),

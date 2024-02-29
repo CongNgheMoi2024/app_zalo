@@ -15,15 +15,20 @@ RouteFactory routes() {
       case RouterName.initScreen:
         // screen = SplashScreen();
         // screen = DashboardScreen();
-        //screen = BoardingScreen();
-        screen = LoginScreen();
+        screen = BoardingScreen();
+        // screen = LoginScreen();
         break;
 
       case RouterName.dashboardScreen:
         screen = DashboardScreen();
         break;
 
-      // case RouterName.changePasswordScreen:
+      case RouterName.loginScreen:
+        screen = LoginScreen();
+        break;
+
+
+    // case RouterName.changePasswordScreen:
       //   screen = BlocProvider(
       //       create: (context) => ChangePasswordCubit(),
       //       child: ChangePasswordScreen());
