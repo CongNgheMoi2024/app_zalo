@@ -15,4 +15,4 @@ const grey03 = Color.fromARGB(255, 217, 217, 217);
 
 const blackColor = Color(0xff000000);
 
-const whiteColor = Color(0xfffef6e7);
+const whiteColor = Color(0xffffffff);
