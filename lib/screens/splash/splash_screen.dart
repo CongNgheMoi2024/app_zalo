@@ -18,7 +18,7 @@ class _SplashScreenState extends State<SplashScreen> {
     Timer(
       const Duration(milliseconds: 2500),
       () {
-        Navigator.pushReplacementNamed(context, RouterName.dashboardScreen);
+        Navigator.pushReplacementNamed(context, RouterName.onBoardingScreen);
       },
     );
   }

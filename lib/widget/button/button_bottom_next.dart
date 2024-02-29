@@ -1,16 +1,16 @@
 import 'package:app_zalo/constants/index.dart';
 import 'package:flutter/material.dart';
 
-class ButtonBottomNavigated extends StatefulWidget {
+class ButtonBottomNext extends StatefulWidget {
   String? title;
   Function? onPressed;
-  ButtonBottomNavigated({super.key, this.title, this.onPressed});
+  ButtonBottomNext({super.key, this.title, this.onPressed});
 
   @override
-  State<ButtonBottomNavigated> createState() => _ButtonBottomNavigatedState();
+  State<ButtonBottomNext> createState() => _ButtonBottomNextState();
 }
 
-class _ButtonBottomNavigatedState extends State<ButtonBottomNavigated> {
+class _ButtonBottomNextState extends State<ButtonBottomNext> {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -25,12 +25,13 @@ class _ButtonBottomNavigatedState extends State<ButtonBottomNavigated> {
                   left: 55.sp, right: 55.sp, bottom: 5.sp, top: 8.sp),
               width: width - 40.sp,
               decoration: BoxDecoration(
-                  color: primaryColor,
-                  borderRadius: BorderRadius.circular(28.sp)),
+                  borderRadius: BorderRadius.circular(28.sp),
+                  border:
+                      Border.all(color: greyIcBot.withOpacity(0.4), width: 1)),
               child: Center(
                 child: Text(
                   widget.title ?? "Button",
-                  style: text15.medium.white,
+                  style: text15.medium.bgColor,
                 ),
               ),
             ),
