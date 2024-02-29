@@ -1,4 +1,3 @@
-
 import 'package:app_zalo/constants/index.dart';
 import 'package:app_zalo/screens/fast_contact/fast_contact_screen.dart';
 import 'package:app_zalo/screens/home_account/home_account_screen.dart';
@@ -12,6 +11,7 @@ class DashboardScreen extends StatefulWidget {
   @override
   State<DashboardScreen> createState() => _DashboardScreenState();
 }
+
 List<bool> isSelectedB = [true, false, false, false];
 
 class _DashboardScreenState extends State<DashboardScreen>
