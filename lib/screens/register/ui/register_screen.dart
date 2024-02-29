@@ -1,10 +1,9 @@
 import 'package:app_zalo/constants/index.dart';
-import 'package:app_zalo/widget/button/button_bottom_navigated.dart';
 import 'package:app_zalo/routes/routes.dart';
 import 'package:app_zalo/utils/regex.dart';
+import 'package:app_zalo/widget/button/button_bottom_navigated.dart';
 import 'package:app_zalo/widget/dismiss_keyboard_widget.dart';
 import 'package:app_zalo/widget/text_input/text_input_login.dart';
-
 import 'package:app_zalo/widget/text_input/text_input_password.dart';
 import 'package:app_zalo/widget/text_input/text_input_widget.dart';
 import 'package:app_zalo/widget/text_input_picked_day/text_input_picked_day.dart';

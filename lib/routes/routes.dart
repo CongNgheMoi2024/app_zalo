@@ -3,7 +3,6 @@ import 'package:app_zalo/screens/dashboard/ui/dashboard.dart';
 import 'package:app_zalo/screens/login/ui/login_screen.dart';
 import 'package:app_zalo/screens/register/ui/register_screen.dart';
 import 'package:app_zalo/screens/splash/splash_screen.dart';
-
 import 'package:app_zalo/screens/upload_avatar/upload_avatar_screen.dart';
 import 'package:app_zalo/screens/verify_register/verify_register_screen.dart';
 import 'package:flutter/material.dart';
@@ -22,9 +21,11 @@ RouteFactory routes() {
       case RouterName.dashboardScreen:
         screen = const DashboardScreen();
         break;
-      case RouterName.loginScreen:
-        screen = LoginScreen();
+
+      case RouterName.onBoardingScreen:
+        screen = BoardingScreen();
         break;
+
       case RouterName.registerScreen:
         screen = RegisterScreen();
         break;
@@ -37,14 +38,6 @@ RouteFactory routes() {
 
       case RouterName.loginScreen:
         screen = LoginScreen();
-        break;
-
-      case RouterName.onBoardingScreen:
-        screen = BoardingScreen();
-        break;
-
-      case RouterName.registerScreen:
-        screen = RegisterScreen();
         break;
 
       default:

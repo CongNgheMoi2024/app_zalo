@@ -1,4 +1,3 @@
-import 'package:app_zalo/constants/colors.dart';
 import 'package:app_zalo/constants/index.dart';
 import 'package:app_zalo/routes/routes.dart';
 import 'package:app_zalo/screens/boarding/onboarding1.dart';
