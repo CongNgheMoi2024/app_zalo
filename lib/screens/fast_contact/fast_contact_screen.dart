@@ -72,7 +72,7 @@ class _FastContactScreenState extends State<FastContactScreen> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              Text(firstLetter, style: text28.black.bold),
+                              Text(firstLetter, style: text26.black.bold),
                             ],
                           ),
                         ),
