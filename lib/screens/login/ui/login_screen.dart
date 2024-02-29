@@ -2,16 +2,12 @@ import 'package:app_zalo/constants/colors.dart';
 import 'package:app_zalo/constants/index.dart';
 import 'package:app_zalo/routes/routes.dart';
 import 'package:app_zalo/screens/boarding/boarding_screen.dart';
-import 'package:app_zalo/screens/register/ui/register_screen.dart';
 import 'package:app_zalo/utils/regex.dart';
 import 'package:app_zalo/widget/dismiss_keyboard_widget.dart';
 import 'package:app_zalo/widget/text_input/text_input_login.dart';
 import 'package:app_zalo/widget/text_input/text_input_password.dart';
-import 'package:app_zalo/widget/text_input/text_input_phone.dart';
 import 'package:app_zalo/widget/text_input/text_input_widget.dart';
 import 'package:flutter/material.dart';
-
-import '../../../widget/button/button_bottom_navigated.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -92,7 +88,9 @@ class _LoginScreenState extends State<LoginScreen> {
                             left: 55.sp, right: 55.sp, bottom: 5.sp, top: 8.sp),
                         width: widthMedia - 40.sp,
                         decoration: BoxDecoration(
-                            color: isPhoneNumberValid? primaryColor : primaryColor.withOpacity(0.3),
+                            color: isPhoneNumberValid
+                                ? primaryColor
+                                : primaryColor.withOpacity(0.3),
                             borderRadius: BorderRadius.circular(28.sp)),
                         child: Center(
                           child: Text(

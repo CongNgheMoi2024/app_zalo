@@ -26,7 +26,7 @@ class _TextInputLoginState extends State<TextInputLogin> {
         cursorColor: greyIcBot.withOpacity(0.5),
         decoration: InputDecoration(
           hintText: widget.title ?? "Tiêu đề button",
-          hintStyle: text16.copyWith(color: greyIcBot.withOpacity(0.7)),
+          hintStyle: text15.regular.copyWith(color: greyIcTop.withOpacity(0.6)),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.sp),
             borderSide: BorderSide(

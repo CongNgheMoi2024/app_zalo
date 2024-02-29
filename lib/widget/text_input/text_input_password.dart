@@ -18,7 +18,7 @@ class _TextInputPasswordState extends State<TextInputPassword> {
     double width = MediaQuery.of(context).size.width;
 
     return Container(
-      margin: EdgeInsets.only(right: 20.sp, left: 20.sp, top: 20.sp),
+      margin: EdgeInsets.only(right: 20.sp, left: 20.sp, top: 0.sp),
       decoration: BoxDecoration(
         border: Border.all(
           color: Colors.grey.withOpacity(0.4),
