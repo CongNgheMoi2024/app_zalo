@@ -41,15 +41,11 @@ dependencies:
   injectable: ^2.3.2
   hive_flutter: ^1.1.0
   smooth_page_indicator: ^1.1.0
-<<<<<<< HEAD
   http: ^1.1.0
-=======
   pin_code_fields: ^8.0.1
   image_picker: ^1.0.7
   permission_handler: ^11.0.1
   contacts_service: ^0.6.3
->>>>>>> 5a7ea88c49ef2f75c07064ea9c20a50dfabf0e9e
-
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -73,15 +69,9 @@ flutter:
   assets:
     - assets/
     - assets/images/
-<<<<<<< HEAD
-#    - assets/icons/
-#    - assets/gif/
-#    - assets/fonts/
-=======
     # - assets/icons/
     # - assets/gif/
     # - assets/fonts/
->>>>>>> 5a7ea88c49ef2f75c07064ea9c20a50dfabf0e9e
 
   # To add assets to your application, add an assets section, like this:
   # assets:

@@ -16,7 +16,8 @@ RouteFactory routes() {
 
     switch (name) {
       case RouterName.initScreen:
-        screen = const BoardingScreen();
+        // screen = const BoardingScreen();
+      screen = const UploadAvatarScreen();
         break;
 
       case RouterName.dashboardScreen:
