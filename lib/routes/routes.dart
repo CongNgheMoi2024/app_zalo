@@ -1,10 +1,12 @@
 import 'package:app_zalo/screens/boarding/boarding_screen.dart';
 import 'package:app_zalo/screens/dashboard/ui/dashboard.dart';
+import 'package:app_zalo/screens/home_account/home_account_screen.dart';
 import 'package:app_zalo/screens/login/ui/login_screen.dart';
 import 'package:app_zalo/screens/register/ui/register_screen.dart';
 import 'package:app_zalo/screens/splash/splash_screen.dart';
 
 import 'package:app_zalo/screens/upload_avatar/upload_avatar_screen.dart';
+import 'package:app_zalo/screens/upload_cover_image/upload_cover_image_screen.dart';
 import 'package:app_zalo/screens/verify_register/verify_register_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -17,7 +19,7 @@ RouteFactory routes() {
     switch (name) {
       case RouterName.initScreen:
         // screen = const BoardingScreen();
-      screen = const UploadAvatarScreen();
+      screen = const HomeAccountScreen();
         break;
 
       case RouterName.dashboardScreen:
@@ -47,7 +49,9 @@ RouteFactory routes() {
       case RouterName.registerScreen:
         screen = RegisterScreen();
         break;
-
+      case RouterName.uploadImageCoverScreen:
+        screen = UploadCoverImageScreen();
+        break;
       default:
         screen = const SplashScreen();
         break;
@@ -67,5 +71,7 @@ abstract class RouterName {
   static const String registerScreen = '/registerScreen';
   static const String loginScreen = '/loginScreen';
   static const String verifyRegisterScreen = '/verifyRegisterScreen';
+  static const String uploadImageCoverScreen ='/uploadImageCoverScreen';
   static const String uploadAvatarScreen = '/uploadAvatarScreen';
+
 }
