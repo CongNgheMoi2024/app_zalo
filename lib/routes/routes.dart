@@ -4,7 +4,6 @@ import 'package:app_zalo/screens/home_account/home_account_screen.dart';
 import 'package:app_zalo/screens/login/ui/login_screen.dart';
 import 'package:app_zalo/screens/register/ui/register_screen.dart';
 import 'package:app_zalo/screens/splash/splash_screen.dart';
-
 import 'package:app_zalo/screens/upload_avatar/upload_avatar_screen.dart';
 import 'package:app_zalo/screens/upload_cover_image/upload_cover_image_screen.dart';
 import 'package:app_zalo/screens/verify_register/verify_register_screen.dart';
@@ -18,16 +17,17 @@ RouteFactory routes() {
 
     switch (name) {
       case RouterName.initScreen:
-        // screen = const BoardingScreen();
-      screen = const HomeAccountScreen();
+         screen = const BoardingScreen();
         break;
 
       case RouterName.dashboardScreen:
         screen = const DashboardScreen();
         break;
-      case RouterName.loginScreen:
-        screen = LoginScreen();
+
+      case RouterName.onBoardingScreen:
+        screen = BoardingScreen();
         break;
+
       case RouterName.registerScreen:
         screen = RegisterScreen();
         break;
@@ -42,15 +42,8 @@ RouteFactory routes() {
         screen = LoginScreen();
         break;
 
-      case RouterName.onBoardingScreen:
-        screen = BoardingScreen();
-        break;
-
-      case RouterName.registerScreen:
-        screen = RegisterScreen();
-        break;
       case RouterName.uploadImageCoverScreen:
-        screen = UploadCoverImageScreen();
+        screen = const UploadCoverImageScreen();
         break;
       default:
         screen = const SplashScreen();

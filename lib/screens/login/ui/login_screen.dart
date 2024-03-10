@@ -21,9 +21,10 @@ class _LoginScreenState extends State<LoginScreen> {
   String? passWord;
   bool isPhoneNumberValid = false;
   bool isButtonEnable = false;
+  bool isPasswordValid = true;
   @override
   Widget build(BuildContext context) {
-    var widthMedia = MediaQuery.of(context).size.width;
+    double widthMedia = MediaQuery.of(context).size.width;
     return DismissKeyboard(
       child: Scaffold(
         body: SafeArea(
@@ -32,7 +33,7 @@ class _LoginScreenState extends State<LoginScreen> {
               Container(
                 height: 100.sp,
                 width: widthMedia,
-                margin: EdgeInsets.only(top: 100.sp),
+                margin: EdgeInsets.only(top: 130.sp, bottom: 10.sp),
                 child: Center(
                   child: Text(
                     'Đăng nhập',
@@ -40,9 +41,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
               ),
-              TextInputWidget(
+              TextInputLogin(
                 title: 'Số điện thoại',
-                onTextChanged: (phone) {
+                onChanged: (phone) {
                   setState(() {
                     phoneNumber = phone;
                     isPhoneNumberValid = Regex.isPhone(phoneNumber!);
@@ -51,10 +52,12 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               Container(
                 width: widthMedia - 20.sp,
-                height: 12.sp,
+                height: 20.sp,
                 margin: EdgeInsets.only(left: 20.sp),
                 child: Text(
-                  isPhoneNumberValid == false && phoneNumber != null
+                  isPhoneNumberValid == false &&
+                          phoneNumber != null &&
+                          phoneNumber != ""
                       ? "Số điện thoại không hợp lệ!"
                       : "",
                   style: text11.textColor.error,
@@ -65,8 +68,19 @@ class _LoginScreenState extends State<LoginScreen> {
                 onChanged: (password) {
                   setState(() {
                     passWord = password;
+                    isPasswordValid = Regex.password(password!);
                   });
                 },
+              ),
+              Container(
+                height: 15.sp,
+                width: widthMedia - 20.sp,
+                margin: EdgeInsets.only(left: 20.sp),
+                child: Text(
+                    !isPasswordValid
+                        ? "Phải từ 6 kí tự, có chữ hoa, chữ thường, số và kí tự đặc biệt"
+                        : "",
+                    style: text11.textColor.error),
               ),
             ],
           ),
@@ -82,7 +96,12 @@ class _LoginScreenState extends State<LoginScreen> {
                   width: widthMedia,
                   child: Center(
                     child: GestureDetector(
-                      onTap: isPhoneNumberValid ? () {} : null,
+                      onTap: isPhoneNumberValid && isPasswordValid
+                          ? () {
+                              Navigator.pushNamed(
+                                  context, RouterName.uploadAvatarScreen);
+                            }
+                          : null,
                       child: Container(
                         margin: EdgeInsets.only(
                             left: 55.sp, right: 55.sp, bottom: 5.sp, top: 8.sp),
