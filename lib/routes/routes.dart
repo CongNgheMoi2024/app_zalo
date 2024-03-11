@@ -1,11 +1,14 @@
 import 'package:app_zalo/screens/boarding/boarding_screen.dart';
 import 'package:app_zalo/screens/dashboard/ui/dashboard.dart';
+import 'package:app_zalo/screens/login/bloc/login_cubit.dart';
 import 'package:app_zalo/screens/login/ui/login_screen.dart';
+import 'package:app_zalo/screens/register/bloc/register_cubit.dart';
 import 'package:app_zalo/screens/register/ui/register_screen.dart';
 import 'package:app_zalo/screens/splash/splash_screen.dart';
 import 'package:app_zalo/screens/upload_avatar/upload_avatar_screen.dart';
 import 'package:app_zalo/screens/verify_register/verify_register_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 RouteFactory routes() {
   return (RouteSettings settings) {
@@ -27,7 +30,8 @@ RouteFactory routes() {
         break;
 
       case RouterName.registerScreen:
-        screen = RegisterScreen();
+        screen = BlocProvider(
+            create: (context) => RegisterCubit(), child: RegisterScreen());
         break;
       case RouterName.verifyRegisterScreen:
         screen = VerifyRegisterScreen();
@@ -37,7 +41,8 @@ RouteFactory routes() {
         break;
 
       case RouterName.loginScreen:
-        screen = LoginScreen();
+        screen = BlocProvider(
+            create: (context) => LoginCubit(), child: LoginScreen());
         break;
 
       default:

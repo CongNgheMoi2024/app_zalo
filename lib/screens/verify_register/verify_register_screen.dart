@@ -55,6 +55,7 @@ class _VerifyRegisterScreenState extends State<VerifyRegisterScreen> {
                         keyboardType: TextInputType.number,
                         validator: (v) {
                           if (v!.length < 6 && v.isNotEmpty) {
+                            isValidatedOtp = false;
                             return "Mã OTP phải đủ 6 số";
                           } else {
                             isValidatedOtp = true;
@@ -101,6 +102,7 @@ class _VerifyRegisterScreenState extends State<VerifyRegisterScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               ButtonBottomNavigated(
+                isValidate: isValidatedOtp,
                 title: "Xác thực",
                 onPressed: () {
                   Navigator.pushNamed(context, RouterName.uploadAvatarScreen);
