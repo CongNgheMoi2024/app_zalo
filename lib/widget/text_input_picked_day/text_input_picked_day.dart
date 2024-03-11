@@ -106,9 +106,9 @@ class _TextInputPickedDayState extends State<TextInputPickedDay> {
             onTap: () => _selectDate(context),
             child: Container(
                 margin: EdgeInsets.only(right: 20.sp),
-                width: 60.sp,
+                width: 65.sp,
                 height: 56.sp,
-                alignment: Alignment(0, 0),
+                alignment: const Alignment(0, 0),
                 child: Icon(Icons.calendar_month_outlined, size: 20.sp)),
           ),
         ),
