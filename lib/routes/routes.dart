@@ -6,6 +6,7 @@ import 'package:app_zalo/screens/register/bloc/register_cubit.dart';
 import 'package:app_zalo/screens/register/ui/register_screen.dart';
 import 'package:app_zalo/screens/splash/splash_screen.dart';
 import 'package:app_zalo/screens/upload_avatar/upload_avatar_screen.dart';
+import 'package:app_zalo/screens/upload_cover_image/upload_cover_image_screen.dart';
 import 'package:app_zalo/screens/verify_register/verify_register_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -45,6 +46,9 @@ RouteFactory routes() {
             create: (context) => LoginCubit(), child: LoginScreen());
         break;
 
+      case RouterName.uploadImageCoverScreen:
+        screen = const UploadCoverImageScreen();
+        break;
       default:
         screen = const SplashScreen();
         break;
@@ -64,5 +68,6 @@ abstract class RouterName {
   static const String registerScreen = '/registerScreen';
   static const String loginScreen = '/loginScreen';
   static const String verifyRegisterScreen = '/verifyRegisterScreen';
+  static const String uploadImageCoverScreen = '/uploadImageCoverScreen';
   static const String uploadAvatarScreen = '/uploadAvatarScreen';
 }
