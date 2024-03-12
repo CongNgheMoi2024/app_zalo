@@ -36,11 +36,11 @@ class _LoginScreenState extends State<LoginScreen> {
               Container(
                 height: 100.sp,
                 width: widthMedia,
-                margin: EdgeInsets.only(top: 130.sp, bottom: 10.sp),
+                margin: EdgeInsets.only(top: 150.sp, bottom: 30.sp),
                 child: Center(
                   child: Text(
                     'Đăng nhập',
-                    style: text22.medium.primary,
+                    style: text22.semiBold.primary,
                   ),
                 ),
               ),
@@ -85,6 +85,24 @@ class _LoginScreenState extends State<LoginScreen> {
                         : "",
                     style: text11.textColor.error),
               ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pushNamed(
+                          context, RouterName.forgotPasswordScreen);
+                    },
+                    child: Text(
+                      "Quên mật khẩu?",
+                      style: text14.medium.textColor.primary,
+                    ),
+                  ),
+                  SizedBox(
+                    width: 20.sp,
+                  )
+                ],
+              )
             ],
           ),
         ),
