@@ -1,5 +1,6 @@
 import 'package:app_zalo/screens/boarding/boarding_screen.dart';
 import 'package:app_zalo/screens/dashboard/ui/dashboard.dart';
+import 'package:app_zalo/screens/forgot_password/ui/forgot_password_screen.dart';
 import 'package:app_zalo/screens/login/bloc/login_cubit.dart';
 import 'package:app_zalo/screens/login/ui/login_screen.dart';
 import 'package:app_zalo/screens/register/bloc/register_cubit.dart';
@@ -49,6 +50,9 @@ RouteFactory routes() {
       case RouterName.uploadImageCoverScreen:
         screen = const UploadCoverImageScreen();
         break;
+      case RouterName.forgotPasswordScreen:
+        screen = const ForgotPasswordScreen();
+        break;
       default:
         screen = const SplashScreen();
         break;
@@ -70,4 +74,5 @@ abstract class RouterName {
   static const String verifyRegisterScreen = '/verifyRegisterScreen';
   static const String uploadImageCoverScreen = '/uploadImageCoverScreen';
   static const String uploadAvatarScreen = '/uploadAvatarScreen';
+  static const String forgotPasswordScreen = '/forgotPasswordScreen';
 }
