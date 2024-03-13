@@ -22,11 +22,12 @@ class RegisterScreen extends StatefulWidget {
 class _RegisterScreenState extends State<RegisterScreen> {
   bool isPhoneNumberValid = true;
   bool isNameValid = true;
-  bool isPasswordValid = true;
+
   String selectedTimeBorn = "";
   int? selectedRadio = 1;
   String? gender;
   String? password;
+  bool isPasswordValid = true;
   String? dateOfBirth;
   String? phoneNumber;
   String? name;

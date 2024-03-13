@@ -1,6 +1,9 @@
 import 'package:app_zalo/screens/boarding/boarding_screen.dart';
 import 'package:app_zalo/screens/dashboard/ui/dashboard.dart';
+import 'package:app_zalo/screens/forgot_password/bloc/forgot_password_cubit.dart';
+import 'package:app_zalo/screens/forgot_password/bloc/otp_forgot_cubit.dart';
 import 'package:app_zalo/screens/forgot_password/ui/forgot_password_screen.dart';
+import 'package:app_zalo/screens/forgot_password/ui/otp_forgot_password_screen.dart';
 import 'package:app_zalo/screens/login/bloc/login_cubit.dart';
 import 'package:app_zalo/screens/login/ui/login_screen.dart';
 import 'package:app_zalo/screens/register/bloc/register_cubit.dart';
@@ -54,7 +57,10 @@ RouteFactory routes() {
         screen = const UploadCoverImageScreen();
         break;
       case RouterName.forgotPasswordScreen:
-        screen = const ForgotPasswordScreen();
+        screen = BlocProvider(
+            create: (context) => ForgotPasswordCubit(),
+            child: const ForgotPasswordScreen());
+
         break;
       default:
         screen = const SplashScreen();

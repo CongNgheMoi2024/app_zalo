@@ -1,9 +1,15 @@
 import 'package:app_zalo/constants/index.dart';
 import 'package:app_zalo/routes/routes.dart';
+import 'package:app_zalo/screens/forgot_password/bloc/forgot_password_cubit.dart';
+import 'package:app_zalo/screens/forgot_password/bloc/forgot_password_state.dart';
+import 'package:app_zalo/screens/forgot_password/bloc/otp_forgot_cubit.dart';
+import 'package:app_zalo/screens/forgot_password/ui/otp_forgot_password_screen.dart';
 import 'package:app_zalo/utils/regex.dart';
+import 'package:app_zalo/widget/button/button_bottom_navigated.dart';
 import 'package:app_zalo/widget/dismiss_keyboard_widget.dart';
 import 'package:app_zalo/widget/text_input/text_input_login.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
   const ForgotPasswordScreen({super.key});
@@ -65,24 +71,50 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              SizedBox(
-                height: 63.sp,
-                width: widthMedia,
-                child: Container(
-                  margin: EdgeInsets.only(
-                      left: 55.sp, right: 55.sp, bottom: 5.sp, top: 8.sp),
-                  width: widthMedia - 40.sp,
-                  decoration: BoxDecoration(
-                      color: primaryColor,
-                      borderRadius: BorderRadius.circular(28.sp)),
-                  child: Center(
-                    child: Text(
-                      "Tiếp tục",
-                      style: text15.medium.white,
-                    ),
-                  ),
-                ),
-              ),
+              BlocBuilder<ForgotPasswordCubit, ForgotPasswordState>(
+                  builder: (context, state) {
+                if (state is ForgotPasswordenticatedState) {
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => BlocProvider<OTPForgotCubit>(
+                          create: (BuildContext context) => OTPForgotCubit(),
+                          child: OtpForgotPasswordScreen(
+                            phone: phoneNumber!,
+                          ),
+                        ),
+                      ),
+                    );
+
+                    context.read<ForgotPasswordCubit>().resetState();
+                  });
+                  return Container();
+                } else {
+                  return state is LoadingForgotPasswordState
+                      ? CircularProgressIndicator()
+                      : Column(
+                          children: [
+                            ButtonBottomNavigated(
+                                title: "Tiếp tục",
+                                isValidate: isPhoneNumberValid &&
+                                    phoneNumber != null &&
+                                    phoneNumber != "",
+                                onPressed: () {
+                                  context
+                                      .read<ForgotPasswordCubit>()
+                                      .ForgotPasswordenticate(phoneNumber!);
+                                }),
+                            state is ErrorForgotPasswordState
+                                ? Text(
+                                    "Số điện thoại không hợp lệ",
+                                    style: text14.medium.error,
+                                  )
+                                : Container(),
+                          ],
+                        );
+                }
+              }),
               GestureDetector(
                 onTap: () {
                   Navigator.pushNamed(context, RouterName.loginScreen);
