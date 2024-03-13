@@ -23,7 +23,6 @@ class OTPForgotCubit extends Cubit<OTPForgotPasswordState> {
       });
 
       if (response.statusCode == 200) {
-        print("Nhaapsjppppppppp Đúng OTPPPPP");
         emit(SuccessOTPForgotState(otp));
       } else {
         emit(ErrorOTPForgotPasswordState(
