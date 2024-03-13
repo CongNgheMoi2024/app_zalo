@@ -25,13 +25,22 @@ class RegisterCubit extends Cubit<RegisterState> {
       });
 
       if (response.statusCode == 200) {
-        print("SuccccESSSSSSS${response.data['data']['access_token']}");
+        String apiUrlOTP = "${Env.url}/api/v1/phoneNumber";
         HiveStorage()
             .updateOTPToken("${response.data['data']['access_token']}");
         HiveStorage()
             .updateRefreshToken("${response.data['data']['refresh_token']}");
-        emit(SuccessRegisterState(
-            response.statusCode!, response.data['data']['access_token']));
+
+        Response responseOtp = await dio.post(apiUrlOTP,
+            data: {"phoneNo": "+84${numberPhone.substring(1)}"});
+
+        if (responseOtp.statusCode == 200) {
+          emit(SuccessRegisterState(
+              response.statusCode!, response.data['data']['access_token']));
+        } else {
+          emit(ErrorRegisterState(
+              responseOtp.statusCode!, responseOtp.data['message']));
+        }
       } else {
         emit(
             ErrorRegisterState(response.statusCode!, response.data['message']));

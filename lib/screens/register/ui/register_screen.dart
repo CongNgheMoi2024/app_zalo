@@ -220,86 +220,54 @@ class _RegisterScreenState extends State<RegisterScreen> {
             children: [
               BlocBuilder<RegisterCubit, RegisterState>(
                   builder: (context, state) {
-                if (state is LoadingRegisterState) {
-                  return const CircularProgressIndicator();
-                } else if (state is ErrorRegisterState) {
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      ButtonBottomNavigated(
-                        title: "Tiếp tục",
-                        isValidate: (isPhoneNumberValid &&
-                                    phoneNumber != "" &&
-                                    phoneNumber != null) &&
-                                name != "" &&
-                                name != null &&
-                                dateOfBirth != "" &&
-                                dateOfBirth != null &&
-                                isPasswordValid &&
-                                password != "" &&
-                                password != null &&
-                                isConfirmPasswordValid &&
-                                newPassword != "" &&
-                                newPassword != null
-                            ? true
-                            : false,
-                        onPressed: () async {
-                          context.read<RegisterCubit>().register(
-                              phoneNumber!,
-                              name!,
-                              selectedRadio!,
-                              dateOfBirth!,
-                              password!,
-                              newPassword!);
-                        },
-                      ),
-                      Text(
-                        "Đăng ký không thành công",
-                        style: text14.medium.error,
-                      )
-                    ],
-                  );
-                } else if (state is SuccessRegisterState) {
-                  Future.delayed(Duration.zero, () {
+                if (state is SuccessRegisterState) {
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
                     Navigator.pushNamed(
                         context, RouterName.verifyRegisterScreen);
                     context.read<RegisterCubit>().resetState();
                   });
                   return Container();
                 } else {
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      SizedBox(height: 18.sp),
-                      ButtonBottomNavigated(
-                        title: "Tiếp tục",
-                        isValidate: (isPhoneNumberValid &&
-                                    phoneNumber != "" &&
-                                    phoneNumber != null) &&
-                                name != "" &&
-                                name != null &&
-                                dateOfBirth != "" &&
-                                dateOfBirth != null &&
-                                isPasswordValid &&
-                                password != "" &&
-                                password != null &&
-                                isConfirmPasswordValid &&
-                                newPassword != "" &&
-                                newPassword != null
-                            ? true
-                            : false,
-                        onPressed: () async {
-                          context.read<RegisterCubit>().register(
-                              phoneNumber!,
-                              name!,
-                              selectedRadio!,
-                              dateOfBirth!,
-                              password!,
-                              newPassword!);
-                        },
-                      ),
-                    ],
-                  );
+                  return state is LoadingRegisterState
+                      ? CircularProgressIndicator()
+                      : Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            ButtonBottomNavigated(
+                              title: "Tiếp tục",
+                              isValidate: (isPhoneNumberValid &&
+                                          phoneNumber != "" &&
+                                          phoneNumber != null) &&
+                                      name != "" &&
+                                      name != null &&
+                                      dateOfBirth != "" &&
+                                      dateOfBirth != null &&
+                                      isPasswordValid &&
+                                      password != "" &&
+                                      password != null &&
+                                      isConfirmPasswordValid &&
+                                      newPassword != "" &&
+                                      newPassword != null
+                                  ? true
+                                  : false,
+                              onPressed: () async {
+                                context.read<RegisterCubit>().register(
+                                    phoneNumber!,
+                                    name!,
+                                    selectedRadio!,
+                                    dateOfBirth!,
+                                    password!,
+                                    newPassword!);
+                              },
+                            ),
+                            state is ErrorRegisterState
+                                ? Text(
+                                    "Số điện thoại đã đăng kí rồi",
+                                    style: text14.medium.error,
+                                  )
+                                : Container(),
+                          ],
+                        );
                 }
               }),
               GestureDetector(

@@ -8,6 +8,7 @@ import 'package:app_zalo/screens/register/ui/register_screen.dart';
 import 'package:app_zalo/screens/splash/splash_screen.dart';
 import 'package:app_zalo/screens/upload_avatar/upload_avatar_screen.dart';
 import 'package:app_zalo/screens/upload_cover_image/upload_cover_image_screen.dart';
+import 'package:app_zalo/screens/verify_register/bloc/verify_register_cubit.dart';
 import 'package:app_zalo/screens/verify_register/verify_register_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -36,7 +37,9 @@ RouteFactory routes() {
             create: (context) => RegisterCubit(), child: RegisterScreen());
         break;
       case RouterName.verifyRegisterScreen:
-        screen = VerifyRegisterScreen();
+        screen = BlocProvider(
+            create: (context) => VerifyRegisterCubit(),
+            child: VerifyRegisterScreen());
         break;
       case RouterName.uploadAvatarScreen:
         screen = const UploadAvatarScreen();
