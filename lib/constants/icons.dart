@@ -4,7 +4,7 @@ class Svg {
 
 class Png {
   Png._();
-  static const String logoZalo = 'assets/images/logoZalo.jpg';
+  static const String logoZalo = 'assets/images/logoZalo.png';
   static const String onboarding1 = 'assets/images/onBoarding1.png';
   static const String onboarding2 = 'assets/images/onBoarding2.png';
   static const String onboarding3 = 'assets/images/onBoarding3.png';

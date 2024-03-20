@@ -2,11 +2,14 @@ import 'dart:io';
 
 import 'package:app_zalo/constants/index.dart';
 import 'package:app_zalo/routes/routes.dart';
-import 'package:app_zalo/widget/appbar/appbar_actions.dart';
+import 'package:app_zalo/screens/upload_avatar/bloc/upload_avatar_cubit.dart';
+import 'package:app_zalo/screens/upload_avatar/bloc/upload_avatar_state.dart';
+import 'package:app_zalo/storages/hive_storage.dart';
 import 'package:app_zalo/widget/button/button_bottom_navigated.dart';
 import 'package:app_zalo/widget/button/button_bottom_next.dart';
 import 'package:app_zalo/widget/dismiss_keyboard_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 
 class UploadAvatarScreen extends StatefulWidget {
@@ -164,12 +167,31 @@ class _UploadAvatarScreenState extends State<UploadAvatarScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              ButtonBottomNavigated(
-                title: "Lưu",
-                onPressed: () {
-                  // Navigator.pushNamed(context, RouterName.verifyRegisterScreen);
-                },
-              ),
+              BlocBuilder<UploadAvatarCubit, UploadAvatarState>(
+                  builder: (context, state) {
+                if (state is UploadAvatarSuccessState) {
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    Navigator.pushNamed(context, RouterName.dashboardScreen);
+                    context.read<UploadAvatarCubit>().resetState();
+                  });
+                  return Container();
+                } else {
+                  return state is LoadingUploadAvataState
+                      ? CircularProgressIndicator()
+                      : Column(
+                          children: [
+                            ButtonBottomNavigated(
+                              title: "Lưu",
+                              onPressed: () {
+                                context
+                                    .read<UploadAvatarCubit>()
+                                    .UploadAvatar(pathImage1 ?? File(""));
+                              },
+                            ),
+                          ],
+                        );
+                }
+              }),
               ButtonBottomNext(
                 title: "Lúc khác",
                 onPressed: () {
