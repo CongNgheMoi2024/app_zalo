@@ -34,7 +34,7 @@ class UploadAvatarCubit extends Cubit<UploadAvatarState> {
       Response response = await dio.post(apiUrl, data: formData);
 
       if (response.statusCode == 200) {
-        print("UPLOAD AVATAR SUCCESS");
+        print("UPLOAD AVATAR SUCCESS ${imageAvatar.path}");
         emit(UploadAvatarSuccessState("UploadAvatar success."));
       } else {
         print("UPLOAD FAILEDDDDDDĐ");

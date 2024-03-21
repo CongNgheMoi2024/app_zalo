@@ -10,6 +10,7 @@ import 'package:app_zalo/widget/button/button_bottom_next.dart';
 import 'package:app_zalo/widget/dismiss_keyboard_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:image_picker/image_picker.dart';
 
 class UploadAvatarScreen extends StatefulWidget {
@@ -33,7 +34,7 @@ class _UploadAvatarScreenState extends State<UploadAvatarScreen> {
           source: ImageSource.gallery,
           maxHeight: 480,
           maxWidth: 640,
-          imageQuality: 50);
+          imageQuality: 90);
       if (pickedFile1 != null) {
         setState(() {
           pathImage1 = File(pickedFile1.path);
@@ -162,7 +163,7 @@ class _UploadAvatarScreenState extends State<UploadAvatarScreen> {
           ],
         )),
         bottomNavigationBar: Container(
-          height: 165.sp,
+          height: 175.sp,
           padding: EdgeInsets.only(bottom: 27.sp),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -177,9 +178,14 @@ class _UploadAvatarScreenState extends State<UploadAvatarScreen> {
                   return Container();
                 } else {
                   return state is LoadingUploadAvataState
-                      ? CircularProgressIndicator()
+                      ? const CircularProgressIndicator()
                       : Column(
                           children: [
+                            state is ErrorUploadAvataState
+                                ? Container()
+                                : SizedBox(
+                                    height: 10.sp,
+                                  ),
                             ButtonBottomNavigated(
                               title: "Lưu",
                               onPressed: () {
@@ -188,6 +194,12 @@ class _UploadAvatarScreenState extends State<UploadAvatarScreen> {
                                     .UploadAvatar(pathImage1 ?? File(""));
                               },
                             ),
+                            state is ErrorUploadAvataState
+                                ? Text(
+                                    "Cập nhật avatar không thành công!",
+                                    style: text14.medium.error,
+                                  )
+                                : Container(),
                           ],
                         );
                 }
