@@ -45,7 +45,7 @@ class _DashboardScreenState extends State<DashboardScreen>
 
   void fetchContacts() async {
     ContactsService.getContacts().then((value) {
-      contacts = value.take(40).toList();
+      contacts = value.take(80).toList();
       setState(() {
         isLoading = false;
       });
@@ -67,86 +67,84 @@ class _DashboardScreenState extends State<DashboardScreen>
           ),
           automaticallyImplyLeading: false,
         ),
-        bottomNavigationBar: Theme(
-            data: ThemeData(useMaterial3: false),
-            child: BottomNavigationBar(
-                fixedColor: Colors.black,
-                type: BottomNavigationBarType.fixed,
-                onTap: onTabTapped,
-                currentIndex: _currentIndex,
-                items: [
-                  BottomNavigationBarItem(
-                    icon: Padding(
-                      padding: EdgeInsets.only(
-                        left: 20.sp,
-                        right: 10.sp,
-                        top: 10.sp,
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.message_outlined,
-                            size: 30.sp,
-                            color: primaryColor,
-                          ),
-                        ],
-                      ),
-                    ),
-                    label: 'Tin nhắn',
+        bottomNavigationBar: BottomNavigationBar(
+            fixedColor: Colors.black,
+            type: BottomNavigationBarType.fixed,
+            onTap: onTabTapped,
+            currentIndex: _currentIndex,
+            items: [
+              BottomNavigationBarItem(
+                icon: Padding(
+                  padding: EdgeInsets.only(
+                    left: 20.sp,
+                    right: 10.sp,
+                    top: 10.sp,
                   ),
-                  BottomNavigationBarItem(
-                    icon: Padding(
-                      padding: EdgeInsets.only(
-                          left: 15.sp, right: 15.sp, top: 10.sp),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.switch_account_outlined,
-                            size: 30.sp,
-                            color: primaryColor,
-                          ),
-                        ],
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.message_outlined,
+                        size: 30.sp,
+                        color: primaryColor,
                       ),
-                    ),
-                    label: 'Danh bạ',
+                    ],
                   ),
-                  BottomNavigationBarItem(
-                    icon: Padding(
-                      padding: EdgeInsets.only(
-                          left: 15.sp, right: 15.sp, top: 10.sp),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.timer_outlined,
-                            size: 30.sp,
-                            color: primaryColor,
-                          ),
-                        ],
+                ),
+                label: 'Tin nhắn',
+              ),
+              BottomNavigationBarItem(
+                icon: Padding(
+                  padding:
+                      EdgeInsets.only(left: 15.sp, right: 15.sp, top: 10.sp),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.switch_account_outlined,
+                        size: 30.sp,
+                        color: primaryColor,
                       ),
-                    ),
-                    label: 'Nhật kí',
+                    ],
                   ),
-                  BottomNavigationBarItem(
-                    icon: Padding(
-                      padding: EdgeInsets.only(
-                          left: 10.sp, right: 20.sp, top: 10.sp),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.account_circle_outlined,
-                            size: 30.sp,
-                            color: primaryColor,
-                          ),
-                        ],
+                ),
+                label: 'Danh bạ',
+              ),
+              BottomNavigationBarItem(
+                icon: Padding(
+                  padding:
+                      EdgeInsets.only(left: 15.sp, right: 15.sp, top: 10.sp),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.timer_outlined,
+                        size: 30.sp,
+                        color: primaryColor,
                       ),
-                    ),
-                    label: 'Cá nhân',
+                    ],
                   ),
-                ])),
+                ),
+                label: 'Nhật kí',
+              ),
+              BottomNavigationBarItem(
+                icon: Padding(
+                  padding:
+                      EdgeInsets.only(left: 10.sp, right: 20.sp, top: 10.sp),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.account_circle_outlined,
+                        size: 30.sp,
+                        color: primaryColor,
+                      ),
+                    ],
+                  ),
+                ),
+                label: 'Cá nhân',
+              ),
+            ]),
         body: IndexedStack(
           index: _currentIndex,
           children: [
