@@ -3,6 +3,7 @@ import 'package:app_zalo/routes/routes.dart';
 import 'package:app_zalo/screens/boarding/onboarding1.dart';
 import 'package:app_zalo/screens/boarding/onboarding2.dart';
 import 'package:app_zalo/screens/boarding/onboarding3.dart';
+import 'package:app_zalo/storages/hive_storage.dart';
 import 'package:app_zalo/widget/button/button_bottom_navigated.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -17,6 +18,11 @@ class BoardingScreen extends StatefulWidget {
 PageController _pageController = PageController();
 
 class _BoardingScreenState extends State<BoardingScreen> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -85,7 +91,8 @@ class _BoardingScreenState extends State<BoardingScreen> {
               child: ButtonBottomNavigated(
                 title: "Đăng nhập",
                 onPressed: () {
-                  Navigator.pushNamed(context, RouterName.loginScreen);
+                  Navigator.pushReplacementNamed(
+                      context, RouterName.loginScreen);
                 },
               ),
             ),
@@ -97,7 +104,8 @@ class _BoardingScreenState extends State<BoardingScreen> {
                   child: Center(
                     child: GestureDetector(
                       onTap: () {
-                        Navigator.pushNamed(context, RouterName.registerScreen);
+                        Navigator.pushReplacementNamed(
+                            context, RouterName.registerScreen);
                       },
                       child: Container(
                         margin: EdgeInsets.only(

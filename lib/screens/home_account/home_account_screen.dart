@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:app_zalo/constants/index.dart';
 import 'package:app_zalo/routes/routes.dart';
+import 'package:app_zalo/storages/hive_storage.dart';
 import 'package:app_zalo/widget/dismiss_keyboard_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -26,7 +27,8 @@ class _HomeAccountScreenState extends State<HomeAccountScreen> {
           maxWidth: 640,
           imageQuality: 50);
       if (pickedFile1 != null) {
-         Navigator.pushNamed(context, RouterName.uploadImageCoverScreen,arguments: {'imageFile':File(pickedFile1.path)});
+        Navigator.pushNamed(context, RouterName.uploadImageCoverScreen,
+            arguments: {'imageFile': File(pickedFile1.path)});
       } else {
         print('No image selected.');
       }
@@ -66,7 +68,7 @@ class _HomeAccountScreenState extends State<HomeAccountScreen> {
                                           style: text20.primary.bold)),
                                   GestureDetector(
                                     onTap: () {
-                                       _pickImage();
+                                      _pickImage();
                                     },
                                     child: Container(
                                       height: 50.sp,
@@ -86,7 +88,8 @@ class _HomeAccountScreenState extends State<HomeAccountScreen> {
                                           SizedBox(
                                             width: 16.sp,
                                           ),
-                                          Text("Chọn ảnh từ thư viện", style: text18)
+                                          Text("Chọn ảnh từ thư viện",
+                                              style: text18)
                                         ],
                                       ),
                                     ),
@@ -344,7 +347,16 @@ class _HomeAccountScreenState extends State<HomeAccountScreen> {
                     color: Colors.grey.withOpacity(0.3),
                   ),
                   GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      HiveStorage().clearIdUser();
+                      HiveStorage().clearRefreshToken();
+                      HiveStorage().clearTokenAccess();
+                      Navigator.pushNamedAndRemoveUntil(
+                        context,
+                        RouterName.onBoardingScreen,
+                        (route) => false,
+                      );
+                    },
                     child: Container(
                       height: 45.sp,
                       margin: EdgeInsets.only(bottom: 15.sp, top: 15.sp),

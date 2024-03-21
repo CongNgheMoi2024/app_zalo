@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:app_zalo/constants/index.dart';
 import 'package:app_zalo/routes/routes.dart';
+import 'package:app_zalo/storages/hive_storage.dart';
 import 'package:flutter/material.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -12,13 +13,19 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  String accessToken = HiveStorage().token;
   @override
   void initState() {
     super.initState();
     Timer(
       const Duration(milliseconds: 2500),
       () {
-        Navigator.pushReplacementNamed(context, RouterName.onBoardingScreen);
+        if (accessToken != "") {
+          Navigator.pushReplacementNamed(
+              context, RouterName.uploadAvatarScreen);
+        } else {
+          Navigator.pushReplacementNamed(context, RouterName.onBoardingScreen);
+        }
       },
     );
   }
@@ -29,10 +36,13 @@ class _SplashScreenState extends State<SplashScreen> {
         backgroundColor: whiteColor,
         body: SafeArea(
             child: Center(
-          child: ImageAssets.pngAsset(
-            Png.logoZalo,
-            width: 100,
-            height: 100,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(15.sp),
+            child: ImageAssets.pngAsset(
+              Png.logoZalo,
+              width: 100,
+              height: 100,
+            ),
           ),
         )));
   }
