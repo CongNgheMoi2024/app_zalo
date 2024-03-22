@@ -114,7 +114,9 @@ class _LoginScreenState extends State<LoginScreen> {
             children: [
               BlocBuilder<LoginCubit, LoginState>(builder: (context, state) {
                 if (state is LoadingLoginState) {
-                  return CircularProgressIndicator();
+                  return const CircularProgressIndicator(
+                    color: primaryColor,
+                  );
                 } else if (state is ErrorLoginState) {
                   return Column(
                     children: [
@@ -166,7 +168,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   );
                 } else if (state is LoginenticatedState) {
                   Future.delayed(Duration.zero, () {
-                    Navigator.pushNamed(context, RouterName.uploadAvatarScreen);
+                    Navigator.pushNamedAndRemoveUntil(context,
+                        RouterName.uploadAvatarScreen, (route) => false);
                     context.read<LoginCubit>().resetState();
                   });
                   return Container();

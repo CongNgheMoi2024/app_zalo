@@ -304,20 +304,26 @@ class _HomeAccountScreenState extends State<HomeAccountScreen> {
               ),
               child: Column(
                 children: [
-                  Padding(
-                    padding: EdgeInsets.only(top: 18.sp, bottom: 18.sp),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        SizedBox(
-                            width: width * 0.15,
-                            child: Icon(
-                              Icons.published_with_changes,
-                              size: 25.sp,
-                              color: blackColor.withOpacity(0.8),
-                            )),
-                        Text("Đổi mật khẩu", style: text16.black.regular),
-                      ],
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pushNamed(
+                          context, RouterName.changePasswordScreen);
+                    },
+                    child: Padding(
+                      padding: EdgeInsets.only(top: 18.sp, bottom: 18.sp),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                              width: width * 0.15,
+                              child: Icon(
+                                Icons.published_with_changes,
+                                size: 25.sp,
+                                color: blackColor.withOpacity(0.8),
+                              )),
+                          Text("Đổi mật khẩu", style: text16.black.regular),
+                        ],
+                      ),
                     ),
                   ),
                   Container(
