@@ -16,7 +16,7 @@ class _TextInputLoginState extends State<TextInputLogin> {
   Widget build(BuildContext context) {
     return Container(
       height: 56.sp,
-      margin: EdgeInsets.only(right: 16.sp, left: 16.sp),
+      margin: EdgeInsets.only(right: 20.sp, left: 20.sp),
       child: TextField(
         keyboardType: TextInputType.number,
         onChanged: (value) {

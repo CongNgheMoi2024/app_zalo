@@ -2,11 +2,15 @@ import 'dart:io';
 
 import 'package:app_zalo/constants/index.dart';
 import 'package:app_zalo/routes/routes.dart';
-import 'package:app_zalo/widget/appbar/appbar_actions.dart';
+import 'package:app_zalo/screens/upload_avatar/bloc/upload_avatar_cubit.dart';
+import 'package:app_zalo/screens/upload_avatar/bloc/upload_avatar_state.dart';
+import 'package:app_zalo/storages/hive_storage.dart';
 import 'package:app_zalo/widget/button/button_bottom_navigated.dart';
 import 'package:app_zalo/widget/button/button_bottom_next.dart';
 import 'package:app_zalo/widget/dismiss_keyboard_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:image_picker/image_picker.dart';
 
 class UploadAvatarScreen extends StatefulWidget {
@@ -30,7 +34,7 @@ class _UploadAvatarScreenState extends State<UploadAvatarScreen> {
           source: ImageSource.gallery,
           maxHeight: 480,
           maxWidth: 640,
-          imageQuality: 50);
+          imageQuality: 90);
       if (pickedFile1 != null) {
         setState(() {
           pathImage1 = File(pickedFile1.path);
@@ -159,17 +163,47 @@ class _UploadAvatarScreenState extends State<UploadAvatarScreen> {
           ],
         )),
         bottomNavigationBar: Container(
-          height: 165.sp,
+          height: 175.sp,
           padding: EdgeInsets.only(bottom: 27.sp),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              ButtonBottomNavigated(
-                title: "Lưu",
-                onPressed: () {
-                  // Navigator.pushNamed(context, RouterName.verifyRegisterScreen);
-                },
-              ),
+              BlocBuilder<UploadAvatarCubit, UploadAvatarState>(
+                  builder: (context, state) {
+                if (state is UploadAvatarSuccessState) {
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    Navigator.pushNamed(context, RouterName.dashboardScreen);
+                    context.read<UploadAvatarCubit>().resetState();
+                  });
+                  return Container();
+                } else {
+                  return state is LoadingUploadAvataState
+                      ? const CircularProgressIndicator()
+                      : Column(
+                          children: [
+                            state is ErrorUploadAvataState
+                                ? Container()
+                                : SizedBox(
+                                    height: 10.sp,
+                                  ),
+                            ButtonBottomNavigated(
+                              title: "Lưu",
+                              onPressed: () {
+                                context
+                                    .read<UploadAvatarCubit>()
+                                    .UploadAvatar(pathImage1 ?? File(""));
+                              },
+                            ),
+                            state is ErrorUploadAvataState
+                                ? Text(
+                                    "Cập nhật avatar không thành công!",
+                                    style: text14.medium.error,
+                                  )
+                                : Container(),
+                          ],
+                        );
+                }
+              }),
               ButtonBottomNext(
                 title: "Lúc khác",
                 onPressed: () {

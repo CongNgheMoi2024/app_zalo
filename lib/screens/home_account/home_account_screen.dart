@@ -1,7 +1,11 @@
+import 'dart:io';
+
 import 'package:app_zalo/constants/index.dart';
+import 'package:app_zalo/routes/routes.dart';
+import 'package:app_zalo/storages/hive_storage.dart';
 import 'package:app_zalo/widget/dismiss_keyboard_widget.dart';
-import 'package:app_zalo/widget/header/header_actions_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class HomeAccountScreen extends StatefulWidget {
   const HomeAccountScreen({super.key});
@@ -11,6 +15,28 @@ class HomeAccountScreen extends StatefulWidget {
 }
 
 class _HomeAccountScreenState extends State<HomeAccountScreen> {
+  int sizeImage = 0;
+  File? pathImage1;
+  Future<void> _pickImage() async {
+    try {
+      final picker = ImagePicker();
+
+      final XFile? pickedFile1 = await picker.pickImage(
+          source: ImageSource.gallery,
+          maxHeight: 480,
+          maxWidth: 640,
+          imageQuality: 50);
+      if (pickedFile1 != null) {
+        Navigator.pushNamed(context, RouterName.uploadImageCoverScreen,
+            arguments: {'imageFile': File(pickedFile1.path)});
+      } else {
+        print('No image selected.');
+      }
+    } catch (e) {
+      print("Error: $e");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -26,26 +52,73 @@ class _HomeAccountScreenState extends State<HomeAccountScreen> {
                   children: [
             Stack(
               children: [
-                Container(
-                  height: 185.sp,
-                  width: width,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage(Png.imgAnhBia),
-                      fit: BoxFit.cover,
+                GestureDetector(
+                  onTap: () {
+                    showModalBottomSheet(
+                        context: context,
+                        builder: (context) => SizedBox(
+                              height: 160.sp,
+                              child: Column(
+                                children: [
+                                  Container(
+                                      height: 50.sp,
+                                      padding: EdgeInsets.only(left: 12.sp),
+                                      alignment: Alignment.centerLeft,
+                                      child: Text("Ảnh bìa",
+                                          style: text20.primary.bold)),
+                                  GestureDetector(
+                                    onTap: () {
+                                      _pickImage();
+                                    },
+                                    child: Container(
+                                      height: 50.sp,
+                                      decoration: BoxDecoration(
+                                          border: Border(
+                                              bottom: BorderSide(
+                                                  color: Colors.grey
+                                                      .withOpacity(0.3),
+                                                  width: 1))),
+                                      child: Row(
+                                        children: [
+                                          SizedBox(width: 12.sp),
+                                          const Icon(
+                                            Icons.add_photo_alternate,
+                                            size: 35,
+                                          ),
+                                          SizedBox(
+                                            width: 16.sp,
+                                          ),
+                                          Text("Chọn ảnh từ thư viện",
+                                              style: text18)
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ));
+                  },
+                  child: Container(
+                    height: 185.sp,
+                    width: width,
+                    decoration: const BoxDecoration(
+                      image: DecorationImage(
+                        image: AssetImage(Png.imgAnhBia),
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                 ),
                 Positioned(
-                  top: 0,
+                  bottom: 0,
                   child: Container(
-                      height: 185.sp,
-                      width: width,
+                      height: 70.sp,
+                      width: width - 200.sp,
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
                           begin: Alignment.topCenter,
                           end: Alignment.bottomCenter,
-                          stops: [
+                          stops: const [
                             0.4,
                             0.5,
                             0.6,
@@ -60,7 +133,7 @@ class _HomeAccountScreenState extends State<HomeAccountScreen> {
                         ),
                       ),
                       child: Padding(
-                        padding: EdgeInsets.only(bottom: 15.sp),
+                        padding: EdgeInsets.only(bottom: 8.sp),
                         child: Row(
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
@@ -231,20 +304,26 @@ class _HomeAccountScreenState extends State<HomeAccountScreen> {
               ),
               child: Column(
                 children: [
-                  Padding(
-                    padding: EdgeInsets.only(top: 18.sp, bottom: 18.sp),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        SizedBox(
-                            width: width * 0.15,
-                            child: Icon(
-                              Icons.published_with_changes,
-                              size: 25.sp,
-                              color: blackColor.withOpacity(0.8),
-                            )),
-                        Text("Đổi mật khẩu", style: text16.black.regular),
-                      ],
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pushNamed(
+                          context, RouterName.changePasswordScreen);
+                    },
+                    child: Padding(
+                      padding: EdgeInsets.only(top: 18.sp, bottom: 18.sp),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                              width: width * 0.15,
+                              child: Icon(
+                                Icons.published_with_changes,
+                                size: 25.sp,
+                                color: blackColor.withOpacity(0.8),
+                              )),
+                          Text("Đổi mật khẩu", style: text16.black.regular),
+                        ],
+                      ),
                     ),
                   ),
                   Container(
@@ -274,7 +353,16 @@ class _HomeAccountScreenState extends State<HomeAccountScreen> {
                     color: Colors.grey.withOpacity(0.3),
                   ),
                   GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      HiveStorage().clearIdUser();
+                      HiveStorage().clearRefreshToken();
+                      HiveStorage().clearTokenAccess();
+                      Navigator.pushNamedAndRemoveUntil(
+                        context,
+                        RouterName.onBoardingScreen,
+                        (route) => false,
+                      );
+                    },
                     child: Container(
                       height: 45.sp,
                       margin: EdgeInsets.only(bottom: 15.sp, top: 15.sp),

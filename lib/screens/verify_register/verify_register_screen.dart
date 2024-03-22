@@ -1,9 +1,12 @@
 import 'package:app_zalo/constants/index.dart';
 import 'package:app_zalo/routes/routes.dart';
+import 'package:app_zalo/screens/verify_register/bloc/verify_register_cubit.dart';
+import 'package:app_zalo/screens/verify_register/bloc/verify_register_state.dart';
 import 'package:app_zalo/widget/appbar/appbar_actions.dart';
 import 'package:app_zalo/widget/button/button_bottom_navigated.dart';
 import 'package:app_zalo/widget/dismiss_keyboard_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
 class VerifyRegisterScreen extends StatefulWidget {
@@ -55,6 +58,7 @@ class _VerifyRegisterScreenState extends State<VerifyRegisterScreen> {
                         keyboardType: TextInputType.number,
                         validator: (v) {
                           if (v!.length < 6 && v.isNotEmpty) {
+                            isValidatedOtp = false;
                             return "Mã OTP phải đủ 6 số";
                           } else {
                             isValidatedOtp = true;
@@ -95,20 +99,53 @@ class _VerifyRegisterScreenState extends State<VerifyRegisterScreen> {
           ),
         ),
         bottomNavigationBar: Container(
-          height: 126.sp,
+          height: 141.sp,
           padding: EdgeInsets.only(bottom: 37.sp),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              ButtonBottomNavigated(
-                title: "Xác thực",
-                onPressed: () {
-                  Navigator.pushNamed(context, RouterName.uploadAvatarScreen);
-                },
-              ),
+              BlocBuilder<VerifyRegisterCubit, VerifyRegisterState>(
+                  builder: (context, state) {
+                if (state is VerifyRegisterSuccessState) {
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    Navigator.pushReplacementNamed(
+                        context, RouterName.uploadAvatarScreen);
+                    context.read<VerifyRegisterCubit>().resetState();
+                  });
+                  return Container();
+                } else {
+                  return state is LoadingVerifyRegisterState
+                      ? CircularProgressIndicator()
+                      : Column(
+                          children: [
+                            state is ErrorVerifyRegisterState
+                                ? Container()
+                                : SizedBox(
+                                    height: 14.sp,
+                                  ),
+                            ButtonBottomNavigated(
+                              isValidate: isValidatedOtp,
+                              title: "Xác thực",
+                              onPressed: () {
+                                context
+                                    .read<VerifyRegisterCubit>()
+                                    .VerifyRegisterenticate("415566");
+                              },
+                            ),
+                            state is ErrorVerifyRegisterState
+                                ? Text(
+                                    "OTP không đúng. Vui lòng nhập lại!",
+                                    style: text12.medium.error,
+                                  )
+                                : Container(),
+                          ],
+                        );
+                }
+              }),
               GestureDetector(
                 onTap: () {
-                  Navigator.pushNamed(context, RouterName.loginScreen);
+                  Navigator.pushReplacementNamed(
+                      context, RouterName.loginScreen);
                 },
                 child: Container(
                   margin: EdgeInsets.only(top: 8.sp),
