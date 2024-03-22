@@ -21,6 +21,7 @@ class _FastContactScreenState extends State<FastContactScreen> {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
+
     return DismissKeyboard(
       child: Scaffold(
         body: SingleChildScrollView(
@@ -29,9 +30,8 @@ class _FastContactScreenState extends State<FastContactScreen> {
             child: Wrap(
                 children: widget.contacts!.asMap().entries.map((entry) {
               final index = entry.key;
-
               final e = entry.value;
-              final firstLetter = "${e.displayName?[0].toUpperCase()}";
+              final firstLetter = e.displayName![0].toUpperCase().toString();
 
               final isFirstLetterSame = firstLetter == previousFirstLetter;
 
@@ -40,7 +40,7 @@ class _FastContactScreenState extends State<FastContactScreen> {
               return Column(
                 children: [
                   if (shouldShowFirstLetter)
-                    Regex.number(firstLetter!) == true ||
+                    Regex.number(firstLetter) == true ||
                             e.displayName!.startsWith("Contact")
                         ? Container()
                         : Padding(
@@ -99,10 +99,7 @@ class _FastContactScreenState extends State<FastContactScreen> {
                             SizedBox(
                               height: 1.sp,
                             ),
-                            Text(
-                                "${e.displayName}" == ""
-                                    ? "Chưa đặt tên"
-                                    : "${e.displayName}",
+                            Text(e.displayName ?? "Chưa đặt tên",
                                 style: text16.black.medium),
                             SizedBox(
                               height: 2.sp,

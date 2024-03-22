@@ -230,7 +230,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   return Container();
                 } else {
                   return state is LoadingRegisterState
-                      ? CircularProgressIndicator()
+                      ? const CircularProgressIndicator()
                       : Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
