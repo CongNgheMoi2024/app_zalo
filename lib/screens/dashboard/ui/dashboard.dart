@@ -47,7 +47,6 @@ class _DashboardScreenState extends State<DashboardScreen>
     ContactsService.getContacts().then((value) {
       contacts = value.toList();
       setState(() {
-        print("LoaddXong");
         isLoading = false;
       });
     });

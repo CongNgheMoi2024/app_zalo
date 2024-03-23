@@ -1,5 +1,6 @@
 import 'package:app_zalo/screens/boarding/boarding_screen.dart';
 import 'package:app_zalo/screens/change_password/ui/change_password_screen.dart';
+import 'package:app_zalo/screens/dashboard/bloc/infor_account_cubit.dart';
 import 'package:app_zalo/screens/dashboard/ui/dashboard.dart';
 import 'package:app_zalo/screens/forgot_password/bloc/forgot_password_cubit.dart';
 import 'package:app_zalo/screens/forgot_password/ui/forgot_password_screen.dart';
@@ -27,7 +28,17 @@ RouteFactory routes() {
         break;
 
       case RouterName.dashboardScreen:
-        screen = const DashboardScreen();
+        screen = MultiBlocProvider(
+          providers: [
+            BlocProvider<InforAccountCubit>(
+              create: (BuildContext context) => InforAccountCubit(),
+            ),
+            // BlocProvider<InforAccountCubit>(
+            //   create: (BuildContext context) => InforAccountCubit(),
+            // ),
+          ],
+          child: const DashboardScreen(),
+        );
         break;
 
       case RouterName.onBoardingScreen:
