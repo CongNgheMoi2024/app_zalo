@@ -15,11 +15,9 @@ class LoginCubit extends Cubit<LoginState> {
       Dio dio = Dio();
       String apiUrl = "${Env.url}/api/v1/auth/login";
 
-      Response response = await dio.post(apiUrl, data: {
-        "phone": phoneNumber,
-        "password": password,
-      });
-
+      Response response = await dio
+          .post(apiUrl, data: {"phone": phoneNumber, "password": password});
+      print("Loginenticaterrrrrrrrrrrrrrrrrrrrrr");
       if (response.statusCode == 200) {
         Map<String, dynamic> result = response.data['data'];
         String accessToken = result['access_token'];
