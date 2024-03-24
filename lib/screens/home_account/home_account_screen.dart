@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:app_zalo/constants/index.dart';
 import 'package:app_zalo/routes/routes.dart';
+import 'package:app_zalo/screens/change_password/bloc/change_password_cubit.dart';
+import 'package:app_zalo/screens/change_password/ui/change_password_screen.dart';
 import 'package:app_zalo/screens/home_account/bloc/infor_account_cubit.dart';
 import 'package:app_zalo/screens/home_account/bloc/infor_account_state.dart';
 import 'package:app_zalo/storages/hive_storage.dart';
@@ -20,6 +22,7 @@ class HomeAccountScreen extends StatefulWidget {
 class _HomeAccountScreenState extends State<HomeAccountScreen> {
   int sizeImage = 0;
   File? pathImage1;
+  String phone = "";
   Future<void> _pickImage() async {
     try {
       final picker = ImagePicker();
@@ -405,8 +408,21 @@ class _HomeAccountScreenState extends State<HomeAccountScreen> {
                     children: [
                       InkWell(
                         onTap: () {
-                          Navigator.pushNamed(
-                              context, RouterName.changePasswordScreen);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  BlocProvider<ChangePasswordCubit>(
+                                create: (BuildContext context) =>
+                                    ChangePasswordCubit(),
+                                child: ChangePasswordScreen(
+                                  phone: phone,
+                                ),
+                              ),
+                            ),
+                          );
+                          // Navigator.pushNamed(
+                          //     context, RouterName.changePasswordScreen);
                         },
                         child: Padding(
                           padding: EdgeInsets.only(top: 18.sp, bottom: 18.sp),
