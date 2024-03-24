@@ -28,6 +28,7 @@ RouteFactory routes() {
 
       case RouterName.dashboardScreen:
         screen = const DashboardScreen();
+
         break;
 
       case RouterName.onBoardingScreen:
