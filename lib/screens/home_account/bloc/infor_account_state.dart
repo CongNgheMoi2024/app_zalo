@@ -11,7 +11,14 @@ class ErrorInforAccountState extends InforAccountState {
 }
 
 class InforAccountSuccessState extends InforAccountState {
-  final String idUser;
-  final String phoneNumber;
-  InforAccountSuccessState(this.idUser, this.phoneNumber);
+  final Object user;
+  final String phone;
+  final String avatar;
+  final String imageCover;
+  InforAccountSuccessState(
+    this.user,
+    this.phone,
+    this.avatar,
+    this.imageCover,
+  );
 }

@@ -1,10 +1,12 @@
 import 'package:app_zalo/constants/index.dart';
 import 'package:app_zalo/screens/fast_contact/fast_contact_screen.dart';
+import 'package:app_zalo/screens/home_account/bloc/infor_account_cubit.dart';
 import 'package:app_zalo/screens/home_account/home_account_screen.dart';
 import 'package:app_zalo/screens/home_chat/home_chat_screen.dart';
 import 'package:app_zalo/widget/header/header_actions_bar.dart';
 import 'package:contacts_service/contacts_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -159,7 +161,17 @@ class _DashboardScreenState extends State<DashboardScreen>
               color: Colors.yellow,
               child: Text("Text1"),
             ),
-            const HomeAccountScreen(),
+            MultiBlocProvider(
+              providers: [
+                BlocProvider<InforAccountCubit>(
+                  create: (BuildContext context) => InforAccountCubit(),
+                ),
+                // BlocProvider<InforAccountCubit>(
+                //   create: (BuildContext context) => InforAccountCubit(),
+                // ),
+              ],
+              child: const HomeAccountScreen(),
+            ),
           ],
         ),
       ),
