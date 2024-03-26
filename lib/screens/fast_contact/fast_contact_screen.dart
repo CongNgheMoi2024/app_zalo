@@ -18,6 +18,9 @@ class FastContactScreen extends StatefulWidget {
 
 class _FastContactScreenState extends State<FastContactScreen> {
   String? previousFirstLetter;
+
+  int _currentIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
@@ -32,18 +35,68 @@ class _FastContactScreenState extends State<FastContactScreen> {
               contacts: widget.contacts,
             ),
             Padding(
-              padding: EdgeInsets.only(left: 5.sp, top: 15.sp, right: 5.sp),
+              padding: EdgeInsets.only(
+                  left: 15.sp, top: 10.sp, right: 15.sp, bottom: 5.sp),
               child: Row(
                 children: [
-                  Container(
-                    // padding: EdgeInsets.only(left: 10.sp, top: 10.sp),
-
-                    decoration: BoxDecoration(
-                      color: lightBlue.withOpacity(0.8),
-                      borderRadius: BorderRadius.circular(10.sp),
+                  InkWell(
+                    onTap: () {
+                      if (_currentIndex != 0) {
+                        setState(() {
+                          _currentIndex = 0;
+                        });
+                      }
+                    },
+                    child: Container(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 11.sp, vertical: 6.sp),
+                      decoration: BoxDecoration(
+                        color: _currentIndex == 0
+                            ? lightBlue.withOpacity(0.5)
+                            : whiteColor,
+                        borderRadius: BorderRadius.circular(13.sp),
+                        border: Border.all(
+                            color: _currentIndex == 0
+                                ? Colors.transparent
+                                : lightBlue.withOpacity(0.5),
+                            width: 1.sp),
+                      ),
+                      child: Text("Bạn bè",
+                          style: text15.black.semiBold.copyWith(
+                              color: _currentIndex == 0
+                                  ? whiteColor
+                                  : lightBlue.withOpacity(0.8))),
                     ),
-                    child: Text("Bạn bè",
-                        style: text26.black.bold.copyWith(color: whiteColor)),
+                  ),
+                  InkWell(
+                    onTap: () {
+                      if (_currentIndex != 1) {
+                        setState(() {
+                          _currentIndex = 1;
+                        });
+                      }
+                    },
+                    child: Container(
+                      margin: EdgeInsets.only(left: 15.sp),
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 11.sp, vertical: 6.sp),
+                      decoration: BoxDecoration(
+                        color: _currentIndex == 1
+                            ? lightBlue.withOpacity(0.5)
+                            : whiteColor,
+                        borderRadius: BorderRadius.circular(13.sp),
+                        border: Border.all(
+                            color: _currentIndex == 1
+                                ? Colors.transparent
+                                : lightBlue.withOpacity(0.5),
+                            width: 1.sp),
+                      ),
+                      child: Text("Danh bạ",
+                          style: text15.black.semiBold.copyWith(
+                              color: _currentIndex == 1
+                                  ? whiteColor
+                                  : lightBlue.withOpacity(0.8))),
+                    ),
                   ),
                 ],
               ),
@@ -51,103 +104,110 @@ class _FastContactScreenState extends State<FastContactScreen> {
             Expanded(
               child: SingleChildScrollView(
                 child: Container(
-                  margin: EdgeInsets.only(top: 10.sp, bottom: 10.sp),
-                  child: Wrap(
-                      children: widget.contacts!.asMap().entries.map((entry) {
-                    final index = entry.key;
-                    final e = entry.value;
-                    final firstLetter =
-                        e.displayName![0].toUpperCase().toString();
+                    margin: EdgeInsets.only(top: 10.sp, bottom: 10.sp),
+                    child: IndexedStack(index: _currentIndex, children: [
+                      Wrap(
+                          children:
+                              widget.contacts!.asMap().entries.map((entry) {
+                        final index = entry.key;
+                        final e = entry.value;
+                        final firstLetter =
+                            e.displayName![0].toUpperCase().toString();
 
-                    final isFirstLetterSame =
-                        firstLetter == previousFirstLetter;
+                        final isFirstLetterSame =
+                            firstLetter == previousFirstLetter;
 
-                    final shouldShowFirstLetter = !isFirstLetterSame;
-                    previousFirstLetter = firstLetter;
-                    return Column(
-                      children: [
-                        if (shouldShowFirstLetter)
-                          Regex.number(firstLetter) == true ||
-                                  e.displayName!.startsWith("Contact")
-                              ? Container()
-                              : Padding(
-                                  padding: EdgeInsets.only(
-                                    left: 10.sp,
-                                    top: 10.sp,
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Text(firstLetter,
-                                          style: text26.black.bold),
-                                    ],
-                                  ),
-                                ),
-                        Container(
-                          height: 65.sp,
-                          width: width,
-                          padding: EdgeInsets.only(
-                              top: 10.sp, left: 10.sp, right: 10.sp),
-                          child: Row(
-                            children: [
-                              e.avatar != null && e.avatar!.isNotEmpty
-                                  ? ClipRRect(
-                                      borderRadius: BorderRadius.circular(60),
-                                      child: Image.memory(
-                                          height: 46.sp,
-                                          width: 46.sp,
-                                          e.avatar!),
-                                    )
-                                  : Container(
-                                      height: 46.sp,
-                                      width: 46.sp,
-                                      decoration: BoxDecoration(
-                                        color: Color.fromARGB(
-                                            255,
-                                            255,
-                                            (231 - (index + 12) % 99),
-                                            (211 - index * 3 % 100)),
-                                        borderRadius: BorderRadius.circular(60),
+                        final shouldShowFirstLetter = !isFirstLetterSame;
+                        previousFirstLetter = firstLetter;
+                        return Column(
+                          children: [
+                            if (shouldShowFirstLetter)
+                              Regex.number(firstLetter) == true ||
+                                      e.displayName!.startsWith("Contact")
+                                  ? Container()
+                                  : Padding(
+                                      padding: EdgeInsets.only(
+                                        left: 10.sp,
+                                        top: 10.sp,
                                       ),
-                                      child: Center(
-                                        child: Text(
-                                          e.displayName![0].toUpperCase(),
-                                          textAlign: TextAlign.center,
-                                          style: text22.white.bold.copyWith(
-                                              color: Color.fromARGB(
-                                                  255,
-                                                  0,
-                                                  (106 - (index * 8) % 98),
-                                                  122)),
-                                        ),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          Text(firstLetter,
+                                              style: text26.black.bold),
+                                        ],
                                       ),
                                     ),
-                              SizedBox(
-                                width: 10.sp,
-                              ),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                            Container(
+                              height: 65.sp,
+                              width: width,
+                              padding: EdgeInsets.only(
+                                  top: 10.sp, left: 10.sp, right: 10.sp),
+                              child: Row(
                                 children: [
+                                  e.avatar != null && e.avatar!.isNotEmpty
+                                      ? ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(60),
+                                          child: Image.memory(
+                                              height: 46.sp,
+                                              width: 46.sp,
+                                              e.avatar!),
+                                        )
+                                      : Container(
+                                          height: 46.sp,
+                                          width: 46.sp,
+                                          decoration: BoxDecoration(
+                                            color: Color.fromARGB(
+                                                255,
+                                                255,
+                                                (231 - (index + 12) % 99),
+                                                (211 - index * 3 % 100)),
+                                            borderRadius:
+                                                BorderRadius.circular(60),
+                                          ),
+                                          child: Center(
+                                            child: Text(
+                                              e.displayName![0].toUpperCase(),
+                                              textAlign: TextAlign.center,
+                                              style: text22.white.bold.copyWith(
+                                                  color: Color.fromARGB(
+                                                      255,
+                                                      0,
+                                                      (106 - (index * 8) % 98),
+                                                      122)),
+                                            ),
+                                          ),
+                                        ),
                                   SizedBox(
-                                    height: 1.sp,
+                                    width: 10.sp,
                                   ),
-                                  Text(e.displayName ?? "Chưa đặt tên",
-                                      style: text16.black.medium),
-                                  SizedBox(
-                                    height: 2.sp,
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      SizedBox(
+                                        height: 1.sp,
+                                      ),
+                                      Text(e.displayName ?? "Chưa đặt tên",
+                                          style: text16.black.medium),
+                                      SizedBox(
+                                        height: 2.sp,
+                                      ),
+                                      Text(e.phones!.first.value!,
+                                          style: text16.black.regular),
+                                    ],
                                   ),
-                                  Text(e.phones!.first.value!,
-                                      style: text16.black.regular),
                                 ],
                               ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    );
-                  }).toList()),
-                ),
+                            ),
+                          ],
+                        );
+                      }).toList()),
+                      Text("Danh bạ")
+                    ])),
               ),
             ),
           ],
