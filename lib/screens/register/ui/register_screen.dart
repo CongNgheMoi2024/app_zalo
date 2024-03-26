@@ -252,10 +252,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   ? true
                                   : false,
                               onPressed: () async {
+                                print("phoneNumber: $selectedRadio");
                                 context.read<RegisterCubit>().register(
                                     phoneNumber!,
                                     name!,
-                                    selectedRadio!,
+                                    selectedRadio! - 1,
                                     dateOfBirth!,
                                     password!,
                                     newPassword!);

@@ -22,7 +22,6 @@ class InforAccountCubit extends Cubit<InforAccountState> {
       );
 
       if (response.statusCode == 200) {
-        print("Thanh cong! ${response.data['data']}");
         emit(InforAccountSuccessState(
           response.data['data'],
           response.data['data']['phone'],
