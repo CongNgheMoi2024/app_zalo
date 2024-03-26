@@ -88,7 +88,9 @@ class _DashboardScreenState extends State<DashboardScreen>
                       Icon(
                         Icons.message_outlined,
                         size: 30.sp,
-                        color: primaryColor,
+                        color: _currentIndex == 0
+                            ? primaryColor
+                            : primaryColor.withOpacity(0.5),
                       ),
                     ],
                   ),
@@ -105,7 +107,9 @@ class _DashboardScreenState extends State<DashboardScreen>
                       Icon(
                         Icons.switch_account_outlined,
                         size: 30.sp,
-                        color: primaryColor,
+                        color: _currentIndex == 1
+                            ? primaryColor
+                            : primaryColor.withOpacity(0.5),
                       ),
                     ],
                   ),
@@ -122,7 +126,9 @@ class _DashboardScreenState extends State<DashboardScreen>
                       Icon(
                         Icons.timer_outlined,
                         size: 30.sp,
-                        color: primaryColor,
+                        color: _currentIndex == 2
+                            ? primaryColor
+                            : primaryColor.withOpacity(0.5),
                       ),
                     ],
                   ),
@@ -139,7 +145,9 @@ class _DashboardScreenState extends State<DashboardScreen>
                       Icon(
                         Icons.account_circle_outlined,
                         size: 30.sp,
-                        color: primaryColor,
+                        color: _currentIndex == 3
+                            ? primaryColor
+                            : primaryColor.withOpacity(0.5),
                       ),
                     ],
                   ),

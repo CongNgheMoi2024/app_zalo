@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:app_zalo/constants/index.dart';
 import 'package:app_zalo/routes/routes.dart';
+import 'package:app_zalo/screens/change_password/bloc/change_password_cubit.dart';
+import 'package:app_zalo/screens/change_password/ui/change_password_screen.dart';
 import 'package:app_zalo/screens/home_account/bloc/infor_account_cubit.dart';
 import 'package:app_zalo/screens/home_account/bloc/infor_account_state.dart';
 import 'package:app_zalo/storages/hive_storage.dart';
@@ -20,15 +22,14 @@ class HomeAccountScreen extends StatefulWidget {
 class _HomeAccountScreenState extends State<HomeAccountScreen> {
   int sizeImage = 0;
   File? pathImage1;
+  String phone = "";
   Future<void> _pickImage() async {
     try {
       final picker = ImagePicker();
 
       final XFile? pickedFile1 = await picker.pickImage(
-          source: ImageSource.gallery,
-          maxHeight: 480,
-          maxWidth: 640,
-          imageQuality: 50);
+        source: ImageSource.gallery,
+      );
       if (pickedFile1 != null) {
         // ignore: use_build_context_synchronously
         Navigator.pushNamed(context, RouterName.uploadImageCoverScreen,
@@ -60,6 +61,7 @@ class _HomeAccountScreenState extends State<HomeAccountScreen> {
             GestureDetector(
               onTap: () {
                 _pickImage();
+                Navigator.pop(context);
               },
               child: Container(
                 height: 50.sp,
@@ -92,6 +94,79 @@ class _HomeAccountScreenState extends State<HomeAccountScreen> {
         ),
       ),
     );
+  }
+
+  void showModalAvatar(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
+    showModalBottomSheet(
+        context: context,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(22.sp),
+          ),
+        ),
+        builder: (context) => SizedBox(
+              height: 160.sp,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(top: 8.sp),
+                    height: 25.sp,
+                    width: width,
+                    child: Center(
+                      child: Container(
+                        height: 6.sp,
+                        width: 50.sp,
+                        decoration: BoxDecoration(
+                          color: Colors.grey.withOpacity(0.3),
+                          borderRadius: BorderRadius.circular(5.sp),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 20.sp),
+                    child: Text("Xem ảnh đại diện",
+                        style: text15.regular.copyWith(color: lightBlue)),
+                  ),
+                  InkWell(
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.pushNamed(
+                          context, RouterName.uploadAvatarScreen);
+                    },
+                    child: Container(
+                      margin: EdgeInsets.only(top: 13.sp),
+                      padding: EdgeInsets.only(
+                          top: 10.sp, bottom: 15.sp, left: 18.sp, right: 18.sp),
+                      decoration: BoxDecoration(
+                        border: Border(
+                          bottom: BorderSide(
+                            color: Colors.grey.withOpacity(0.2),
+                            width: 1.sp,
+                          ),
+                        ),
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.photo_camera_back_outlined,
+                            color: primaryColor,
+                            size: 30.sp,
+                          ),
+                          SizedBox(width: 16.sp),
+                          Text("Cập nhật Avatar",
+                              style: text16.regular.primary),
+                        ],
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ));
   }
 
   @override
@@ -174,61 +249,72 @@ class _HomeAccountScreenState extends State<HomeAccountScreen> {
                                       ],
                                     ),
                                   ),
-                                  child: Padding(
-                                    padding: EdgeInsets.only(bottom: 8.sp),
-                                    child: Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.end,
-                                        children: [
-                                          Padding(
-                                            padding: EdgeInsets.only(
-                                                left: 15.sp, right: 15.sp),
-                                            child: ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(80.sp),
-                                              child: state.avatar != ""
-                                                  ? ImageAssets.networkImage(
-                                                      url: state.avatar,
-                                                      width: 55.sp,
-                                                      height: 55.sp,
-                                                    )
-                                                  : ImageAssets.pngAsset(
-                                                      Png.imageAvatarChien,
-                                                      width: 55.sp,
-                                                      height: 55.sp,
-                                                    ),
+                                  child: InkWell(
+                                    onTap: () {
+                                      // Navigator.pushNamed(context,
+                                      //     RouterName.uploadAvatarScreen);
+                                      showModalAvatar(context);
+                                    },
+                                    child: Padding(
+                                      padding: EdgeInsets.only(bottom: 8.sp),
+                                      child: Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.end,
+                                          children: [
+                                            Padding(
+                                              padding: EdgeInsets.only(
+                                                  left: 15.sp, right: 15.sp),
+                                              child: ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        80.sp),
+                                                child: state.avatar != ""
+                                                    ? ImageAssets.networkImage(
+                                                        url: state.avatar,
+                                                        width: 55.sp,
+                                                        height: 55.sp,
+                                                      )
+                                                    : ImageAssets.pngAsset(
+                                                        Png.imageAvatarChien,
+                                                        width: 55.sp,
+                                                        height: 55.sp,
+                                                      ),
+                                              ),
                                             ),
-                                          ),
-                                          Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.end,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              SizedBox(
-                                                width: width * 0.22,
-                                                child: Text(
-                                                  ((state.user as Map)['name']
-                                                          .split(' ')
-                                                      as List<String>)[0],
-                                                  style: text18.white.medium,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  maxLines: 1,
+                                            Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.end,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                SizedBox(
+                                                  width: width * 0.22,
+                                                  child: Text(
+                                                    ((state.user as Map)['name']
+                                                            .split(' ')
+                                                        as List<String>)[0],
+                                                    style: text18.white.medium,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    maxLines: 1,
+                                                  ),
                                                 ),
-                                              ),
-                                              SizedBox(
-                                                height: 3.sp,
-                                              ),
-                                              Text(
-                                                "Xem trang cá nhân",
-                                                style: text15.regular.copyWith(
-                                                    color: Colors.white
-                                                        .withOpacity(0.8)),
-                                              )
-                                            ],
-                                          )
-                                        ]),
+                                                SizedBox(
+                                                  height: 3.sp,
+                                                ),
+                                                Text(
+                                                  "Xem trang cá nhân",
+                                                  style: text15.regular
+                                                      .copyWith(
+                                                          color: Colors
+                                                              .white
+                                                              .withOpacity(
+                                                                  0.8)),
+                                                )
+                                              ],
+                                            )
+                                          ]),
+                                    ),
                                   )),
                             ),
                           ],
@@ -405,8 +491,19 @@ class _HomeAccountScreenState extends State<HomeAccountScreen> {
                     children: [
                       InkWell(
                         onTap: () {
-                          Navigator.pushNamed(
-                              context, RouterName.changePasswordScreen);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  BlocProvider<ChangePasswordCubit>(
+                                create: (BuildContext context) =>
+                                    ChangePasswordCubit(),
+                                child: ChangePasswordScreen(
+                                  phone: phone,
+                                ),
+                              ),
+                            ),
+                          );
                         },
                         child: Padding(
                           padding: EdgeInsets.only(top: 18.sp, bottom: 18.sp),

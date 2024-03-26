@@ -22,7 +22,6 @@ class InforAccountCubit extends Cubit<InforAccountState> {
       );
 
       if (response.statusCode == 200) {
-        print("Thanh cong! ${response.data['data']}");
         emit(InforAccountSuccessState(
           response.data['data'],
           response.data['data']['phone'],
@@ -33,12 +32,10 @@ class InforAccountCubit extends Cubit<InforAccountState> {
               : response.data['data']['imageCover'],
         ));
       } else {
-        print("LLLLLLLLLLLLLLLLLLLLLLLOOOOOOOOOOOOOOOOOI");
         emit(ErrorInforAccountState(
             "InforAccount failed. ${response.data['message']}"));
       }
     } catch (e) {
-      print("Looixiii ${e.toString()}");
       emit(ErrorInforAccountState(e.toString()));
     }
   }

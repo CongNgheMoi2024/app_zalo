@@ -12,7 +12,7 @@ class Png {
   static const String icHide = 'assets/images/icHide.png';
   static const String icView = 'assets/images/icView.png';
   static const String icAddImageAvatar = 'assets/images/icAddImageAvatar.png';
-  static const String imageAvatarChien = 'assets/images/imageAvatarChien.jpg';
+  static const String imageAvatarChien = 'assets/images/imageAvatarChien.png';
   static const String imgAnhBia = 'assets/images/imgAnhBia.jpg';
   static const String imgUserGirl = 'assets/images/imgUserGirl.jpg';
   static const String imgUserBoy = 'assets/images/imgUserBoy.jpg';

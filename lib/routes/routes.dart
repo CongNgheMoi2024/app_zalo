@@ -60,10 +60,6 @@ RouteFactory routes() {
         screen = const UploadCoverImageScreen();
         break;
 
-      case RouterName.changePasswordScreen:
-        screen = const ChangePasswordScreen();
-        break;
-
       case RouterName.forgotPasswordScreen:
         screen = BlocProvider(
             create: (context) => ForgotPasswordCubit(),
@@ -92,5 +88,4 @@ abstract class RouterName {
   static const String uploadImageCoverScreen = '/uploadImageCoverScreen';
   static const String uploadAvatarScreen = '/uploadAvatarScreen';
   static const String forgotPasswordScreen = '/forgotPasswordScreen';
-  static const String changePasswordScreen = '/changePasswordScreen';
 }
