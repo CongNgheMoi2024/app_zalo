@@ -1,5 +1,6 @@
 import 'package:app_zalo/constants/index.dart';
-import 'package:app_zalo/screens/fast_contact/fast_contact_screen.dart';
+import 'package:app_zalo/screens/fast_contact/bloc/fast_contact_cubit.dart';
+import 'package:app_zalo/screens/fast_contact/ui/fast_contact_screen.dart';
 import 'package:app_zalo/screens/home_account/bloc/infor_account_cubit.dart';
 import 'package:app_zalo/screens/home_account/home_account_screen.dart';
 import 'package:app_zalo/screens/home_chat/home_chat_screen.dart';
@@ -164,7 +165,14 @@ class _DashboardScreenState extends State<DashboardScreen>
                     child: CircularProgressIndicator(
                         valueColor:
                             AlwaysStoppedAnimation<Color>(Colors.black)))
-                : FastContactScreen(contacts: contacts),
+                : MultiBlocProvider(
+                    providers: [
+                      BlocProvider<FastContactCubit>(
+                        create: (BuildContext context) => FastContactCubit(),
+                      ),
+                    ],
+                    child: FastContactScreen(contacts: contacts),
+                  ),
             Container(
               color: Colors.yellow,
               child: Text("Text1"),
