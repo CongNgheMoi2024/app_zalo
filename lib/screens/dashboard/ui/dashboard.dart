@@ -1,5 +1,6 @@
 import 'package:app_zalo/constants/index.dart';
 import 'package:app_zalo/screens/fast_contact/bloc/fast_contact_cubit.dart';
+import 'package:app_zalo/screens/fast_contact/bloc/get_friends_cubit.dart';
 import 'package:app_zalo/screens/fast_contact/ui/fast_contact_screen.dart';
 import 'package:app_zalo/screens/home_account/bloc/infor_account_cubit.dart';
 import 'package:app_zalo/screens/home_account/home_account_screen.dart';
@@ -169,6 +170,9 @@ class _DashboardScreenState extends State<DashboardScreen>
                     providers: [
                       BlocProvider<FastContactCubit>(
                         create: (BuildContext context) => FastContactCubit(),
+                      ),
+                      BlocProvider<GetFriendsCubit>(
+                        create: (BuildContext context) => GetFriendsCubit(),
                       ),
                     ],
                     child: FastContactScreen(contacts: contacts),
