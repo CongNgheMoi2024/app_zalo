@@ -2,10 +2,18 @@ import 'package:app_zalo/constants/index.dart';
 import 'package:app_zalo/utils/regex.dart';
 import 'package:app_zalo/widget/button/button_bottom_navigated.dart';
 import 'package:app_zalo/widget/dismiss_keyboard_widget.dart';
+import 'package:app_zalo/routes/routes.dart';
+import 'package:app_zalo/screens/register/bloc/register_cubit.dart';
+import 'package:app_zalo/screens/register/bloc/register_state.dart';
+import 'package:app_zalo/utils/regex.dart';
+import 'package:app_zalo/widget/button/button_bottom_navigated.dart';
+import 'package:app_zalo/widget/dismiss_keyboard_widget.dart';
+import 'package:app_zalo/widget/text_input/text_input_login.dart';
 import 'package:app_zalo/widget/text_input/text_input_password.dart';
 import 'package:app_zalo/widget/text_input/text_input_widget.dart';
 import 'package:app_zalo/widget/text_input_picked_day/text_input_picked_day.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -16,11 +24,13 @@ class RegisterScreen extends StatefulWidget {
 
 class _RegisterScreenState extends State<RegisterScreen> {
   bool isPhoneNumberValid = true;
-  bool isPasswordValid = true;
+  bool isNameValid = true;
+
   String selectedTimeBorn = "";
   int? selectedRadio = 1;
   String? gender;
   String? password;
+  bool isPasswordValid = true;
   String? dateOfBirth;
   String? phoneNumber;
   String? name;
@@ -48,12 +58,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         fontSize: 42.sp,
                         fontWeight: FontWeight.bold)),
               ),
-              TextInputWidget(
+              TextInputLogin(
                 title: "Số điện thoại",
-                value: phoneNumber,
-                onTextChanged: (text) {
+                onChanged: (value) {
                   setState(() {
-                    phoneNumber = text;
+                    phoneNumber = value;
                     isPhoneNumberValid = Regex.isPhone(phoneNumber!);
                   });
                 },
@@ -76,6 +85,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     name = text;
                   });
                 },
+              ),
+              Container(
+                height: 20.sp,
+                width: width - 20.sp,
+                margin: EdgeInsets.only(left: 20.sp),
+                child: Text(name == "" ? "Tên không được để trống" : "",
+                    style: text11.textColor.error),
               ),
               Container(
                 padding: EdgeInsets.all(10.sp),
@@ -138,8 +154,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   setState(() {
                     selectedTimeBorn =
                         "${pickedDate.day}/${pickedDate.month}/${pickedDate.year}";
-
-                    dateOfBirth = pickedDate.toIso8601String();
+                    dateOfBirth =
+                        "${pickedDate.year}-${pickedDate.month}-${pickedDate.day}";
                   });
                 },
                 onManualInput: (String pickedDate) {
@@ -200,17 +216,68 @@ class _RegisterScreenState extends State<RegisterScreen> {
           ),
         ),
         bottomNavigationBar: Container(
-          height: 126.sp,
-          padding: EdgeInsets.only(bottom: 37.sp),
+          height: 140.sp,
+          padding: EdgeInsets.only(bottom: 30.sp),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              ButtonBottomNavigated(
-                title: "Đăng ký",
-                onPressed: () {},
-              ),
+              BlocBuilder<RegisterCubit, RegisterState>(
+                  builder: (context, state) {
+                if (state is SuccessRegisterState) {
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    Navigator.pushNamed(
+                        context, RouterName.verifyRegisterScreen);
+                    context.read<RegisterCubit>().resetState();
+                  });
+                  return Container();
+                } else {
+                  return state is LoadingRegisterState
+                      ? const CircularProgressIndicator()
+                      : Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            ButtonBottomNavigated(
+                              title: "Tiếp tục",
+                              isValidate: (isPhoneNumberValid &&
+                                          phoneNumber != "" &&
+                                          phoneNumber != null) &&
+                                      name != "" &&
+                                      name != null &&
+                                      dateOfBirth != "" &&
+                                      dateOfBirth != null &&
+                                      isPasswordValid &&
+                                      password != "" &&
+                                      password != null &&
+                                      isConfirmPasswordValid &&
+                                      newPassword != "" &&
+                                      newPassword != null
+                                  ? true
+                                  : false,
+                              onPressed: () async {
+                                print("phoneNumber: $selectedRadio");
+                                context.read<RegisterCubit>().register(
+                                    phoneNumber!,
+                                    name!,
+                                    selectedRadio! - 1,
+                                    dateOfBirth!,
+                                    password!,
+                                    newPassword!);
+                              },
+                            ),
+                            state is ErrorRegisterState
+                                ? Text(
+                                    "Số điện thoại đã đăng kí rồi",
+                                    style: text14.medium.error,
+                                  )
+                                : Container(),
+                          ],
+                        );
+                }
+              }),
               GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  Navigator.pushNamed(context, RouterName.loginScreen);
+                },
                 child: Container(
                   margin: EdgeInsets.only(top: 8.sp),
                   child: RichText(

@@ -16,7 +16,7 @@ class _TextInputLoginState extends State<TextInputLogin> {
   Widget build(BuildContext context) {
     return Container(
       height: 56.sp,
-      margin: EdgeInsets.only(right: 16.sp, left: 16.sp),
+      margin: EdgeInsets.only(right: 20.sp, left: 20.sp),
       child: TextField(
         keyboardType: TextInputType.number,
         onChanged: (value) {
@@ -26,7 +26,7 @@ class _TextInputLoginState extends State<TextInputLogin> {
         cursorColor: greyIcBot.withOpacity(0.5),
         decoration: InputDecoration(
           hintText: widget.title ?? "Tiêu đề button",
-          hintStyle: text16.copyWith(color: greyIcBot.withOpacity(0.7)),
+          hintStyle: text15.regular.copyWith(color: greyIcTop.withOpacity(0.6)),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.sp),
             borderSide: BorderSide(

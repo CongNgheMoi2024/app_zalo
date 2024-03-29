@@ -1,4 +1,3 @@
-import 'package:app_zalo/constants/colors.dart';
 import 'package:app_zalo/constants/index.dart';
 import 'package:flutter/material.dart';
 
@@ -25,11 +24,14 @@ class _AppbarActionsState extends State<AppbarActions> {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return Container(
-        height: height * 0.11,
+        height: height * 0.065,
         width: width,
-        padding: EdgeInsets.only(top: 31.sp),
-        decoration: BoxDecoration(color: primaryColor),
+        padding: EdgeInsets.only(
+          top: 5.sp,
+        ),
+        decoration: BoxDecoration(color: whiteColor),
         child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             InkWell(
@@ -47,10 +49,15 @@ class _AppbarActionsState extends State<AppbarActions> {
                 ),
               ),
             ),
-            Center(
-              child:
-                  Text(widget.title ?? "Tiêu đề", style: text17.medium.black),
+            Expanded(
+              child: Center(
+                child:
+                    Text(widget.title ?? "Tiêu đề", style: text17.medium.black),
+              ),
             ),
+            SizedBox(
+              width: 55.sp,
+            )
           ],
         ));
   }
