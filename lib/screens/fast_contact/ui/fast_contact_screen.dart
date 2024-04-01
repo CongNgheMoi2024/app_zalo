@@ -118,13 +118,13 @@ class _FastContactScreenState extends State<FastContactScreen> {
 
                     final stateFastContact = fastContactCubit.state;
                     final stateGetFriends = getFriendsCubit.state;
+                    print("Sattttttttttte Fast Contac$stateFastContact");
+                    print("Sattttttttttte Get Friends$stateGetFriends");
                     if (stateFastContact is InitialFastContactState ||
-                        stateGetFriends is InitialFastContactState) {
+                        stateGetFriends is InitialGetFriendsState) {
                       fastContactCubit.FastContactenticate();
                       getFriendsCubit.getFriendsPhoneBook();
                     }
-                    fastContactCubit.FastContactenticate();
-                    getFriendsCubit.getFriendsPhoneBook();
                     return IndexedStack(index: _currentIndex, children: [
                       stateFastContact is LoadingFastContactState
                           ? Center(

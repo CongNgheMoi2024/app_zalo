@@ -20,7 +20,7 @@ class GetFriendsCubit extends Cubit<GetFriendsState> {
         options: Options(headers: {"Authorization": "Bearer $accessToken"}),
       );
       if (response.statusCode == 200) {
-        print("LOADDDD THÀNH CÔNG ${response.data['data']}");
+        print("LOADDDD THÀNH CÔNG Frienđsds${response.data['data']}");
         emit(GetFriendsPhoneBookSuccessState(response.data['data']));
       } else {
         emit(ErrorGetFriendsPhoneBookState("GetFriends failed.  "));
