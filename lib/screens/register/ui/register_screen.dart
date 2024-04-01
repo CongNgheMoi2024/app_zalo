@@ -1,4 +1,7 @@
 import 'package:app_zalo/constants/index.dart';
+import 'package:app_zalo/utils/regex.dart';
+import 'package:app_zalo/widget/button/button_bottom_navigated.dart';
+import 'package:app_zalo/widget/dismiss_keyboard_widget.dart';
 import 'package:app_zalo/routes/routes.dart';
 import 'package:app_zalo/screens/register/bloc/register_cubit.dart';
 import 'package:app_zalo/screens/register/bloc/register_state.dart';
@@ -151,7 +154,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   setState(() {
                     selectedTimeBorn =
                         "${pickedDate.day}/${pickedDate.month}/${pickedDate.year}";
-
                     dateOfBirth =
                         "${pickedDate.year}-${pickedDate.month}-${pickedDate.day}";
                   });
