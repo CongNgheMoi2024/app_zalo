@@ -7,6 +7,8 @@ import 'package:app_zalo/screens/login/bloc/login_cubit.dart';
 import 'package:app_zalo/screens/login/ui/login_screen.dart';
 import 'package:app_zalo/screens/register/bloc/register_cubit.dart';
 import 'package:app_zalo/screens/register/ui/register_screen.dart';
+import 'package:app_zalo/screens/search/bloc/search_cubit.dart';
+import 'package:app_zalo/screens/search/ui/search_by_phone_screen.dart';
 import 'package:app_zalo/screens/splash/splash_screen.dart';
 import 'package:app_zalo/screens/upload_avatar/bloc/upload_avatar_cubit.dart';
 import 'package:app_zalo/screens/upload_avatar/ui/upload_avatar_screen.dart';
@@ -66,6 +68,12 @@ RouteFactory routes() {
             child: const ForgotPasswordScreen());
 
         break;
+
+      case RouterName.searchByPhoneScreen:
+        screen = BlocProvider(create: (context)=>SearchCubit(),
+        child: const SearchScreen());
+        break;
+
       default:
         screen = const SplashScreen();
         break;
@@ -88,4 +96,5 @@ abstract class RouterName {
   static const String uploadImageCoverScreen = '/uploadImageCoverScreen';
   static const String uploadAvatarScreen = '/uploadAvatarScreen';
   static const String forgotPasswordScreen = '/forgotPasswordScreen';
+  static const String searchByPhoneScreen = '/searchByPhoneScreen';
 }

@@ -1,5 +1,7 @@
 import 'package:app_zalo/constants/index.dart';
+import 'package:app_zalo/routes/routes.dart';
 import 'package:flutter/material.dart';
+import 'package:injectable/injectable.dart';
 
 class HeaderActionsBar extends StatefulWidget {
   final IconData? icon1;
@@ -12,7 +14,6 @@ class HeaderActionsBar extends StatefulWidget {
   @override
   State<HeaderActionsBar> createState() => _HeaderActionsBarState();
 }
-
 class _HeaderActionsBarState extends State<HeaderActionsBar> {
   @override
   Widget build(BuildContext context) {
@@ -50,28 +51,29 @@ class _HeaderActionsBarState extends State<HeaderActionsBar> {
               ),
             ),
             Container(
-              height: 56.sp,
-              width: width * 0.69 -
-                  57.sp +
-                  (widget.icon1 == null ? 48.sp : 0) +
-                  (widget.icon2 == null ? 48.sp : 0),
-              padding: EdgeInsets.only(left: 5.sp, right: 5.sp, bottom: 6.sp),
-              child: TextField(
-                cursorColor: grey03,
-                decoration: InputDecoration(
-                  border: InputBorder.none,
-                  hintText: 'Tìm kiếm',
-                  hintStyle: TextStyle(
-                      color: whiteColor.withOpacity(0.8),
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.w400),
-                ),
-                style: TextStyle(
-                    color: whiteColor,
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.w400),
-              ),
-            )
+                height: 56.sp,
+                width: width * 0.69 -
+                    57.sp +
+                    (widget.icon1 == null ? 48.sp : 0) +
+                    (widget.icon2 == null ? 48.sp : 0),
+                padding: EdgeInsets.only(left: 5.sp, right: 5.sp, bottom: 6.sp),
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.pushNamed(context,RouterName.searchByPhoneScreen);
+                  },
+                  child: Container(
+                    color: Colors.transparent,
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      'Tìm kiếm',
+                      style: TextStyle(
+                        color: whiteColor.withOpacity(0.8),
+                        fontWeight: FontWeight.w400,
+                        fontSize: 16.sp,
+                      ),
+                    ),
+                  ),
+                ))
           ],
         ),
         SizedBox(
@@ -121,4 +123,4 @@ class _HeaderActionsBarState extends State<HeaderActionsBar> {
       ]),
     );
   }
-}
+  }
