@@ -251,8 +251,6 @@ class _HomeAccountScreenState extends State<HomeAccountScreen> {
                                   ),
                                   child: InkWell(
                                     onTap: () {
-                                      // Navigator.pushNamed(context,
-                                      //     RouterName.uploadAvatarScreen);
                                       showModalAvatar(context);
                                     },
                                     child: Padding(

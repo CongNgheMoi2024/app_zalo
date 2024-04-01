@@ -1,5 +1,6 @@
 import 'package:app_zalo/screens/boarding/boarding_screen.dart';
 import 'package:app_zalo/screens/change_password/ui/change_password_screen.dart';
+import 'package:app_zalo/screens/chatting_with/ui/chatting_with_screen.dart';
 import 'package:app_zalo/screens/dashboard/ui/dashboard.dart';
 import 'package:app_zalo/screens/forgot_password/bloc/forgot_password_cubit.dart';
 import 'package:app_zalo/screens/forgot_password/ui/forgot_password_screen.dart';
@@ -66,12 +67,15 @@ RouteFactory routes() {
         screen = BlocProvider(
             create: (context) => ForgotPasswordCubit(),
             child: const ForgotPasswordScreen());
-
         break;
+
 
       case RouterName.searchByPhoneScreen:
         screen = BlocProvider(create: (context)=>SearchCubit(),
         child: const SearchScreen());
+
+      case RouterName.chattingWithScreen:
+        screen = ChattingWithScreen();
         break;
 
       default:
@@ -97,4 +101,6 @@ abstract class RouterName {
   static const String uploadAvatarScreen = '/uploadAvatarScreen';
   static const String forgotPasswordScreen = '/forgotPasswordScreen';
   static const String searchByPhoneScreen = '/searchByPhoneScreen';
+  static const String chattingWithScreen = '/chattingWithScreen';
+
 }
