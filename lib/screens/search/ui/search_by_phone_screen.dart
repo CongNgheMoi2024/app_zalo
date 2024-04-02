@@ -51,7 +51,9 @@ class _SearchScreenState extends State<SearchScreen> {
                     top: 10.sp,
                     bottom: 10.sp,
                   ),
-                  padding: EdgeInsets.only(left: 14.sp),
+                  padding: EdgeInsets.only(
+                    left: 14.sp,
+                  ),
                   decoration: BoxDecoration(
                       color: whiteColor,
                       borderRadius: BorderRadius.circular(30)),

@@ -229,7 +229,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 context.read<RegisterCubit>().register(
                                     widget.phoneNumber!,
                                     name!,
-                                    selectedRadio! - 1,
+                                    selectedRadio! == 2 ? 0 : 1,
                                     dateOfBirth!,
                                     password!,
                                     newPassword!);

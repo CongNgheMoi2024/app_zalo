@@ -26,6 +26,7 @@ class FastContactCubit extends Cubit<FastContactState> {
         emit(ErrorFastContactState("FastContact failed.  "));
       }
     } catch (e) {
+      print("Loi FasssssTContact ${e.toString()}");
       emit(ErrorFastContactState(e.toString()));
     }
   }

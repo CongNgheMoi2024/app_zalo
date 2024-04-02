@@ -10,7 +10,7 @@ class GetFriendsCubit extends Cubit<GetFriendsState> {
 
   Future<void> getFriendsPhoneBook() async {
     emit(LoadingGetFriendsPhoneBookState());
-
+    print("accessToken $accessToken");
     try {
       Dio dio = Dio();
       String apiUrl = "${Env.url}/api/v1/users/phone-book/friends";

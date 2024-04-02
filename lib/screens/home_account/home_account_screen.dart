@@ -202,6 +202,7 @@ class _HomeAccountScreenState extends State<HomeAccountScreen> {
                     ),
                   );
                 } else if (state is InforAccountSuccessState) {
+                  phone = state.phone;
                   return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
