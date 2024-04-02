@@ -23,7 +23,6 @@ class UploadAvatarScreen extends StatefulWidget {
 
 class _UploadAvatarScreenState extends State<UploadAvatarScreen> {
   int? selectedRadio;
-
   int sizeImage = 0;
   File? pathImage1;
   Future<void> _pickImage() async {
