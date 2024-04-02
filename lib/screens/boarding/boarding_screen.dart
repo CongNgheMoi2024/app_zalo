@@ -105,7 +105,7 @@ class _BoardingScreenState extends State<BoardingScreen> {
                     child: GestureDetector(
                       onTap: () {
                         Navigator.pushReplacementNamed(
-                            context, RouterName.registerScreen);
+                            context, RouterName.phoneOTPRegisterScreen);
                       },
                       child: Container(
                         margin: EdgeInsets.only(

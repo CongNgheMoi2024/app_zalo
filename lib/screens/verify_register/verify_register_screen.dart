@@ -1,5 +1,7 @@
 import 'package:app_zalo/constants/index.dart';
 import 'package:app_zalo/routes/routes.dart';
+import 'package:app_zalo/screens/register/bloc/register_cubit.dart';
+import 'package:app_zalo/screens/register/ui/register_screen.dart';
 import 'package:app_zalo/screens/verify_register/bloc/verify_register_cubit.dart';
 import 'package:app_zalo/screens/verify_register/bloc/verify_register_state.dart';
 import 'package:app_zalo/widget/appbar/appbar_actions.dart';
@@ -10,7 +12,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
 class VerifyRegisterScreen extends StatefulWidget {
-  const VerifyRegisterScreen({super.key});
+  String? phoneNumber;
+  VerifyRegisterScreen({super.key, this.phoneNumber});
 
   @override
   State<VerifyRegisterScreen> createState() => _VerifyRegisterScreenState();
@@ -32,7 +35,7 @@ class _VerifyRegisterScreenState extends State<VerifyRegisterScreen> {
           child: Column(
             children: [
               const AppbarActions(
-                title: "Đăng kí",
+                title: "Xác thực OTP",
               ),
               Expanded(
                   child: SingleChildScrollView(
@@ -108,8 +111,17 @@ class _VerifyRegisterScreenState extends State<VerifyRegisterScreen> {
                   builder: (context, state) {
                 if (state is VerifyRegisterSuccessState) {
                   WidgetsBinding.instance.addPostFrameCallback((_) {
-                    Navigator.pushReplacementNamed(
-                        context, RouterName.uploadAvatarScreen);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => BlocProvider<RegisterCubit>(
+                          create: (BuildContext context) => RegisterCubit(),
+                          child: RegisterScreen(
+                            phoneNumber: state.phoneNumber,
+                          ),
+                        ),
+                      ),
+                    );
                     context.read<VerifyRegisterCubit>().resetState();
                   });
                   return Container();
@@ -129,7 +141,8 @@ class _VerifyRegisterScreenState extends State<VerifyRegisterScreen> {
                               onPressed: () {
                                 context
                                     .read<VerifyRegisterCubit>()
-                                    .VerifyRegisterenticate("415566");
+                                    .VerifyRegisterenticate(widget.phoneNumber!,
+                                        otpController!.text);
                               },
                             ),
                             state is ErrorVerifyRegisterState

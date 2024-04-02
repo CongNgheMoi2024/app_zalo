@@ -6,7 +6,9 @@ import 'package:app_zalo/screens/forgot_password/bloc/forgot_password_cubit.dart
 import 'package:app_zalo/screens/forgot_password/ui/forgot_password_screen.dart';
 import 'package:app_zalo/screens/login/bloc/login_cubit.dart';
 import 'package:app_zalo/screens/login/ui/login_screen.dart';
+import 'package:app_zalo/screens/register/bloc/phone_otp_regis_cubit.dart';
 import 'package:app_zalo/screens/register/bloc/register_cubit.dart';
+import 'package:app_zalo/screens/register/ui/phone_otp_regis_screen.dart';
 import 'package:app_zalo/screens/register/ui/register_screen.dart';
 import 'package:app_zalo/screens/search/bloc/search_cubit.dart';
 import 'package:app_zalo/screens/search/ui/search_by_phone_screen.dart';
@@ -38,15 +40,12 @@ RouteFactory routes() {
         screen = const BoardingScreen();
         break;
 
-      case RouterName.registerScreen:
+      case RouterName.phoneOTPRegisterScreen:
         screen = BlocProvider(
-            create: (context) => RegisterCubit(),
-            child: const RegisterScreen());
+            create: (context) => PhoneOtpRegisCubit(),
+            child: const PhoneOTPRegisterScreen());
         break;
-      case RouterName.verifyRegisterScreen:
-        screen = BlocProvider(
-            create: (context) => VerifyRegisterCubit(),
-            child: const VerifyRegisterScreen());
+
         break;
       case RouterName.uploadAvatarScreen:
         screen = BlocProvider(
@@ -69,10 +68,9 @@ RouteFactory routes() {
             child: const ForgotPasswordScreen());
         break;
 
-
       case RouterName.searchByPhoneScreen:
-        screen = BlocProvider(create: (context)=>SearchCubit(),
-        child: const SearchScreen());
+        screen = BlocProvider(
+            create: (context) => SearchCubit(), child: const SearchScreen());
 
       case RouterName.chattingWithScreen:
         screen = ChattingWithScreen();
@@ -94,13 +92,11 @@ abstract class RouterName {
   static const String initScreen = '/';
   static const String dashboardScreen = '/dashboardScreen';
   static const String onBoardingScreen = '/onBoardingScreen';
-  static const String registerScreen = '/registerScreen';
   static const String loginScreen = '/loginScreen';
-  static const String verifyRegisterScreen = '/verifyRegisterScreen';
   static const String uploadImageCoverScreen = '/uploadImageCoverScreen';
   static const String uploadAvatarScreen = '/uploadAvatarScreen';
   static const String forgotPasswordScreen = '/forgotPasswordScreen';
   static const String searchByPhoneScreen = '/searchByPhoneScreen';
   static const String chattingWithScreen = '/chattingWithScreen';
-
+  static const String phoneOTPRegisterScreen = '/phoneOTPRegisterScreen';
 }
