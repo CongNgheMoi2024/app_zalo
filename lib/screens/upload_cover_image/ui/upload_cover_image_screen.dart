@@ -32,6 +32,7 @@ class _UploadCoverImageScreenState extends State<UploadCoverImageScreen> {
         imageQuality: 90,
       );
       if (pickedFile1 != null) {
+        // ignore: use_build_context_synchronously
         Navigator.pushReplacementNamed(
             context, RouterName.uploadImageCoverScreen,
             arguments: {'imageFile': File(pickedFile1.path)});

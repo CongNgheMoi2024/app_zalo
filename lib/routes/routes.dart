@@ -1,5 +1,4 @@
 import 'package:app_zalo/screens/boarding/boarding_screen.dart';
-import 'package:app_zalo/screens/change_password/ui/change_password_screen.dart';
 import 'package:app_zalo/screens/chatting_with/ui/chatting_with_screen.dart';
 import 'package:app_zalo/screens/dashboard/ui/dashboard.dart';
 import 'package:app_zalo/screens/forgot_password/bloc/forgot_password_cubit.dart';
