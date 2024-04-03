@@ -3,9 +3,6 @@ import 'package:app_zalo/screens/search/bloc/search_cubit.dart';
 import 'package:app_zalo/screens/search/bloc/search_state.dart';
 import 'package:app_zalo/utils/regex.dart';
 import 'package:app_zalo/widget/dismiss_keyboard_widget.dart';
-import 'package:dio/dio.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -54,7 +51,9 @@ class _SearchScreenState extends State<SearchScreen> {
                     top: 10.sp,
                     bottom: 10.sp,
                   ),
-                  padding: EdgeInsets.only(left: 14.sp),
+                  padding: EdgeInsets.only(
+                    left: 14.sp,
+                  ),
                   decoration: BoxDecoration(
                       color: whiteColor,
                       borderRadius: BorderRadius.circular(30)),
@@ -131,8 +130,10 @@ class _SearchScreenState extends State<SearchScreen> {
                         radius: 20,
                         backgroundImage: imgUrl != ""
                             ? NetworkImage(imgUrl)
-                            :  state.data['sex']? const AssetImage( Png.imgUserBoy): const AssetImage( Png.imgUserGirl)
-                                as ImageProvider,
+                            : state.data['sex']
+                                ? const AssetImage(Png.imgUserBoy)
+                                : const AssetImage(Png.imgUserGirl)
+                                    as ImageProvider,
                       ),
                       SizedBox.fromSize(
                         size: Size.fromWidth(30.sp),

@@ -227,7 +227,8 @@ class _LoginScreenState extends State<LoginScreen> {
               }),
               GestureDetector(
                 onTap: () {
-                  Navigator.pushNamed(context, RouterName.registerScreen);
+                  Navigator.pushNamed(
+                      context, RouterName.phoneOTPRegisterScreen);
                 },
                 child: Container(
                   margin: EdgeInsets.only(top: 8.sp),

@@ -25,7 +25,6 @@ class LoginCubit extends Cubit<LoginState> {
         HiveStorage().updateToken(accessToken);
         HiveStorage().updateRefreshToken(refreshToken);
         HiveStorage().updateIdUser(result['user']['id']);
-        print("Đăng nhập thành công! ID USER: ${result['user']['id']}");
 
         emit(LoginenticatedState(refreshToken, phoneNumber));
       } else {
