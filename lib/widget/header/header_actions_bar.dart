@@ -14,6 +14,7 @@ class HeaderActionsBar extends StatefulWidget {
   @override
   State<HeaderActionsBar> createState() => _HeaderActionsBarState();
 }
+
 class _HeaderActionsBarState extends State<HeaderActionsBar> {
   @override
   Widget build(BuildContext context) {
@@ -58,22 +59,19 @@ class _HeaderActionsBarState extends State<HeaderActionsBar> {
                     (widget.icon2 == null ? 48.sp : 0),
                 padding: EdgeInsets.only(left: 5.sp, right: 5.sp, bottom: 6.sp),
                 child: GestureDetector(
-                  onTap: () {
-                    Navigator.pushNamed(context,RouterName.searchByPhoneScreen);
-                  },
-                  child: Container(
-                    color: Colors.transparent,
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      'Tìm kiếm',
-                      style: TextStyle(
-                        color: whiteColor.withOpacity(0.8),
-                        fontWeight: FontWeight.w400,
-                        fontSize: 16.sp,
+                    onTap: () {
+                      Navigator.pushNamed(
+                          context, RouterName.searchByPhoneScreen);
+                    },
+                    child: Container(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'Tìm kiếm',
+                        style: text18.regular.copyWith(
+                          color: whiteColor.withOpacity(0.7),
+                        ),
                       ),
-                    ),
-                  ),
-                ))
+                    )))
           ],
         ),
         SizedBox(
@@ -123,4 +121,4 @@ class _HeaderActionsBarState extends State<HeaderActionsBar> {
       ]),
     );
   }
-  }
+}
