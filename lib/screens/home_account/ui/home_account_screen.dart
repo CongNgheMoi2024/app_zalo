@@ -218,8 +218,7 @@ class _HomeAccountScreenState extends State<HomeAccountScreen> {
                                 decoration: BoxDecoration(
                                   image: DecorationImage(
                                     image: state.imageCover != ""
-                                        ? NetworkImage((state.user as Map<
-                                            String, dynamic>)['imageCover'])
+                                        ? NetworkImage(state.imageCover)
                                         : const AssetImage(Png.imgAnhBia)
                                             as ImageProvider<Object>,
                                     fit: BoxFit.cover,

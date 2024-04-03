@@ -16,7 +16,6 @@ class UploadAvatarCubit extends Cubit<UploadAvatarState> {
     String accessToken = HiveStorage().token;
     String idUser = HiveStorage().idUser;
 
-    print("accessToken: $accessToken, idUser: $idUser");
     try {
       Dio dio = Dio();
       String apiUrl = "${Env.url}/api/v1/users/upload-avatar/$idUser";
@@ -24,7 +23,7 @@ class UploadAvatarCubit extends Cubit<UploadAvatarState> {
       dio.options.headers["Authorization"] = "Bearer $accessToken";
 
       FormData formData = FormData.fromMap({
-        "image": await MultipartFile.fromFile(
+        "avatar": await MultipartFile.fromFile(
           imageAvatar.path,
           filename: imageAvatar.path.split("/").last,
           contentType: MediaType("image", "jpg"),
@@ -34,15 +33,12 @@ class UploadAvatarCubit extends Cubit<UploadAvatarState> {
       Response response = await dio.post(apiUrl, data: formData);
 
       if (response.statusCode == 200) {
-        print("UPLOAD AVATAR SUCCESS ${imageAvatar.path}");
         emit(UploadAvatarSuccessState("UploadAvatar success."));
       } else {
-        print("UPLOAD FAILEDDDDDDĐ");
         emit(ErrorUploadAvataState(
             "UploadAvatar failed. ${response.data['message']}"));
       }
     } catch (e) {
-      print("Error55555555555555555555555: $e");
       emit(ErrorUploadAvataState(e.toString()));
     }
   }

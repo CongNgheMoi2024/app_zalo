@@ -7,17 +7,14 @@ import 'package:app_zalo/screens/forgot_password/ui/forgot_password_screen.dart'
 import 'package:app_zalo/screens/login/bloc/login_cubit.dart';
 import 'package:app_zalo/screens/login/ui/login_screen.dart';
 import 'package:app_zalo/screens/register/bloc/phone_otp_regis_cubit.dart';
-import 'package:app_zalo/screens/register/bloc/register_cubit.dart';
 import 'package:app_zalo/screens/register/ui/phone_otp_regis_screen.dart';
-import 'package:app_zalo/screens/register/ui/register_screen.dart';
 import 'package:app_zalo/screens/search/bloc/search_cubit.dart';
 import 'package:app_zalo/screens/search/ui/search_by_phone_screen.dart';
 import 'package:app_zalo/screens/splash/splash_screen.dart';
 import 'package:app_zalo/screens/upload_avatar/bloc/upload_avatar_cubit.dart';
 import 'package:app_zalo/screens/upload_avatar/ui/upload_avatar_screen.dart';
-import 'package:app_zalo/screens/upload_cover_image/upload_cover_image_screen.dart';
-import 'package:app_zalo/screens/verify_register/bloc/verify_register_cubit.dart';
-import 'package:app_zalo/screens/verify_register/verify_register_screen.dart';
+import 'package:app_zalo/screens/upload_cover_image/bloc/upload_cover_cubit.dart';
+import 'package:app_zalo/screens/upload_cover_image/ui/upload_cover_image_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -46,7 +43,6 @@ RouteFactory routes() {
             child: const PhoneOTPRegisterScreen());
         break;
 
-        break;
       case RouterName.uploadAvatarScreen:
         screen = BlocProvider(
             create: (context) => UploadAvatarCubit(),
@@ -59,7 +55,9 @@ RouteFactory routes() {
         break;
 
       case RouterName.uploadImageCoverScreen:
-        screen = const UploadCoverImageScreen();
+        screen = BlocProvider(
+            create: (context) => UploadCoverCubit(),
+            child: const UploadCoverImageScreen());
         break;
 
       case RouterName.forgotPasswordScreen:

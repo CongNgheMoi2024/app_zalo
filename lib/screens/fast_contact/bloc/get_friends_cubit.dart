@@ -10,7 +10,6 @@ class GetFriendsCubit extends Cubit<GetFriendsState> {
 
   Future<void> getFriendsPhoneBook() async {
     emit(LoadingGetFriendsPhoneBookState());
-    print("accessToken $accessToken");
     try {
       Dio dio = Dio();
       String apiUrl = "${Env.url}/api/v1/users/phone-book/friends";
@@ -20,7 +19,6 @@ class GetFriendsCubit extends Cubit<GetFriendsState> {
         options: Options(headers: {"Authorization": "Bearer $accessToken"}),
       );
       if (response.statusCode == 200) {
-        print("LOADDDD THÀNH CÔNG Frienđsds${response.data['data']}");
         emit(GetFriendsPhoneBookSuccessState(response.data['data']));
       } else {
         emit(ErrorGetFriendsPhoneBookState("GetFriends failed.  "));

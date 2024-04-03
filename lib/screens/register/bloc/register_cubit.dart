@@ -30,7 +30,7 @@ class RegisterCubit extends Cubit<RegisterState> {
         HiveStorage().updateToken("${response.data['data']['access_token']}");
         HiveStorage()
             .updateRefreshToken("${response.data['data']['refresh_token']}");
-
+        HiveStorage().updateIdUser(response.data['data']['user']['id']);
         emit(SuccessRegisterState());
       } else {
         emit(

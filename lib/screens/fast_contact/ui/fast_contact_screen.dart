@@ -22,7 +22,8 @@ class FastContactScreen extends StatefulWidget {
 }
 
 class _FastContactScreenState extends State<FastContactScreen> {
-  String? previousFirstLetter;
+  String? previousFirstLetter1;
+  String? previousFirstLetter2;
 
   int _currentIndex = 0;
 
@@ -108,15 +109,7 @@ class _FastContactScreenState extends State<FastContactScreen> {
             ),
             Expanded(
               child: RefreshIndicator(
-                onRefresh: () async {
-                  final fastContactCubit =
-                      BlocProvider.of<FastContactCubit>(context);
-                  final getFriendsCubit =
-                      BlocProvider.of<GetFriendsCubit>(context);
-
-                  fastContactCubit.FastContactenticate();
-                  getFriendsCubit.getFriendsPhoneBook();
-                },
+                onRefresh: () async {},
                 child: SingleChildScrollView(
                   physics: const AlwaysScrollableScrollPhysics(),
                   child: Container(
@@ -129,8 +122,6 @@ class _FastContactScreenState extends State<FastContactScreen> {
 
                       final stateFastContact = fastContactCubit.state;
                       final stateGetFriends = getFriendsCubit.state;
-                      print("Sattttttttttte Fast Contac$stateFastContact");
-                      print("Sattttttttttte Get Friends$stateGetFriends");
                       if (stateFastContact is InitialFastContactState ||
                           stateGetFriends is InitialGetFriendsState) {
                         fastContactCubit.FastContactenticate();
@@ -149,11 +140,11 @@ class _FastContactScreenState extends State<FastContactScreen> {
                                       data["name"]![0].toUpperCase().toString();
 
                                   final isFirstLetterSame =
-                                      firstLetter == previousFirstLetter;
+                                      firstLetter == previousFirstLetter1;
 
                                   final shouldShowFirstLetter =
                                       !isFirstLetterSame;
-                                  previousFirstLetter = firstLetter;
+                                  previousFirstLetter1 = firstLetter;
                                   return Column(
                                     children: [
                                       if (shouldShowFirstLetter)
@@ -291,11 +282,11 @@ class _FastContactScreenState extends State<FastContactScreen> {
                                       data["name"]![0].toUpperCase().toString();
 
                                   final isFirstLetterSame =
-                                      firstLetter == previousFirstLetter;
+                                      firstLetter == previousFirstLetter2;
 
                                   final shouldShowFirstLetter =
                                       !isFirstLetterSame;
-                                  previousFirstLetter = firstLetter;
+                                  previousFirstLetter2 = firstLetter;
                                   return Column(
                                     children: [
                                       if (shouldShowFirstLetter)

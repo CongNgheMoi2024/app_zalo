@@ -3,7 +3,7 @@ import 'package:app_zalo/screens/fast_contact/bloc/fast_contact_cubit.dart';
 import 'package:app_zalo/screens/fast_contact/bloc/get_friends_cubit.dart';
 import 'package:app_zalo/screens/fast_contact/ui/fast_contact_screen.dart';
 import 'package:app_zalo/screens/home_account/bloc/infor_account_cubit.dart';
-import 'package:app_zalo/screens/home_account/home_account_screen.dart';
+import 'package:app_zalo/screens/home_account/ui/home_account_screen.dart';
 import 'package:app_zalo/screens/home_chat/home_chat_screen.dart';
 import 'package:app_zalo/widget/header/header_actions_bar.dart';
 import 'package:contacts_service/contacts_service.dart';
