@@ -131,7 +131,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
           ),
         ),
         bottomNavigationBar: Container(
-            height: 152.sp,
+            height: 171.sp,
             padding: EdgeInsets.only(bottom: 25.sp),
             child: Column(
               children: [
@@ -149,6 +149,12 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                         : Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
+                                state is ErrorChangePasswordState
+                                    ? Container()
+                                    : SizedBox(
+                                        width: widthMedia,
+                                        height: 17.sp,
+                                      ),
                                 ButtonBottomNavigated(
                                     title: "Xác nhận",
                                     isValidate: isPasswordValid &&
@@ -168,14 +174,18 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                                     }),
                                 state is ErrorChangePasswordState
                                     ? Text(
-                                        "Đổi mật khẩu thất bại",
-                                        style: text14.medium.error,
+                                        "Mật khẩu không đúng",
+                                        style: text13.medium.error,
                                       )
                                     : Container(),
                               ]);
                   }
                 }),
-                ButtonBottomNext(title: "Quay lại")
+                ButtonBottomNext(
+                    title: "Quay lại",
+                    onPressed: () {
+                      Navigator.pop(context);
+                    })
               ],
             )),
       ),
