@@ -1,14 +1,18 @@
 import 'package:app_zalo/constants/index.dart';
 import 'package:app_zalo/routes/routes.dart';
+import 'package:app_zalo/screens/change_password/bloc/change_password_cubit.dart';
+import 'package:app_zalo/screens/change_password/bloc/change_password_state.dart';
 import 'package:app_zalo/utils/regex.dart';
 import 'package:app_zalo/widget/button/button_bottom_navigated.dart';
 import 'package:app_zalo/widget/button/button_bottom_next.dart';
 import 'package:app_zalo/widget/dismiss_keyboard_widget.dart';
 import 'package:app_zalo/widget/text_input/text_input_password.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ChangePasswordScreen extends StatefulWidget {
-  const ChangePasswordScreen({super.key});
+  String? phone;
+  ChangePasswordScreen({super.key, this.phone});
 
   @override
   State<StatefulWidget> createState() => _ChangePasswordScreenState();
@@ -60,33 +64,6 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                     style: text11.textColor.error),
               ),
               TextInputPassword(
-                title: "Nhập lại Mật khẩu",
-                onChanged: (value) {
-                  setState(() {
-                    confirmPassword = value;
-                    if (isPasswordValid && confirmPassword != password) {
-                      setState(() {
-                        isConfirmPasswordValid = false;
-                      });
-                    } else {
-                      setState(() {
-                        isConfirmPasswordValid = true;
-                      });
-                    }
-                  });
-                },
-              ),
-              Container(
-                height: 25.sp,
-                width: widthMedia - 20.sp,
-                margin: EdgeInsets.only(left: 20.sp),
-                child: Text(
-                    isConfirmPasswordValid == false
-                        ? "Mật khẩu nhập lại không đúng"
-                        : "",
-                    style: text11.textColor.error),
-              ),
-              TextInputPassword(
                 title: "Mật khẩu mới",
                 onChanged: (value) {
                   setState(() {
@@ -102,6 +79,33 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 child: Text(
                     !isNewPasswordValid
                         ? "Phải từ 6 kí tự, có chữ hoa, chữ thường, số và kí tự đặc biệt"
+                        : "",
+                    style: text11.textColor.error),
+              ),
+              TextInputPassword(
+                title: "Nhập lại Mật khẩu mới",
+                onChanged: (value) {
+                  setState(() {
+                    confirmPassword = value;
+                    if (isPasswordValid && confirmPassword != newPassword) {
+                      setState(() {
+                        isConfirmPasswordValid = false;
+                      });
+                    } else {
+                      setState(() {
+                        isConfirmPasswordValid = true;
+                      });
+                    }
+                  });
+                },
+              ),
+              Container(
+                height: 15.sp,
+                width: widthMedia - 20.sp,
+                margin: EdgeInsets.only(left: 20.sp),
+                child: Text(
+                    isConfirmPasswordValid == false
+                        ? "Mật khẩu nhập lại không đúng"
                         : "",
                     style: text11.textColor.error),
               ),
@@ -131,9 +135,46 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
             padding: EdgeInsets.only(bottom: 25.sp),
             child: Column(
               children: [
-                ButtonBottomNavigated(
-                  title: "Xác nhận",
-                ),
+                BlocBuilder<ChangePasswordCubit, ChangePasswordState>(
+                    builder: (context, state) {
+                  if (state is ChangePasswordSuccessState) {
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      Navigator.pop(context);
+                      context.read<ChangePasswordCubit>().resetState();
+                    });
+                    return Container();
+                  } else {
+                    return state is LoadingChangePasswordState
+                        ? const CircularProgressIndicator()
+                        : Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                                ButtonBottomNavigated(
+                                    title: "Xác nhận",
+                                    isValidate: isPasswordValid &&
+                                        password != "" &&
+                                        isConfirmPasswordValid &&
+                                        confirmPassword != "" &&
+                                        isNewPasswordValid &&
+                                        newPassword != "",
+                                    onPressed: () {
+                                      context
+                                          .read<ChangePasswordCubit>()
+                                          .ChangePassword(
+                                              password!,
+                                              newPassword!,
+                                              confirmPassword!,
+                                              widget.phone!);
+                                    }),
+                                state is ErrorChangePasswordState
+                                    ? Text(
+                                        "Đổi mật khẩu thất bại",
+                                        style: text14.medium.error,
+                                      )
+                                    : Container(),
+                              ]);
+                  }
+                }),
                 ButtonBottomNext(title: "Quay lại")
               ],
             )),
