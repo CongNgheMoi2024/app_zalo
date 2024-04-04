@@ -21,8 +21,7 @@ class _SplashScreenState extends State<SplashScreen> {
       const Duration(milliseconds: 2500),
       () {
         if (accessToken != "") {
-          Navigator.pushReplacementNamed(
-              context, RouterName.uploadAvatarScreen);
+          Navigator.pushReplacementNamed(context, RouterName.dashboardScreen);
         } else {
           Navigator.pushReplacementNamed(context, RouterName.onBoardingScreen);
         }
