@@ -439,7 +439,17 @@ class _HomeAccountScreenState extends State<HomeAccountScreen> {
                                             BlocProvider<EditProfileCubit>(
                                           create: (BuildContext context) =>
                                               EditProfileCubit(),
-                                          child: EditProfileScreen(),
+                                          child: EditProfileScreen(
+                                              name: (state.user as Map)['name'],
+                                              phone:
+                                                  (state.user as Map)['phone'],
+                                              avatar: state.avatar,
+                                              dateOfBirth: (state.user
+                                                  as Map)['birthday'],
+                                              sex: (state.user as Map)['sex'] ==
+                                                      true
+                                                  ? 1
+                                                  : 2),
                                         ),
                                       ),
                                     );

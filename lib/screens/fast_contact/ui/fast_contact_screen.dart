@@ -161,7 +161,7 @@ class _FastContactScreenState extends State<FastContactScreen> {
                                                   mainAxisAlignment:
                                                       MainAxisAlignment.start,
                                                   children: [
-                                                    Text("KK $firstLetter",
+                                                    Text(firstLetter,
                                                         style:
                                                             text26.black.bold),
                                                   ],
