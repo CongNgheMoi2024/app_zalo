@@ -1,8 +1,11 @@
+import 'dart:async';
+import 'dart:io';
 import 'package:app_zalo/constants/index.dart';
 import 'package:app_zalo/env.dart';
 import 'package:app_zalo/storages/storage.dart';
 import 'package:app_zalo/widget/dismiss_keyboard_widget.dart';
 import 'package:app_zalo/widget/header/header_of_chatting.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:stomp_dart_client/stomp.dart';
@@ -21,15 +24,95 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
   String idUser = HiveStorage().idUser;
   String accessToken = HiveStorage().token;
   bool showOptions = false;
-  void toggleOptions ()=> setState(() {
-    showOptions = !showOptions;
-  });
-  void getImage()async{
-    final List<AssetEntity>? result = await AssetPicker.pickAssets(context,pickerConfig: AssetPickerConfig(
-      maxAssets:5 ,// chọn tối đa 5 item
+  List<AssetEntity> listMediaAsset = [];
+  final int sizeMax = 1 * 1024 * 1024;
+  void toggleOptions() => setState(() {
+        showOptions = !showOptions;
+      });
 
-    ));
+  Future<List<AssetEntity>> getImagesAndVideos() async {
+    final List<AssetEntity>? result = await AssetPicker.pickAssets(context,
+        pickerConfig: AssetPickerConfig(
+            maxAssets: 10,
+            requestType: RequestType.common,
+            selectPredicate: (context, asset, isSeleted) =>
+                isAssetSizeAllowed(context, asset)));
+    if (result == null) {
+      return [];
+    } else {
+      return result;
+    }
   }
+
+  Future<List<AssetEntity>> getAudios() async {
+    final List<AssetEntity>? result = await AssetPicker.pickAssets(context,
+        pickerConfig: AssetPickerConfig(
+            maxAssets: 10,
+            requestType: RequestType.audio,
+            selectPredicate: (context, asset, isSelected) =>
+                isAssetSizeAllowed(context, asset)));
+    if (result == null) {
+      return [];
+    } else {
+      return result;
+    }
+  }
+
+  Future<List<File>> getFiles(BuildContext context) async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      allowMultiple: true,
+      type: FileType.custom,
+      allowedExtensions: ['pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx'],
+    );
+    if (result != null) {
+      List<File> files = [];
+      for (String? path in result.paths) {
+        if (path != null) {
+          File file = File(path);
+          if (await file.length() < sizeMax) {
+            files.add(file);
+          } else {
+            showAlertDialog();
+            return [];
+          }
+        }
+      }
+      return files;
+    } else {
+      return [];
+    }
+  }
+
+  void showAlertDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Thông báo"),
+          content: Text("Kích thước tệp vượt quá 1MB."),
+          actions: <Widget>[
+            TextButton(
+              child: Text("OK"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  bool isAssetSizeAllowed(BuildContext context, AssetEntity asset) {
+    Size assetSize = asset.size;
+    int assetSizeByte = (assetSize.width * assetSize.height).toInt();
+    if (assetSizeByte > sizeMax) {
+      showAlertDialog();
+      return false;
+    }
+    return true;
+  }
+
   StompClient client = StompClient(
       config: StompConfig.sockJS(
     url: '${Env.url}/ws',
@@ -67,7 +150,9 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
             ),
             bottomNavigationBar: AnimatedContainer(
               duration: Duration(milliseconds: 0),
-              height: showOptions? 250.sp + MediaQuery.of(context).viewInsets.bottom : 50.sp + MediaQuery.of(context).viewInsets.bottom,
+              height: showOptions
+                  ? 250.sp + MediaQuery.of(context).viewInsets.bottom
+                  : 50.sp + MediaQuery.of(context).viewInsets.bottom,
               color: whiteColor,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -135,7 +220,7 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                                 top: 10.sp,
                                 bottom: 10.sp),
                             child: GestureDetector(
-                              onTap: ()=>setState(() {
+                              onTap: () => setState(() {
                                 toggleOptions();
                               }),
                               child: ImageAssets.pngAsset(
@@ -150,23 +235,81 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                   ),
                   Visibility(
                       visible: showOptions,
-                      child:Container(
-                        height: 200.sp,
-                        child:  Row(
+                      child: Container(
+                        margin: EdgeInsets.only(top: 5.sp),
+                        decoration: BoxDecoration(
+                            border: Border(
+                                top: BorderSide(
+                                    width: 1, color: grey03.withOpacity(0.5)))),
+                        child: Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             GestureDetector(
-                              onTap: (){
-                               print('Pressed pick image--------------------');
-                               getImage();
-
+                              onTap: () {
+                                getImagesAndVideos()
+                                    .then((List<AssetEntity> assets) {
+                                  listMediaAsset = assets;
+                                  listMediaAsset.forEach((element) {
+                                    print(
+                                        "---------${element.title}--------type ---${element.type}");
+                                  });
+                                }).catchError((error) {
+                                  // Xử lý lỗi nếu có
+                                });
                               },
-                              child: const Icon(Icons.image,size: 100,),
+                              child: Container(
+                                padding: EdgeInsets.all(5.sp),
+                                margin: EdgeInsets.all(5.sp),
+                                child: Column(
+                                  children: [
+                                    ImageAssets.pngAsset(Png.iconPhoto,
+                                        width: 60.sp, height: 60.sp),
+                                    const Text('Hình ảnh'),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                getAudios()
+                                    .then((assets) => assets.forEach((element) {
+                                          print("---------${element.title}");
+                                        }))
+                                    .catchError((error) {
+                                  print('--------Lỗi khi lấy audio----------');
+                                });
+                              },
+                              child: Container(
+                                padding: EdgeInsets.all(5.sp),
+                                margin: EdgeInsets.all(5.sp),
+                                child: Column(
+                                  children: [
+                                    ImageAssets.pngAsset(Png.iconAudio,
+                                        width: 60.sp, height: 60.sp),
+                                    const Text('Âm thanh'),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                getFiles(context);
+                              },
+                              child: Container(
+                                padding: EdgeInsets.all(5.sp),
+                                margin: EdgeInsets.all(5.sp),
+                                child: Column(
+                                  children: [
+                                    ImageAssets.pngAsset(Png.iconDocument,
+                                        width: 60.sp, height: 60.sp),
+                                    const Text('Tài liệu'),
+                                  ],
+                                ),
+                              ),
                             )
                           ],
                         ),
-                      )
-                  )
+                      ))
                 ],
               ),
             )),
