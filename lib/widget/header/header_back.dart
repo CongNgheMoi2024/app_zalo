@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
 class HeaderBack extends StatefulWidget {
+  bool? notCheck;
   String? title;
   final Function? actionCheck;
-  HeaderBack({super.key, this.title, this.actionCheck});
+  HeaderBack({super.key, this.notCheck = false, this.title, this.actionCheck});
 
   @override
   State<HeaderBack> createState() => _HeaderBackState();
@@ -62,22 +63,24 @@ class _HeaderBackState extends State<HeaderBack> {
             ],
           ),
         ),
-        InkWell(
-          onTap: widget.actionCheck == null
-              ? () {}
-              : () {
-                  widget.actionCheck!();
-                },
-          child: SizedBox(
-            width: 65.sp,
-            child: Center(
-                child: Icon(
-              Icons.check,
-              color: whiteColor,
-              size: 35.sp,
-            )),
-          ),
-        )
+        widget.notCheck == false
+            ? InkWell(
+                onTap: widget.actionCheck == null
+                    ? () {}
+                    : () {
+                        widget.actionCheck!();
+                      },
+                child: SizedBox(
+                  width: 65.sp,
+                  child: Center(
+                      child: Icon(
+                    Icons.check,
+                    color: whiteColor,
+                    size: 35.sp,
+                  )),
+                ),
+              )
+            : SizedBox(width: 65.sp, height: 35.sp)
       ]),
     );
   }

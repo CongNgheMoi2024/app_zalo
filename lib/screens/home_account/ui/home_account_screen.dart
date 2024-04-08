@@ -4,6 +4,8 @@ import 'package:app_zalo/constants/index.dart';
 import 'package:app_zalo/routes/routes.dart';
 import 'package:app_zalo/screens/change_password/bloc/change_password_cubit.dart';
 import 'package:app_zalo/screens/change_password/ui/change_password_screen.dart';
+import 'package:app_zalo/screens/edit_profile/bloc/edit_profile_cubit.dart';
+import 'package:app_zalo/screens/edit_profile/ui/edit_profile_screen.dart';
 import 'package:app_zalo/screens/home_account/bloc/infor_account_cubit.dart';
 import 'package:app_zalo/screens/home_account/bloc/infor_account_state.dart';
 import 'package:app_zalo/storages/hive_storage.dart';
@@ -175,11 +177,16 @@ class _HomeAccountScreenState extends State<HomeAccountScreen> {
     double height = MediaQuery.of(context).size.height;
 
     return DismissKeyboard(
-        child: Scaffold(
-            body: SafeArea(
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
+        child: RefreshIndicator(
+      onRefresh: () async {
+        setState(() {
+          context.read<InforAccountCubit>().GetInforAccount();
+        });
+      },
+      child: Scaffold(
+          body: SafeArea(
+              child: SingleChildScrollView(
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           BlocConsumer<InforAccountCubit, InforAccountState>(
               listener: (context, state) {},
               builder: (context, state) {
@@ -202,6 +209,7 @@ class _HomeAccountScreenState extends State<HomeAccountScreen> {
                     ),
                   );
                 } else if (state is InforAccountSuccessState) {
+                  phone = state.phone;
                   return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -217,8 +225,7 @@ class _HomeAccountScreenState extends State<HomeAccountScreen> {
                                 decoration: BoxDecoration(
                                   image: DecorationImage(
                                     image: state.imageCover != ""
-                                        ? NetworkImage((state.user as Map<
-                                            String, dynamic>)['imageCover'])
+                                        ? NetworkImage(state.imageCover)
                                         : const AssetImage(Png.imgAnhBia)
                                             as ImageProvider<Object>,
                                     fit: BoxFit.cover,
@@ -251,8 +258,6 @@ class _HomeAccountScreenState extends State<HomeAccountScreen> {
                                   ),
                                   child: InkWell(
                                     onTap: () {
-                                      // Navigator.pushNamed(context,
-                                      //     RouterName.uploadAvatarScreen);
                                       showModalAvatar(context);
                                     },
                                     child: Padding(
@@ -426,7 +431,29 @@ class _HomeAccountScreenState extends State<HomeAccountScreen> {
                                   ],
                                 ),
                                 GestureDetector(
-                                  onTap: () {},
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            BlocProvider<EditProfileCubit>(
+                                          create: (BuildContext context) =>
+                                              EditProfileCubit(),
+                                          child: EditProfileScreen(
+                                              name: (state.user as Map)['name'],
+                                              phone:
+                                                  (state.user as Map)['phone'],
+                                              avatar: state.avatar,
+                                              dateOfBirth: (state.user
+                                                  as Map)['birthday'],
+                                              sex: (state.user as Map)['sex'] ==
+                                                      true
+                                                  ? 1
+                                                  : 2),
+                                        ),
+                                      ),
+                                    );
+                                  },
                                   child: Container(
                                     height: 42.sp,
                                     margin: EdgeInsets.only(
@@ -477,108 +504,106 @@ class _HomeAccountScreenState extends State<HomeAccountScreen> {
                   );
                 }
               }),
-          Expanded(
-              child: SingleChildScrollView(
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+          Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Container(
+              padding: EdgeInsets.only(
+                left: 15.sp,
+                right: 15.sp,
+              ),
+              child: Column(
+                children: [
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              BlocProvider<ChangePasswordCubit>(
+                            create: (BuildContext context) =>
+                                ChangePasswordCubit(),
+                            child: ChangePasswordScreen(
+                              phone: phone,
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                    child: Padding(
+                      padding: EdgeInsets.only(top: 18.sp, bottom: 18.sp),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                              width: width * 0.15,
+                              child: Icon(
+                                Icons.published_with_changes,
+                                size: 25.sp,
+                                color: blackColor.withOpacity(0.8),
+                              )),
+                          Text("Đổi mật khẩu", style: text16.black.regular),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Container(
+                    height: 0.5.sp,
+                    width: width,
+                    color: Colors.grey.withOpacity(0.3),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 18.sp, bottom: 18.sp),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                Container(
-                  padding: EdgeInsets.only(
-                    left: 15.sp,
-                    right: 15.sp,
+                        SizedBox(
+                            width: width * 0.15,
+                            child: Icon(
+                              Icons.live_help_outlined,
+                              size: 25.sp,
+                              color: blackColor.withOpacity(0.8),
+                            )),
+                        Text("Liên hệ hỗ trợ", style: text16.black.regular),
+                      ],
+                    ),
                   ),
-                  child: Column(
-                    children: [
-                      InkWell(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  BlocProvider<ChangePasswordCubit>(
-                                create: (BuildContext context) =>
-                                    ChangePasswordCubit(),
-                                child: ChangePasswordScreen(
-                                  phone: phone,
-                                ),
-                              ),
-                            ),
-                          );
-                        },
-                        child: Padding(
-                          padding: EdgeInsets.only(top: 18.sp, bottom: 18.sp),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              SizedBox(
-                                  width: width * 0.15,
-                                  child: Icon(
-                                    Icons.published_with_changes,
-                                    size: 25.sp,
-                                    color: blackColor.withOpacity(0.8),
-                                  )),
-                              Text("Đổi mật khẩu", style: text16.black.regular),
-                            ],
-                          ),
-                        ),
-                      ),
-                      Container(
-                        height: 0.5.sp,
-                        width: width,
-                        color: Colors.grey.withOpacity(0.3),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(top: 18.sp, bottom: 18.sp),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            SizedBox(
-                                width: width * 0.15,
-                                child: Icon(
-                                  Icons.live_help_outlined,
-                                  size: 25.sp,
-                                  color: blackColor.withOpacity(0.8),
-                                )),
-                            Text("Liên hệ hỗ trợ", style: text16.black.regular),
-                          ],
-                        ),
-                      ),
-                      Container(
-                        height: 0.5.sp,
-                        width: width,
-                        color: Colors.grey.withOpacity(0.3),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          HiveStorage().clearIdUser();
-                          HiveStorage().clearRefreshToken();
-                          HiveStorage().clearTokenAccess();
-                          Navigator.pushNamedAndRemoveUntil(
-                            context,
-                            RouterName.onBoardingScreen,
-                            (route) => false,
-                          );
-                        },
-                        child: Container(
-                          height: 45.sp,
-                          margin: EdgeInsets.only(bottom: 15.sp, top: 15.sp),
-                          width: width - 40.sp,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(28.sp),
-                            border: Border.all(color: errorColor, width: 1.sp),
-                          ),
-                          child: Center(
-                            child: Text(
-                              "Đăng xuất",
-                              style: text15.medium.error,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
+                  Container(
+                    height: 0.5.sp,
+                    width: width,
+                    color: Colors.grey.withOpacity(0.3),
                   ),
-                ),
-              ])))
-        ]))));
+                  GestureDetector(
+                    onTap: () {
+                      HiveStorage().clearIdUser();
+                      HiveStorage().clearRefreshToken();
+                      HiveStorage().clearTokenAccess();
+                      Navigator.pushNamedAndRemoveUntil(
+                        context,
+                        RouterName.onBoardingScreen,
+                        (route) => false,
+                      );
+                    },
+                    child: Container(
+                      height: 45.sp,
+                      margin: EdgeInsets.only(bottom: 15.sp, top: 15.sp),
+                      width: width - 40.sp,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(28.sp),
+                        border: Border.all(color: errorColor, width: 1.sp),
+                      ),
+                      child: Center(
+                        child: Text(
+                          "Đăng xuất",
+                          style: text15.medium.error,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ])
+        ]),
+      ))),
+    ));
   }
 }

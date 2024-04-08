@@ -4,13 +4,11 @@ import 'package:app_zalo/constants/index.dart';
 import 'package:app_zalo/routes/routes.dart';
 import 'package:app_zalo/screens/upload_avatar/bloc/upload_avatar_cubit.dart';
 import 'package:app_zalo/screens/upload_avatar/bloc/upload_avatar_state.dart';
-import 'package:app_zalo/storages/hive_storage.dart';
 import 'package:app_zalo/widget/button/button_bottom_navigated.dart';
 import 'package:app_zalo/widget/button/button_bottom_next.dart';
 import 'package:app_zalo/widget/dismiss_keyboard_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hive_flutter/adapters.dart';
 import 'package:image_picker/image_picker.dart';
 
 class UploadAvatarScreen extends StatefulWidget {
@@ -23,7 +21,6 @@ class UploadAvatarScreen extends StatefulWidget {
 
 class _UploadAvatarScreenState extends State<UploadAvatarScreen> {
   int? selectedRadio;
-
   int sizeImage = 0;
   File? pathImage1;
   Future<void> _pickImage() async {
@@ -172,7 +169,8 @@ class _UploadAvatarScreenState extends State<UploadAvatarScreen> {
                   builder: (context, state) {
                 if (state is UploadAvatarSuccessState) {
                   WidgetsBinding.instance.addPostFrameCallback((_) {
-                    Navigator.pushNamed(context, RouterName.dashboardScreen);
+                    Navigator.pushReplacementNamed(
+                        context, RouterName.dashboardScreen);
                     context.read<UploadAvatarCubit>().resetState();
                   });
                   return Container();

@@ -64,33 +64,6 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                     style: text11.textColor.error),
               ),
               TextInputPassword(
-                title: "Nhập lại Mật khẩu",
-                onChanged: (value) {
-                  setState(() {
-                    confirmPassword = value;
-                    if (isPasswordValid && confirmPassword != password) {
-                      setState(() {
-                        isConfirmPasswordValid = false;
-                      });
-                    } else {
-                      setState(() {
-                        isConfirmPasswordValid = true;
-                      });
-                    }
-                  });
-                },
-              ),
-              Container(
-                height: 25.sp,
-                width: widthMedia - 20.sp,
-                margin: EdgeInsets.only(left: 20.sp),
-                child: Text(
-                    isConfirmPasswordValid == false
-                        ? "Mật khẩu nhập lại không đúng"
-                        : "",
-                    style: text11.textColor.error),
-              ),
-              TextInputPassword(
                 title: "Mật khẩu mới",
                 onChanged: (value) {
                   setState(() {
@@ -106,6 +79,33 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 child: Text(
                     !isNewPasswordValid
                         ? "Phải từ 6 kí tự, có chữ hoa, chữ thường, số và kí tự đặc biệt"
+                        : "",
+                    style: text11.textColor.error),
+              ),
+              TextInputPassword(
+                title: "Nhập lại Mật khẩu mới",
+                onChanged: (value) {
+                  setState(() {
+                    confirmPassword = value;
+                    if (isPasswordValid && confirmPassword != newPassword) {
+                      setState(() {
+                        isConfirmPasswordValid = false;
+                      });
+                    } else {
+                      setState(() {
+                        isConfirmPasswordValid = true;
+                      });
+                    }
+                  });
+                },
+              ),
+              Container(
+                height: 15.sp,
+                width: widthMedia - 20.sp,
+                margin: EdgeInsets.only(left: 20.sp),
+                child: Text(
+                    isConfirmPasswordValid == false
+                        ? "Mật khẩu nhập lại không đúng"
                         : "",
                     style: text11.textColor.error),
               ),
@@ -131,7 +131,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
           ),
         ),
         bottomNavigationBar: Container(
-            height: 152.sp,
+            height: 171.sp,
             padding: EdgeInsets.only(bottom: 25.sp),
             child: Column(
               children: [
@@ -149,6 +149,12 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                         : Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
+                                state is ErrorChangePasswordState
+                                    ? Container()
+                                    : SizedBox(
+                                        width: widthMedia,
+                                        height: 17.sp,
+                                      ),
                                 ButtonBottomNavigated(
                                     title: "Xác nhận",
                                     isValidate: isPasswordValid &&
@@ -168,14 +174,18 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                                     }),
                                 state is ErrorChangePasswordState
                                     ? Text(
-                                        "Đổi mật khẩu thất bại",
-                                        style: text14.medium.error,
+                                        "Mật khẩu không đúng",
+                                        style: text13.medium.error,
                                       )
                                     : Container(),
                               ]);
                   }
                 }),
-                ButtonBottomNext(title: "Quay lại")
+                ButtonBottomNext(
+                    title: "Quay lại",
+                    onPressed: () {
+                      Navigator.pop(context);
+                    })
               ],
             )),
       ),

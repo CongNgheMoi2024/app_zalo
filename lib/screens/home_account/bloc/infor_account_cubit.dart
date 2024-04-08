@@ -26,10 +26,7 @@ class InforAccountCubit extends Cubit<InforAccountState> {
           response.data['data'],
           response.data['data']['phone'],
           response.data['data']['avatar'] ?? "",
-          response.data['data']['imageCover'] == null ||
-                  response.data['data']['imageCover'] == ""
-              ? ""
-              : response.data['data']['imageCover'],
+          response.data['data']['imageCover'] ?? "",
         ));
       } else {
         emit(ErrorInforAccountState(

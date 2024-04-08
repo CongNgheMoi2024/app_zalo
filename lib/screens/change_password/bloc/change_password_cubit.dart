@@ -13,6 +13,10 @@ class ChangePasswordCubit extends Cubit<ChangePasswordState> {
     String accessToken = HiveStorage().token;
     emit(LoadingChangePasswordState());
 
+    print("Phongggggggg $phone");
+    print("oldPassword $oldPassword");
+    print("newPassword $newPassword");
+    print("confirmPassword $confirmPassword");
     try {
       Dio dio = Dio();
       String apiUrl = "${Env.url}/api/v1/users/change-password/$phone";

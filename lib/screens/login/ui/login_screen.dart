@@ -168,8 +168,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   );
                 } else if (state is LoginenticatedState) {
                   Future.delayed(Duration.zero, () {
-                    Navigator.pushNamedAndRemoveUntil(context,
-                        RouterName.uploadAvatarScreen, (route) => false);
+                    Navigator.pushNamedAndRemoveUntil(
+                        context, RouterName.dashboardScreen, (route) => false);
                     context.read<LoginCubit>().resetState();
                   });
                   return Container();
@@ -227,7 +227,8 @@ class _LoginScreenState extends State<LoginScreen> {
               }),
               GestureDetector(
                 onTap: () {
-                  Navigator.pushNamed(context, RouterName.registerScreen);
+                  Navigator.pushNamed(
+                      context, RouterName.phoneOTPRegisterScreen);
                 },
                 child: Container(
                   margin: EdgeInsets.only(top: 8.sp),

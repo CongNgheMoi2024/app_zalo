@@ -5,10 +5,6 @@ import 'package:app_zalo/widget/dismiss_keyboard_widget.dart';
 import 'package:app_zalo/routes/routes.dart';
 import 'package:app_zalo/screens/register/bloc/register_cubit.dart';
 import 'package:app_zalo/screens/register/bloc/register_state.dart';
-import 'package:app_zalo/utils/regex.dart';
-import 'package:app_zalo/widget/button/button_bottom_navigated.dart';
-import 'package:app_zalo/widget/dismiss_keyboard_widget.dart';
-import 'package:app_zalo/widget/text_input/text_input_login.dart';
 import 'package:app_zalo/widget/text_input/text_input_password.dart';
 import 'package:app_zalo/widget/text_input/text_input_widget.dart';
 import 'package:app_zalo/widget/text_input_picked_day/text_input_picked_day.dart';
@@ -16,14 +12,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class RegisterScreen extends StatefulWidget {
-  const RegisterScreen({super.key});
+  String? phoneNumber;
+  RegisterScreen({super.key, this.phoneNumber});
 
   @override
   State<RegisterScreen> createState() => _RegisterScreenState();
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-  bool isPhoneNumberValid = true;
   bool isNameValid = true;
 
   String selectedTimeBorn = "";
@@ -32,7 +28,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   String? password;
   bool isPasswordValid = true;
   String? dateOfBirth;
-  String? phoneNumber;
   String? name;
   bool isConfirmPasswordValid = true;
   String? newPassword;
@@ -48,7 +43,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 margin: EdgeInsets.only(
                   top: 105.sp,
                   left: 30.sp,
-                  bottom: 20.sp,
+                  bottom: 25.sp,
                 ),
                 height: 55.sp,
                 width: width,
@@ -57,25 +52,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         color: primaryColor,
                         fontSize: 42.sp,
                         fontWeight: FontWeight.bold)),
-              ),
-              TextInputLogin(
-                title: "Số điện thoại",
-                onChanged: (value) {
-                  setState(() {
-                    phoneNumber = value;
-                    isPhoneNumberValid = Regex.isPhone(phoneNumber!);
-                  });
-                },
-              ),
-              Container(
-                height: 20.sp,
-                width: width - 20.sp,
-                margin: EdgeInsets.only(left: 20.sp),
-                child: Text(
-                    !isPhoneNumberValid && phoneNumber != ""
-                        ? "Số điện thoại không hợp lệ"
-                        : "",
-                    style: text11.textColor.error),
               ),
               TextInputWidget(
                 title: "Tên",
@@ -225,8 +201,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   builder: (context, state) {
                 if (state is SuccessRegisterState) {
                   WidgetsBinding.instance.addPostFrameCallback((_) {
-                    Navigator.pushNamed(
-                        context, RouterName.verifyRegisterScreen);
+                    Navigator.pushNamed(context, RouterName.uploadAvatarScreen);
                     context.read<RegisterCubit>().resetState();
                   });
                   return Container();
@@ -238,10 +213,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           children: [
                             ButtonBottomNavigated(
                               title: "Tiếp tục",
-                              isValidate: (isPhoneNumberValid &&
-                                          phoneNumber != "" &&
-                                          phoneNumber != null) &&
-                                      name != "" &&
+                              isValidate: name != "" &&
                                       name != null &&
                                       dateOfBirth != "" &&
                                       dateOfBirth != null &&
@@ -254,11 +226,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   ? true
                                   : false,
                               onPressed: () async {
-                                print("phoneNumber: $selectedRadio");
                                 context.read<RegisterCubit>().register(
-                                    phoneNumber!,
+                                    widget.phoneNumber!,
                                     name!,
-                                    selectedRadio! - 1,
+                                    selectedRadio! == 2 ? 0 : 1,
                                     dateOfBirth!,
                                     password!,
                                     newPassword!);

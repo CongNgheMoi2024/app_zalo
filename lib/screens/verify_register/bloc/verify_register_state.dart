@@ -11,5 +11,6 @@ class ErrorVerifyRegisterState extends VerifyRegisterState {
 }
 
 class VerifyRegisterSuccessState extends VerifyRegisterState {
-  VerifyRegisterSuccessState();
+  String? phoneNumber;
+  VerifyRegisterSuccessState(this.phoneNumber);
 }
