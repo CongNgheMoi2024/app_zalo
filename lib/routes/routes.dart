@@ -24,16 +24,16 @@ RouteFactory routes() {
     var name = settings.name;
     switch (name) {
       case RouterName.initScreen:
-        screen = const DashboardScreen();
+        screen = const SplashScreen();
         break;
 
       case RouterName.dashboardScreen:
         screen = const DashboardScreen();
-
         break;
 
       case RouterName.onBoardingScreen:
         screen = const BoardingScreen();
+
         break;
 
       case RouterName.phoneOTPRegisterScreen:

@@ -1,13 +1,8 @@
 import 'package:app_zalo/constants/index.dart';
-import 'package:app_zalo/env.dart';
 import 'package:app_zalo/storages/storage.dart';
 import 'package:app_zalo/widget/dismiss_keyboard_widget.dart';
 import 'package:app_zalo/widget/header/header_of_chatting.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:stomp_dart_client/stomp.dart';
-import 'package:stomp_dart_client/stomp_config.dart';
-import 'package:stomp_dart_client/stomp_frame.dart';
 import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 
 class ChattingWithScreen extends StatefulWidget {
@@ -21,33 +16,19 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
   String idUser = HiveStorage().idUser;
   String accessToken = HiveStorage().token;
   bool showOptions = false;
-  void toggleOptions ()=> setState(() {
-    showOptions = !showOptions;
-  });
-  void getImage()async{
-    final List<AssetEntity>? result = await AssetPicker.pickAssets(context,pickerConfig: AssetPickerConfig(
-      maxAssets:5 ,// chọn tối đa 5 item
-
-    ));
+  void toggleOptions() => setState(() {
+        showOptions = !showOptions;
+      });
+  void getImage() async {
+    final List<AssetEntity>? result = await AssetPicker.pickAssets(context,
+        pickerConfig: AssetPickerConfig(
+          maxAssets: 5, // chọn tối đa 5 item
+        ));
   }
-  StompClient client = StompClient(
-      config: StompConfig.sockJS(
-    url: '${Env.url}/ws',
-    onConnect: (StompFrame frame) {
-      print('onConnect     tHANHHCOONGG');
-    },
-    beforeConnect: () async {
-      print('waiting to connect...');
-      await Future.delayed(const Duration(milliseconds: 200));
-      print('connecting...');
-    },
-    onWebSocketError: (dynamic error) => print(error.toString()),
-  ));
 
   @override
   void initState() {
     super.initState();
-    client.activate();
   }
 
   @override
@@ -67,7 +48,9 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
             ),
             bottomNavigationBar: AnimatedContainer(
               duration: Duration(milliseconds: 0),
-              height: showOptions? 250.sp + MediaQuery.of(context).viewInsets.bottom : 50.sp + MediaQuery.of(context).viewInsets.bottom,
+              height: showOptions
+                  ? 250.sp + MediaQuery.of(context).viewInsets.bottom
+                  : 50.sp + MediaQuery.of(context).viewInsets.bottom,
               color: whiteColor,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -135,7 +118,7 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                                 top: 10.sp,
                                 bottom: 10.sp),
                             child: GestureDetector(
-                              onTap: ()=>setState(() {
+                              onTap: () => setState(() {
                                 toggleOptions();
                               }),
                               child: ImageAssets.pngAsset(
@@ -150,23 +133,24 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                   ),
                   Visibility(
                       visible: showOptions,
-                      child:Container(
+                      child: Container(
                         height: 200.sp,
-                        child:  Row(
+                        child: Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             GestureDetector(
-                              onTap: (){
-                               print('Pressed pick image--------------------');
-                               getImage();
-
+                              onTap: () {
+                                print('Pressed pick image--------------------');
+                                getImage();
                               },
-                              child: const Icon(Icons.image,size: 100,),
+                              child: const Icon(
+                                Icons.image,
+                                size: 100,
+                              ),
                             )
                           ],
                         ),
-                      )
-                  )
+                      ))
                 ],
               ),
             )),
