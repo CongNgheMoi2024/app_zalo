@@ -1,12 +1,39 @@
+import 'dart:convert';
+
 import 'package:app_zalo/constants/index.dart';
+import 'package:app_zalo/env.dart';
+import 'package:app_zalo/screens/chatting_with/bloc/get_all_message_cubit.dart';
+import 'package:app_zalo/screens/chatting_with/bloc/get_all_message_state.dart';
 import 'package:app_zalo/storages/storage.dart';
 import 'package:app_zalo/widget/dismiss_keyboard_widget.dart';
 import 'package:app_zalo/widget/header/header_of_chatting.dart';
+import 'package:app_zalo/widget/message/reciver_mess_item.dart';
+import 'package:app_zalo/widget/message/sender_mess_item.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:stomp_dart_client/stomp.dart';
+import 'package:stomp_dart_client/stomp_config.dart';
+import 'package:stomp_dart_client/stomp_frame.dart';
 import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 
+class InforUserChat {
+  String idUserRecipient;
+  String name;
+  String avatar;
+  String timeActive;
+  bool sex;
+  InforUserChat(
+      {required this.idUserRecipient,
+      required this.name,
+      required this.avatar,
+      required this.timeActive,
+      required this.sex});
+}
+
+// ignore: must_be_immutable
 class ChattingWithScreen extends StatefulWidget {
-  const ChattingWithScreen({super.key});
+  InforUserChat inforUserChat;
+  ChattingWithScreen({super.key, required this.inforUserChat});
 
   @override
   State<ChattingWithScreen> createState() => _ChattingWithScreenState();
@@ -16,12 +43,18 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
   String idUser = HiveStorage().idUser;
   String accessToken = HiveStorage().token;
   bool showOptions = false;
+  TextEditingController controllerInputMessage = TextEditingController();
+
+  List<dynamic> listMessage = [];
+
+  late StompClient client;
+
   void toggleOptions() => setState(() {
         showOptions = !showOptions;
       });
   void getImage() async {
     final List<AssetEntity>? result = await AssetPicker.pickAssets(context,
-        pickerConfig: AssetPickerConfig(
+        pickerConfig: const AssetPickerConfig(
           maxAssets: 5, // chọn tối đa 5 item
         ));
   }
@@ -29,29 +62,107 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
   @override
   void initState() {
     super.initState();
+    client = StompClient(
+        config: StompConfig.sockJS(
+      url: '${Env.url}/ws',
+      onConnect: (StompFrame frame) {
+        client.subscribe(
+            destination: "/user/$idUser/queue/messages",
+            callback: (StompFrame frame) {
+              print("Supriseber on ${frame.body}");
+            });
+        // client.send(
+        //     destination: "/app/chat",
+        //     body: jsonEncode({
+        //       "content": "Hello",
+        //       "senderId": idUser,
+        //       "recipientId": "660c33fdd2bf3d74d2c3b304",
+        //       "timestamp": DateTime.now().millisecondsSinceEpoch
+        //     }));
+
+        print('onConnect     tHANHHCOONGG');
+      },
+      beforeConnect: () async {
+        await Future.delayed(const Duration(milliseconds: 200));
+      },
+      onWebSocketError: (dynamic error) =>
+          print("LoiKaiWkAIII${error.toString()}"),
+    ));
+    client.activate();
+    BlocProvider.of<GetAllMessageCubit>(context)
+        .GetAllMessageenticate(idUser, widget.inforUserChat.idUserRecipient);
+  }
+
+  @override
+  void dispose() {
+    client.deactivate();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
     return DismissKeyboard(
       child: SafeArea(
         child: Scaffold(
             body: Column(
               children: [
-                HeaderOfChatting(),
-                SingleChildScrollView(
-                  child: Center(
-                    child: Text('Chatting With Screen'),
-                  ),
+                HeaderOfChatting(
+                  nameReceiver: widget.inforUserChat.name,
+                  timeActive: widget.inforUserChat.timeActive,
+                  urlAvatar: widget.inforUserChat.avatar,
+                  sex: widget.inforUserChat.sex,
+                ),
+                Expanded(
+                  child: SingleChildScrollView(child:
+                      BlocBuilder<GetAllMessageCubit, GetAllMessageState>(
+                          builder: (context, state) {
+                    if (state is LoadingGetAllMessageState) {
+                      return SizedBox(
+                        height: height - 200.sp,
+                        width: width,
+                        child: Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      );
+                    } else if (state is GetAllMessageSuccessState) {
+                      listMessage = state.data;
+                      return Wrap(
+                        children: listMessage.map((e) {
+                          if (e.idSender == idUser) {
+                            return SenderMessItem(
+                              content: e.content,
+                              time: e.timestamp,
+                            );
+                          } else {
+                            return ReciverMessItem(
+                                avatarReceiver: widget.inforUserChat.avatar,
+                                message: e.content,
+                                time: e.timestamp,
+                                sex: widget.inforUserChat.sex);
+                          }
+                        }).toList(),
+                      );
+                    } else {
+                      return SizedBox(
+                        height: height - 200.sp,
+                        width: width,
+                        child: Center(
+                          child: Text("Bạn chưa nhắn tin nào"),
+                        ),
+                      );
+                    }
+                  })),
                 ),
               ],
             ),
             bottomNavigationBar: AnimatedContainer(
-              duration: Duration(milliseconds: 0),
+              duration: const Duration(milliseconds: 0),
               height: showOptions
                   ? 250.sp + MediaQuery.of(context).viewInsets.bottom
                   : 50.sp + MediaQuery.of(context).viewInsets.bottom,
-              color: whiteColor,
+              color: Colors.transparent,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
@@ -61,14 +172,13 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                       children: [
                         Padding(
                           padding: EdgeInsets.only(
-                              left: 15.sp,
+                              left: 16.sp,
                               right: 10.sp,
-                              top: 10.sp,
-                              bottom: 10.sp),
+                              top: 11.sp,
+                              bottom: 11.sp),
                           child: ImageAssets.pngAsset(
                             Png.iconSticker,
-                            width: 30.sp,
-                            height: 30.sp,
+                            height: 28.sp,
                             color: primaryColor,
                           ),
                         ),
@@ -79,6 +189,7 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                               right: 5.sp,
                             ),
                             child: TextField(
+                              controller: controllerInputMessage,
                               decoration: InputDecoration(
                                 contentPadding: EdgeInsets.symmetric(
                                     vertical: 10.sp, horizontal: 18.sp),
@@ -102,32 +213,69 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                             ),
                           ),
                         ),
-                        // Padding(
-                        //   padding: EdgeInsets.only(
-                        //       left: 10.sp, right: 15.sp, top: 10.sp, bottom: 10.sp),
-                        //   child: Icon(
-                        //     Icons.send,
-                        //     color: primaryColor,
-                        //     size: 30.sp,
-                        //   ),
-                        // ),
-                        Padding(
-                            padding: EdgeInsets.only(
-                                left: 10.sp,
-                                right: 15.sp,
-                                top: 10.sp,
-                                bottom: 10.sp),
-                            child: GestureDetector(
-                              onTap: () => setState(() {
-                                toggleOptions();
-                              }),
-                              child: ImageAssets.pngAsset(
-                                Png.iconMore,
-                                width: 30.sp,
-                                height: 30.sp,
-                                color: primaryColor,
-                              ),
-                            )),
+                        MediaQuery.of(context).viewInsets.bottom > 10
+                            ? InkWell(
+                                onTap: () {
+                                  String message = controllerInputMessage
+                                      .text; // Assuming controllerInputMessage is a TextEditingController for your TextField
+                                  if (message.isNotEmpty) {
+                                    client.send(
+                                      destination: "/app/chat",
+                                      body: jsonEncode({
+                                        "content": message,
+                                        "senderId": idUser,
+                                        "recipientId": widget
+                                            .inforUserChat.idUserRecipient,
+                                        "timestamp": DateTime.now()
+                                            .millisecondsSinceEpoch
+                                      }),
+                                    );
+
+                                    controllerInputMessage.clear();
+                                    setState(() {
+                                      listMessage.add(MessageOfList(
+                                          idMessage: "",
+                                          idChat: "",
+                                          idSender: idUser,
+                                          idReceiver: widget
+                                              .inforUserChat.idUserRecipient,
+                                          timestamp: DateTime.now()
+                                              .millisecondsSinceEpoch
+                                              .toString(),
+                                          content: message,
+                                          type: ""));
+                                    });
+                                  }
+                                },
+                                child: Padding(
+                                  padding: EdgeInsets.only(
+                                      left: 10.sp,
+                                      right: 15.sp,
+                                      top: 10.sp,
+                                      bottom: 10.sp),
+                                  child: Icon(
+                                    Icons.send,
+                                    color: primaryColor,
+                                    size: 30.sp,
+                                  ),
+                                ),
+                              )
+                            : Padding(
+                                padding: EdgeInsets.only(
+                                    left: 10.sp,
+                                    right: 15.sp,
+                                    top: 10.sp,
+                                    bottom: 10.sp),
+                                child: GestureDetector(
+                                  onTap: () => setState(() {
+                                    toggleOptions();
+                                  }),
+                                  child: ImageAssets.pngAsset(
+                                    Png.iconMore,
+                                    width: 30.sp,
+                                    height: 30.sp,
+                                  ),
+                                )),
                       ],
                     ),
                   ),
@@ -140,7 +288,6 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                           children: [
                             GestureDetector(
                               onTap: () {
-                                print('Pressed pick image--------------------');
                                 getImage();
                               },
                               child: const Icon(
