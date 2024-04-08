@@ -288,6 +288,7 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                           children: [
                             GestureDetector(
                               onTap: () {
+                                print('Pressed pick image--------------------');
                                 getImage();
                               },
                               child: const Icon(

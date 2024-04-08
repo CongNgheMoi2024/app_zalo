@@ -103,8 +103,10 @@ class _HomeChatScreenState extends State<HomeChatScreen> {
                                                                 .avatar,
                                                             timeActive:
                                                                 timeAgoText,
-                                                                sex: entry.value.userRecipient.sex
-                                                                ),
+                                                            sex: entry
+                                                                .value
+                                                                .userRecipient
+                                                                .sex),
                                                       ))));
                                         },
                                         child: Row(
