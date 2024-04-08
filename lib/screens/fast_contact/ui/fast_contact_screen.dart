@@ -115,17 +115,18 @@ class _FastContactScreenState extends State<FastContactScreen> {
                   child: Container(
                     margin: EdgeInsets.only(top: 10.sp, bottom: 10.sp),
                     child: Builder(builder: (context) {
-                      final fastContactCubit =
+                      var fastContactCubit =
                           BlocProvider.of<FastContactCubit>(context);
-                      final getFriendsCubit =
+                      var getFriendsCubit =
                           BlocProvider.of<GetFriendsCubit>(context);
 
-                      final stateFastContact = fastContactCubit.state;
-                      final stateGetFriends = getFriendsCubit.state;
+                      var stateFastContact = fastContactCubit.state;
+                      var stateGetFriends = getFriendsCubit.state;
                       if (stateFastContact is InitialFastContactState ||
                           stateGetFriends is InitialGetFriendsState) {
                         fastContactCubit.FastContactenticate();
                         getFriendsCubit.getFriendsPhoneBook();
+                        // setState(() {});
                       }
                       return IndexedStack(index: _currentIndex, children: [
                         stateFastContact is FastContactFriendsSuccessdState
@@ -182,10 +183,12 @@ class _FastContactScreenState extends State<FastContactScreen> {
                                                     borderRadius:
                                                         BorderRadius.circular(
                                                             60),
-                                                    child: Image.memory(
-                                                        height: 46.sp,
-                                                        width: 46.sp,
-                                                        data["avatar"]!),
+                                                    child: ImageAssets
+                                                        .networkImage(
+                                                            height: 46.sp,
+                                                            width: 46.sp,
+                                                            url: data[
+                                                                "avatar"]!),
                                                   )
                                                 : Container(
                                                     height: 46.sp,

@@ -169,7 +169,8 @@ class _UploadAvatarScreenState extends State<UploadAvatarScreen> {
                   builder: (context, state) {
                 if (state is UploadAvatarSuccessState) {
                   WidgetsBinding.instance.addPostFrameCallback((_) {
-                    Navigator.pushNamed(context, RouterName.dashboardScreen);
+                    Navigator.pushReplacementNamed(
+                        context, RouterName.dashboardScreen);
                     context.read<UploadAvatarCubit>().resetState();
                   });
                   return Container();
