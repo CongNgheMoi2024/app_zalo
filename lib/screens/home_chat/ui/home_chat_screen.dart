@@ -1,17 +1,13 @@
-import 'dart:convert';
-
 import 'package:app_zalo/constants/index.dart';
-import 'package:app_zalo/env.dart';
 import 'package:app_zalo/routes/routes.dart';
+import 'package:app_zalo/screens/chatting_with/bloc/get_all_message_cubit.dart';
+import 'package:app_zalo/screens/chatting_with/ui/chatting_with_screen.dart';
 import 'package:app_zalo/screens/home_chat/bloc/get_all_rooms_cubit.dart';
 import 'package:app_zalo/screens/home_chat/bloc/get_all_rooms_state.dart';
 import 'package:app_zalo/storages/hive_storage.dart';
 import 'package:app_zalo/widget/dismiss_keyboard_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:stomp_dart_client/stomp.dart';
-import 'package:stomp_dart_client/stomp_config.dart';
-import 'package:stomp_dart_client/stomp_frame.dart';
 
 class HomeChatScreen extends StatefulWidget {
   const HomeChatScreen({super.key});
@@ -22,47 +18,11 @@ class HomeChatScreen extends StatefulWidget {
 
 class _HomeChatScreenState extends State<HomeChatScreen> {
   String idUser = HiveStorage().idUser;
-  late StompClient client;
 
   @override
   void initState() {
     super.initState();
-    client = StompClient(
-        config: StompConfig.sockJS(
-      url: '${Env.url}/ws',
-      onConnect: (StompFrame frame) {
-        client.subscribe(
-            destination: "/user/$idUser/queue/messages",
-            callback: (StompFrame frame) {
-              print("Supriseber on ${frame.body}");
-            });
-        client.send(
-            destination: "/app/chat",
-            body: jsonEncode({
-              "content": "Hello",
-              "senderId": idUser,
-              "recipientId": "660c33fdd2bf3d74d2c3b304",
-              "timestamp": DateTime.now().millisecondsSinceEpoch
-            }));
-
-        print('onConnect     tHANHHCOONGG');
-      },
-      beforeConnect: () async {
-        print('waiting to connect...');
-        await Future.delayed(const Duration(milliseconds: 200));
-        print('connecting...');
-      },
-      onWebSocketError: (dynamic error) =>
-          print("LoiKaiWkAIII${error.toString()}"),
-    ));
-    client.activate();
     BlocProvider.of<GetAllRoomCubit>(context).getAllRoomsUser();
-  }
-
-  @override
-  void dispose() {
-    client.deactivate();
-    super.dispose();
   }
 
   @override
@@ -94,8 +54,7 @@ class _HomeChatScreenState extends State<HomeChatScreen> {
                           ? Wrap(
                               children: state.data.asMap().entries.map<Widget>(
                               (entry) {
-                                print(
-                                    "Entry ${entry.value.userRecipient.sex}");
+                                print("Entry ${entry.value.userRecipient.sex}");
                                 DateTime messageTime = DateTime.parse(
                                     entry.value.lastMessage.timestamp);
 
@@ -120,8 +79,35 @@ class _HomeChatScreenState extends State<HomeChatScreen> {
                                     children: [
                                       InkWell(
                                         onTap: () {
-                                          Navigator.pushNamed(context,
-                                              RouterName.chattingWithScreen);
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) => BlocProvider<
+                                                          GetAllMessageCubit>(
+                                                      create: (BuildContext
+                                                              context) =>
+                                                          GetAllMessageCubit(),
+                                                      child: ChattingWithScreen(
+                                                        inforUserChat: InforUserChat(
+                                                            idUserRecipient: entry
+                                                                .value
+                                                                .userRecipient
+                                                                .idRecipient,
+                                                            name: entry
+                                                                .value
+                                                                .userRecipient
+                                                                .name,
+                                                            avatar: entry
+                                                                .value
+                                                                .userRecipient
+                                                                .avatar,
+                                                            timeActive:
+                                                                timeAgoText,
+                                                            sex: entry
+                                                                .value
+                                                                .userRecipient
+                                                                .sex),
+                                                      ))));
                                         },
                                         child: Row(
                                           children: [
