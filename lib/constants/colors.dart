@@ -19,3 +19,5 @@ const lightBlue = Color.fromARGB(255, 0, 88, 220);
 const greenColor = Color.fromARGB(255, 0, 255, 0);
 
 const whiteColor = Color(0xffffffff);
+
+const boxMessShareColor = Color(0xff51edff);

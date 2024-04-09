@@ -18,6 +18,7 @@ class Png {
   static const String imgUserBoy = 'assets/images/imgUserBoy.jpg';
   static const String iconSticker = 'assets/images/iconSticker.png';
   static const String iconMore = 'assets/images/iconMore.png';
+  static const String icForward = 'assets/images/icForward.png';
 }
 
 class CommonGif {

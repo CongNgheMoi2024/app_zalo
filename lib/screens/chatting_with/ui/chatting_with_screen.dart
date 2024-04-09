@@ -69,16 +69,18 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
         client.subscribe(
             destination: "/user/$idUser/queue/messages",
             callback: (StompFrame frame) {
+              setState(() {
+                listMessage.add(MessageOfList(
+                    idMessage: jsonDecode(frame.body!)["id"],
+                    idChat: "",
+                    idSender: jsonDecode(frame.body!)["senderId"],
+                    idReceiver: jsonDecode(frame.body!)["recipientId"],
+                    timestamp: DateTime.now().millisecondsSinceEpoch.toString(),
+                    content: jsonDecode(frame.body!)["content"],
+                    type: ""));
+              });
               print("Supriseber on ${frame.body}");
             });
-        // client.send(
-        //     destination: "/app/chat",
-        //     body: jsonEncode({
-        //       "content": "Hello",
-        //       "senderId": idUser,
-        //       "recipientId": "660c33fdd2bf3d74d2c3b304",
-        //       "timestamp": DateTime.now().millisecondsSinceEpoch
-        //     }));
 
         print('onConnect     tHANHHCOONGG');
       },
@@ -99,6 +101,9 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
     super.dispose();
   }
 
+  int? prevIndex;
+  bool isConsecutive = false;
+
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
@@ -115,45 +120,55 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                   sex: widget.inforUserChat.sex,
                 ),
                 Expanded(
-                  child: SingleChildScrollView(child:
-                      BlocBuilder<GetAllMessageCubit, GetAllMessageState>(
-                          builder: (context, state) {
-                    if (state is LoadingGetAllMessageState) {
-                      return SizedBox(
-                        height: height - 200.sp,
-                        width: width,
-                        child: Center(
-                          child: CircularProgressIndicator(),
-                        ),
-                      );
-                    } else if (state is GetAllMessageSuccessState) {
-                      listMessage = state.data;
-                      return Wrap(
-                        children: listMessage.map((e) {
-                          if (e.idSender == idUser) {
-                            return SenderMessItem(
-                              content: e.content,
-                              time: e.timestamp,
-                            );
-                          } else {
-                            return ReciverMessItem(
-                                avatarReceiver: widget.inforUserChat.avatar,
-                                message: e.content,
-                                time: e.timestamp,
-                                sex: widget.inforUserChat.sex);
-                          }
-                        }).toList(),
-                      );
-                    } else {
-                      return SizedBox(
-                        height: height - 200.sp,
-                        width: width,
-                        child: Center(
-                          child: Text("Bạn chưa nhắn tin nào"),
-                        ),
-                      );
-                    }
-                  })),
+                  child: SingleChildScrollView(
+                      reverse: true,
+                      child:
+                          BlocBuilder<GetAllMessageCubit, GetAllMessageState>(
+                              builder: (context, state) {
+                        if (state is LoadingGetAllMessageState) {
+                          return SizedBox(
+                            height: height - 200.sp,
+                            width: width,
+                            child: Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                          );
+                        } else if (state is GetAllMessageSuccessState) {
+                          listMessage = state.data;
+                          return Wrap(
+                            children: listMessage.asMap().entries.map((entry) {
+                              final index = entry.key;
+                              final e = entry.value;
+                              if (e.idSender == idUser) {
+                                return SenderMessItem(
+                                  content: e.content,
+                                  time: e.timestamp,
+                                );
+                              } else {
+                                isConsecutive =
+                                    prevIndex != null && prevIndex == index - 1;
+                                prevIndex = index;
+                                print("isConsecutive$isConsecutive");
+                                return ReciverMessItem(
+                                  avatarReceiver: widget.inforUserChat.avatar,
+                                  message: e.content,
+                                  time: e.timestamp,
+                                  sex: widget.inforUserChat.sex,
+                                  showAvatar: isConsecutive,
+                                );
+                              }
+                            }).toList(),
+                          );
+                        } else {
+                          return SizedBox(
+                            height: height - 200.sp,
+                            width: width,
+                            child: const Center(
+                              child: Text("Bạn chưa nhắn tin nào"),
+                            ),
+                          );
+                        }
+                      })),
                 ),
               ],
             ),
