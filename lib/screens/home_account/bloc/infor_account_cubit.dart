@@ -28,8 +28,6 @@ class InforAccountCubit extends Cubit<InforAccountState> {
           response.data['data']['avatar'] ?? "",
           response.data['data']['imageCover'] ?? "",
         ));
-
-        print("Anh bIAAAAAA ${response.data['data']['imageCover']}");
       } else {
         emit(ErrorInforAccountState(
             "InforAccount failed. ${response.data['message']}"));
