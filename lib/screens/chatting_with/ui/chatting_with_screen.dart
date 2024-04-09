@@ -43,7 +43,6 @@ class ChattingWithScreen extends StatefulWidget {
 }
 
 class _ChattingWithScreenState extends State<ChattingWithScreen> {
-  List<String> messages = ['Hi', 'Hello'];
   String idUser = HiveStorage().idUser;
   String accessToken = HiveStorage().token;
   bool showOptions = false;
@@ -147,7 +146,8 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
           client.subscribe(
               destination: "/user/$idUser/queue/messages",
               callback: (StompFrame frame) {
-                print("Supriseber on ${frame.body}");
+                print("Message  body= ${frame.body}");
+
               });
           // client.send(
           //     destination: "/app/chat",
@@ -160,6 +160,7 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
 
           print('onConnect     tHANHHCOONGG');
         },
+
         beforeConnect: () async {
           await Future.delayed(const Duration(milliseconds: 200));
         },
