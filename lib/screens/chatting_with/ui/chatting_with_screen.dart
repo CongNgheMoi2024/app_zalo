@@ -13,6 +13,7 @@ import 'package:app_zalo/widget/message/sender_mess_item.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:stomp_dart_client/stomp.dart';
 import 'package:stomp_dart_client/stomp_config.dart';
 import 'package:stomp_dart_client/stomp_frame.dart';
@@ -225,7 +226,6 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                                 isConsecutive =
                                     prevIndex != null && prevIndex == index - 1;
                                 prevIndex = index;
-                                print("isConsecutive$isConsecutive");
                                 return ReciverMessItem(
                                   avatarReceiver: widget.inforUserChat.avatar,
                                   message: e.content,
@@ -311,15 +311,6 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                             ),
                           ),
                         ),
-                        // Padding(
-                        //   padding: EdgeInsets.only(
-                        //       left: 10.sp, right: 15.sp, top: 10.sp, bottom: 10.sp),
-                        //   child: Icon(
-                        //     Icons.send,
-                        //     color: primaryColor,
-                        //     size: 30.sp,
-                        //   ),
-                        // ),
                         MediaQuery.of(context).viewInsets.bottom > 10
                             ? InkWell(
                                 onTap: () {
@@ -399,16 +390,20 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             GestureDetector(
-                              onTap: () {
-                                getImagesAndVideos()
-                                    .then((List<AssetEntity> assets) {
-                                  assets.forEach((element) {
-                                    print(
-                                        "---------${element.title}--------type ---${element.type}");
+                              onTap: () async {
+                                if (await Permission.photos
+                                    .request()
+                                    .isGranted) {
+                                  getImagesAndVideos()
+                                      .then((List<AssetEntity> assets) {
+                                    assets.forEach((element) {
+                                      print(
+                                          "---------${element.title}--------type ---${element.type}");
+                                    });
+                                  }).catchError((error) {
+                                    // Xử lý lỗi nếu có
                                   });
-                                }).catchError((error) {
-                                  // Xử lý lỗi nếu có
-                                });
+                                }
                               },
                               child: Container(
                                 padding: EdgeInsets.all(5.sp),
