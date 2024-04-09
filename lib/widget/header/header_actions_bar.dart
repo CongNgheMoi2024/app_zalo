@@ -65,6 +65,7 @@ class _HeaderActionsBarState extends State<HeaderActionsBar> {
                     },
                     child: Container(
                       alignment: Alignment.centerLeft,
+                      color: Colors.transparent,
                       child: Text(
                         'Tìm kiếm',
                         style: text18.regular.copyWith(

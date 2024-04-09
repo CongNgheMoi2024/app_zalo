@@ -19,6 +19,9 @@ class Png {
   static const String iconSticker = 'assets/images/iconSticker.png';
   static const String iconMore = 'assets/images/iconMore.png';
   static const String icForward = 'assets/images/icForward.png';
+  static const String iconPhoto = 'assets/images/iconPhoto.png';
+  static const String iconAudio = 'assets/images/iconAudio.png';
+  static const String iconDocument = 'assets/images/iconDocument.png';
 }
 
 class CommonGif {
