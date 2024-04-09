@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 import 'package:app_zalo/constants/index.dart';
 import 'package:app_zalo/env.dart';
@@ -21,21 +22,20 @@ class ChattingWithScreen extends StatefulWidget {
 }
 
 class _ChattingWithScreenState extends State<ChattingWithScreen> {
+  List<String> messages = ['Hi', 'Hello'];
   String idUser = HiveStorage().idUser;
   String accessToken = HiveStorage().token;
   bool showOptions = false;
-  List<AssetEntity> listMediaAsset = [];
-  final int sizeMax = 1 * 1024 * 1024;
+  final int sizeMax = 100 * 1024 * 1024;
   void toggleOptions() => setState(() {
         showOptions = !showOptions;
       });
-
   Future<List<AssetEntity>> getImagesAndVideos() async {
     final List<AssetEntity>? result = await AssetPicker.pickAssets(context,
         pickerConfig: AssetPickerConfig(
             maxAssets: 10,
             requestType: RequestType.common,
-            selectPredicate: (context, asset, isSeleted) =>
+            selectPredicate: (context, asset, isSelected) =>
                 isAssetSizeAllowed(context, asset)));
     if (result == null) {
       return [];
@@ -61,8 +61,7 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
   Future<List<File>> getFiles(BuildContext context) async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       allowMultiple: true,
-      type: FileType.custom,
-      allowedExtensions: ['pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx'],
+      type: FileType.any,
     );
     if (result != null) {
       List<File> files = [];
@@ -89,7 +88,7 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text("Thông báo"),
-          content: Text("Kích thước tệp vượt quá 1MB."),
+          content: Text("Kích thước tệp vượt quá 100MB."),
           actions: <Widget>[
             TextButton(
               child: Text("OK"),
@@ -112,24 +111,40 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
     }
     return true;
   }
+// config stompclient with sockjs
 
-  StompClient client = StompClient(
-      config: StompConfig.sockJS(
-    url: '${Env.url}/ws',
-    onConnect: (StompFrame frame) {
-      print('onConnect     tHANHHCOONGG');
-    },
-    beforeConnect: () async {
-      print('waiting to connect...');
-      await Future.delayed(const Duration(milliseconds: 200));
-      print('connecting...');
-    },
-    onWebSocketError: (dynamic error) => print(error.toString()),
-  ));
-
+  late StompClient client ;
   @override
   void initState() {
     super.initState();
+    client = StompClient(
+        config: StompConfig.sockJS(
+          url: '${Env.url}/ws',
+          onConnect: (StompFrame frame) {
+            client.subscribe(
+                destination: "/user/$idUser/queue/messages",
+                callback: (StompFrame frame) {
+                  print("Subscriber on ${frame.body}");
+                });
+            client.send(
+                destination: "/app/chat",
+                body: jsonEncode({
+                  "content": "Hellooooooo",
+                  "senderId": idUser,
+                  "recipientId": "660c33fdd2bf3d74d2c3b304",
+                  "timestamp": DateTime.now().millisecondsSinceEpoch
+                }));
+
+            print('onConnect     tHANHHCOONGG');
+          },
+          beforeConnect: () async {
+            print('waiting to connect...');
+            await Future.delayed(const Duration(milliseconds: 200));
+            print('connecting...');
+          },
+          onWebSocketError: (dynamic error) =>
+              print("LoiKaiWkAIII${error.toString()}"),
+        ));
     client.activate();
   }
 
@@ -141,9 +156,10 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
             body: Column(
               children: [
                 HeaderOfChatting(),
-                SingleChildScrollView(
-                  child: Center(
-                    child: Text('Chatting With Screen'),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: messages.length,
+                    itemBuilder: (context, index) => Text(messages[index]?? ''),
                   ),
                 ),
               ],
@@ -248,8 +264,7 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                               onTap: () {
                                 getImagesAndVideos()
                                     .then((List<AssetEntity> assets) {
-                                  listMediaAsset = assets;
-                                  listMediaAsset.forEach((element) {
+                                  assets.forEach((element) {
                                     print(
                                         "---------${element.title}--------type ---${element.type}");
                                   });

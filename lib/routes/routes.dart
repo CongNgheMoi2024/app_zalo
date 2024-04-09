@@ -24,7 +24,7 @@ RouteFactory routes() {
     var name = settings.name;
     switch (name) {
       case RouterName.initScreen:
-        screen = const DashboardScreen();
+        screen = const SplashScreen();
         break;
 
       case RouterName.dashboardScreen:

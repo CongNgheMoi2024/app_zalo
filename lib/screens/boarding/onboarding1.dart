@@ -9,7 +9,6 @@ class Onboarding1 extends StatefulWidget {
   @override
   State<Onboarding1> createState() => _Onboarding1State();
 }
-
 class _Onboarding1State extends State<Onboarding1> {
   @override
   Widget build(BuildContext context) {
