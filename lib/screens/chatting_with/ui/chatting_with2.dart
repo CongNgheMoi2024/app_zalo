@@ -1,6 +1,6 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:app_zalo/constants/index.dart';
 import 'package:app_zalo/env.dart';
 import 'package:app_zalo/screens/chatting_with/bloc/get_all_message_cubit.dart';
@@ -8,12 +8,12 @@ import 'package:app_zalo/screens/chatting_with/bloc/get_all_message_state.dart';
 import 'package:app_zalo/storages/storage.dart';
 import 'package:app_zalo/widget/dismiss_keyboard_widget.dart';
 import 'package:app_zalo/widget/header/header_of_chatting.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:app_zalo/widget/message/reciver_mess_item.dart';
 import 'package:app_zalo/widget/message/sender_mess_item.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:stomp_dart_client/stomp.dart';
 import 'package:stomp_dart_client/stomp_config.dart';
 import 'package:stomp_dart_client/stomp_frame.dart';
@@ -45,12 +45,6 @@ class ChattingWithScreen extends StatefulWidget {
 class _ChattingWithScreenState extends State<ChattingWithScreen> {
   String idUser = HiveStorage().idUser;
   bool showOptions = false;
-  TextEditingController controllerInputMessage = TextEditingController();
-
-  List<dynamic> listMessage = [];
-
-  late StompClient client;
-
   final int sizeMax = 100 * 1024 * 1024;
   void toggleOptions() => setState(() {
         showOptions = !showOptions;
@@ -68,6 +62,12 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
       return result;
     }
   }
+
+  TextEditingController controllerInputMessage = TextEditingController();
+
+  List<dynamic> listMessage = [];
+
+  late StompClient client;
 
   Future<List<AssetEntity>> getAudios() async {
     final List<AssetEntity>? result = await AssetPicker.pickAssets(context,
@@ -137,6 +137,7 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
     return true;
   }
 
+// config stompclient with sockjs
   @override
   void initState() {
     super.initState();
@@ -147,18 +148,16 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
         client.subscribe(
             destination: "/user/$idUser/queue/messages",
             callback: (StompFrame frame) {
-              setState(() {
-                listMessage.add(MessageOfList(
-                    idMessage: jsonDecode(frame.body!)["id"],
-                    idChat: "",
-                    idSender: jsonDecode(frame.body!)["senderId"],
-                    idReceiver: jsonDecode(frame.body!)["recipientId"],
-                    timestamp: DateTime.now().millisecondsSinceEpoch.toString(),
-                    content: jsonDecode(frame.body!)["content"],
-                    type: ""));
-              });
               print("Supriseber on ${frame.body}");
             });
+        // client.send(
+        //     destination: "/app/chat",
+        //     body: jsonEncode({
+        //       "content": "Hello",
+        //       "senderId": idUser,
+        //       "recipientId": "660c33fdd2bf3d74d2c3b304",
+        //       "timestamp": DateTime.now().millisecondsSinceEpoch
+        //     }));
 
         print('onConnect     tHANHHCOONGG');
       },
@@ -179,9 +178,6 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
     super.dispose();
   }
 
-  int? prevIndex;
-  bool isConsecutive = false;
-
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
@@ -198,55 +194,45 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                   sex: widget.inforUserChat.sex,
                 ),
                 Expanded(
-                  child: SingleChildScrollView(
-                      reverse: true,
-                      child:
-                          BlocBuilder<GetAllMessageCubit, GetAllMessageState>(
-                              builder: (context, state) {
-                        if (state is LoadingGetAllMessageState) {
-                          return SizedBox(
-                            height: height - 200.sp,
-                            width: width,
-                            child: Center(
-                              child: CircularProgressIndicator(),
-                            ),
-                          );
-                        } else if (state is GetAllMessageSuccessState) {
-                          listMessage = state.data;
-                          return Wrap(
-                            children: listMessage.asMap().entries.map((entry) {
-                              final index = entry.key;
-                              final e = entry.value;
-                              if (e.idSender == idUser) {
-                                return SenderMessItem(
-                                  content: e.content,
-                                  time: e.timestamp,
-                                );
-                              } else {
-                                isConsecutive =
-                                    prevIndex != null && prevIndex == index - 1;
-                                prevIndex = index;
-                                print("isConsecutive$isConsecutive");
-                                return ReciverMessItem(
-                                  avatarReceiver: widget.inforUserChat.avatar,
-                                  message: e.content,
-                                  time: e.timestamp,
-                                  sex: widget.inforUserChat.sex,
-                                  showAvatar: isConsecutive,
-                                );
-                              }
-                            }).toList(),
-                          );
-                        } else {
-                          return SizedBox(
-                            height: height - 200.sp,
-                            width: width,
-                            child: const Center(
-                              child: Text("Bạn chưa nhắn tin nào"),
-                            ),
-                          );
-                        }
-                      })),
+                  child: SingleChildScrollView(child:
+                      BlocBuilder<GetAllMessageCubit, GetAllMessageState>(
+                          builder: (context, state) {
+                    if (state is LoadingGetAllMessageState) {
+                      return SizedBox(
+                        height: height - 200.sp,
+                        width: width,
+                        child: Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      );
+                    } else if (state is GetAllMessageSuccessState) {
+                      listMessage = state.data;
+                      return Wrap(
+                        children: listMessage.map((e) {
+                          if (e.idSender == idUser) {
+                            return SenderMessItem(
+                              content: e.content,
+                              time: e.timestamp,
+                            );
+                          } else {
+                            return ReciverMessItem(
+                                avatarReceiver: widget.inforUserChat.avatar,
+                                message: e.content,
+                                time: e.timestamp,
+                                sex: widget.inforUserChat.sex);
+                          }
+                        }).toList(),
+                      );
+                    } else {
+                      return SizedBox(
+                        height: height - 200.sp,
+                        width: width,
+                        child: Center(
+                          child: Text("Bạn chưa nhắn tin nào"),
+                        ),
+                      );
+                    }
+                  })),
                 ),
               ],
             ),
@@ -401,6 +387,15 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                           children: [
                             GestureDetector(
                               onTap: () {
+                                getImagesAndVideos()
+                                    .then((List<AssetEntity> assets) {
+                                  assets.forEach((element) {
+                                    print(
+                                        "---------${element.title}--------type ---${element.type}");
+                                  });
+                                }).catchError((error) {
+                                  // Xử lý lỗi nếu có
+                                });
                               },
                               child: Container(
                                 padding: EdgeInsets.all(5.sp),
