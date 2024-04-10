@@ -128,6 +128,7 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                             children: listMessage.asMap().entries.map((entry) {
                               final index = entry.key;
                               final e = entry.value;
+                              print("eEEEEEEEEEEEEEEEEEJJJ ${e.content}");
                               if (e.idSender == idUser) {
                                 return SenderMessItem(
                                   content: e.content,
@@ -136,7 +137,6 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                                   idMessage: e.idMessage,
                                   idReceiver:
                                       widget.inforUserChat.idUserRecipient,
-
                                 );
                               } else {
                                 isConsecutive =

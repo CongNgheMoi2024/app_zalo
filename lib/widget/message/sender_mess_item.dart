@@ -12,7 +12,13 @@ class SenderMessItem extends StatefulWidget {
   String? idMessage;
   String? idReceiver;
 
-  SenderMessItem({super.key, required content, required time, required type, required idMessage, required String idReceiver});
+  SenderMessItem(
+      {super.key,
+      this.content,
+      this.time,
+      this.type,
+      this.idMessage,
+      this.idReceiver});
 
   @override
   State<SenderMessItem> createState() => _SenderMessItemState();
@@ -192,7 +198,7 @@ class _SenderMessItemState extends State<SenderMessItem> {
                             fit: BoxFit.cover,
                           )
                         : Text(
-                            widget.content!,
+                            "${widget.content}",
                             style: text16.primary.regular,
                           )),
               ),
