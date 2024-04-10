@@ -133,6 +133,10 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                                   content: e.content,
                                   time: e.timestamp,
                                   type: e.type,
+                                  idMessage: e.idMessage,
+                                  idReceiver:
+                                      widget.inforUserChat.idUserRecipient,
+
                                 );
                               } else {
                                 isConsecutive =
