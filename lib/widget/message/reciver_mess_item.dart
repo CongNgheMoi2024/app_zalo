@@ -1,4 +1,5 @@
 import 'package:app_zalo/constants/index.dart';
+import 'package:app_zalo/screens/forward/bloc/forward_message_cubit.dart';
 import 'package:app_zalo/screens/forward/ui/forward_message_screen.dart';
 import 'package:app_zalo/screens/home_chat/bloc/get_all_rooms_cubit.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +12,7 @@ class ReciverMessItem extends StatefulWidget {
   bool? sex;
   bool? showAvatar;
   String? type;
+  String? idMessage;
   ReciverMessItem(
       {super.key,
       this.avatarReceiver,
@@ -18,7 +20,8 @@ class ReciverMessItem extends StatefulWidget {
       this.time,
       this.sex,
       this.showAvatar,
-      this.type});
+      this.type,
+      this.idMessage});
 
   @override
   State<ReciverMessItem> createState() => _ReciverMessItemState();
@@ -122,11 +125,20 @@ class _ReciverMessItemState extends State<ReciverMessItem> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => BlocProvider<GetAllRoomCubit>(
-                          create: (BuildContext context) => GetAllRoomCubit(),
-                          child: ForwardMessageScreen(),
-                        ),
-                      ),
+                          builder: (context) => MultiBlocProvider(
+                                  providers: [
+                                    BlocProvider<GetAllRoomCubit>(
+                                      create: (BuildContext context) =>
+                                          GetAllRoomCubit(),
+                                    ),
+                                    BlocProvider<ForwardMessageCubit>(
+                                      create: (BuildContext context) =>
+                                          ForwardMessageCubit(),
+                                    ),
+                                  ],
+                                  child: ForwardMessageScreen(
+                                    idMessage: widget.idMessage!,
+                                  ))),
                     );
                   },
                   child: Column(

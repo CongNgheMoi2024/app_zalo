@@ -141,6 +141,7 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                                   time: e.timestamp,
                                   sex: widget.inforUserChat.sex,
                                   showAvatar: isConsecutive,
+                                  idMessage: e.idMessage,
                                 );
                               }
                             }).toList(),
