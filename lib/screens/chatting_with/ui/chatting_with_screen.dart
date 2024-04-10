@@ -13,11 +13,10 @@ import 'package:app_zalo/widget/message/sender_mess_item.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:permission_handler/permission_handler.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:stomp_dart_client/stomp.dart';
 import 'package:stomp_dart_client/stomp_config.dart';
 import 'package:stomp_dart_client/stomp_frame.dart';
-import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 
 class InforUserChat {
   String idUserRecipient;
@@ -55,31 +54,26 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
   void toggleOptions() => setState(() {
         showOptions = !showOptions;
       });
-  Future<List<AssetEntity>> getImagesAndVideos() async {
-    final List<AssetEntity>? result = await AssetPicker.pickAssets(context,
-        pickerConfig: AssetPickerConfig(
-            maxAssets: 10,
-            requestType: RequestType.common,
-            selectPredicate: (context, asset, isSelected) =>
-                isAssetSizeAllowed(context, asset)));
-    if (result == null) {
-      return [];
-    } else {
-      return result;
-    }
-  }
 
-  Future<List<AssetEntity>> getAudios() async {
-    final List<AssetEntity>? result = await AssetPicker.pickAssets(context,
-        pickerConfig: AssetPickerConfig(
-            maxAssets: 10,
-            requestType: RequestType.audio,
-            selectPredicate: (context, asset, isSelected) =>
-                isAssetSizeAllowed(context, asset)));
-    if (result == null) {
-      return [];
-    } else {
-      return result;
+  Future<void> getImages() async {
+    try {
+      final picker = ImagePicker();
+
+      final XFile? pickedFile1 = await picker.pickImage(
+          source: ImageSource.gallery,
+          maxHeight: 480,
+          maxWidth: 640,
+          imageQuality: 90);
+      if (pickedFile1 != null) {
+        setState(() {
+          // pathImage1 = File(pickedFile1.path);
+          // sizeImage = pathImage1!.lengthSync();
+        });
+      } else {
+        print('No image selected.');
+      }
+    } catch (e) {
+      print("Error: $e");
     }
   }
 
@@ -125,16 +119,6 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
         );
       },
     );
-  }
-
-  bool isAssetSizeAllowed(BuildContext context, AssetEntity asset) {
-    Size assetSize = asset.size;
-    int assetSizeByte = (assetSize.width * assetSize.height).toInt();
-    if (assetSizeByte > sizeMax) {
-      showAlertDialog();
-      return false;
-    }
-    return true;
   }
 
   @override
@@ -255,12 +239,6 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                   ? 255.sp + MediaQuery.of(context).viewInsets.bottom
                   : 50.sp + MediaQuery.of(context).viewInsets.bottom,
               color: whiteColor,
-              // duration: const Duration(milliseconds: 0),
-              // height: showOptions
-              //     ? 250.sp + MediaQuery.of(context).viewInsets.bottom
-              //     : 50.sp + MediaQuery.of(context).viewInsets.bottom,
-              // color: Colors.transparent,
-
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
@@ -314,8 +292,7 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                         MediaQuery.of(context).viewInsets.bottom > 10
                             ? InkWell(
                                 onTap: () {
-                                  String message = controllerInputMessage
-                                      .text; // Assuming controllerInputMessage is a TextEditingController for your TextField
+                                  String message = controllerInputMessage.text;
                                   if (message.isNotEmpty) {
                                     client.send(
                                       destination: "/app/chat",
@@ -391,19 +368,7 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                           children: [
                             GestureDetector(
                               onTap: () async {
-                                if (await Permission.photos
-                                    .request()
-                                    .isGranted) {
-                                  getImagesAndVideos()
-                                      .then((List<AssetEntity> assets) {
-                                    assets.forEach((element) {
-                                      print(
-                                          "---------${element.title}--------type ---${element.type}");
-                                    });
-                                  }).catchError((error) {
-                                    // Xử lý lỗi nếu có
-                                  });
-                                }
+                                getImages();
                               },
                               child: Container(
                                 padding: EdgeInsets.all(5.sp),
@@ -418,15 +383,7 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                               ),
                             ),
                             GestureDetector(
-                              onTap: () {
-                                getAudios()
-                                    .then((assets) => assets.forEach((element) {
-                                          print("---------${element.title}");
-                                        }))
-                                    .catchError((error) {
-                                  print('--------Lỗi khi lấy audio----------');
-                                });
-                              },
+                              onTap: () {},
                               child: Container(
                                 padding: EdgeInsets.all(5.sp),
                                 margin: EdgeInsets.all(5.sp),
