@@ -85,10 +85,7 @@ class _ReciverMessItemState extends State<ReciverMessItem> {
                     decoration: BoxDecoration(
                         color: primaryColor.withOpacity(0.1),
                         borderRadius: BorderRadius.circular(20.sp)),
-                    child:  Text(widget.message!)
-
-
-                      ),
+                    child: Text(widget.message!)),
               ],
             ),
             Container(
@@ -211,10 +208,23 @@ class _ReciverMessItemState extends State<ReciverMessItem> {
                           bottomLeft: Radius.circular(5.sp),
                           bottomRight: Radius.circular(5.sp)),
                     ),
-                    child: Text(
-                      widget.message!,
-                      style: text16.primary.regular,
-                    )),
+                    child: widget.type == "IMAGE"
+                        ? Image.network(
+                            widget.message!,
+                            fit: BoxFit.cover,
+                            height: 150.sp,
+                            width: 250.sp,
+                          )
+                        : Text(
+                            widget.message!,
+                            style: text16.primary.regular,
+                          )
+
+                    // Text(
+                    //   widget.message!,
+                    //   style: text16.primary.regular,
+                    // )
+                    ),
               ),
             ],
           ),

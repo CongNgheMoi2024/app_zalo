@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 class SenderMessItem extends StatefulWidget {
   String? content;
   String? time;
-  SenderMessItem({super.key, this.content, this.time});
+  String? type;
+  SenderMessItem({super.key, this.content, this.time, this.type});
 
   @override
   State<SenderMessItem> createState() => _SenderMessItemState();
@@ -52,10 +53,17 @@ class _SenderMessItemState extends State<SenderMessItem> {
                         bottomLeft: Radius.circular(20.sp),
                       ),
                     ),
-                    child: Text(
-                      widget.content!,
-                      style: text16.primary.regular,
-                    )),
+                    child: widget.type == "IMAGE"
+                        ? Image.network(
+                            widget.content!,
+                            height: 150.sp,
+                            width: 250.sp,
+                            fit: BoxFit.cover,
+                          )
+                        : Text(
+                            widget.content!,
+                            style: text16.primary.regular,
+                          )),
               ),
             ],
           ),

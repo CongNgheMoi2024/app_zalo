@@ -71,7 +71,6 @@ RouteFactory routes() {
             create: (context) => SearchCubit(), child: const SearchScreen());
 
         break;
-
       default:
         screen = const SplashScreen();
         break;
@@ -94,4 +93,5 @@ abstract class RouterName {
   static const String forgotPasswordScreen = '/forgotPasswordScreen';
   static const String searchByPhoneScreen = '/searchByPhoneScreen';
   static const String phoneOTPRegisterScreen = '/phoneOTPRegisterScreen';
+  static const String  chatScreen='/chatScreen';
 }
