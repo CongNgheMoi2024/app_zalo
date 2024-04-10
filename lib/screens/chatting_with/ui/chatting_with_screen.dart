@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:app_zalo/constants/index.dart';
 import 'package:app_zalo/env.dart';
@@ -13,11 +12,8 @@ import 'package:app_zalo/widget/header/header_of_chatting.dart';
 import 'package:app_zalo/widget/media_options_box/media_options_box.dart';
 import 'package:app_zalo/widget/message/reciver_mess_item.dart';
 import 'package:app_zalo/widget/message/sender_mess_item.dart';
-import 'package:dio/dio.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:stomp_dart_client/stomp.dart';
 import 'package:stomp_dart_client/stomp_config.dart';
 import 'package:stomp_dart_client/stomp_frame.dart';
@@ -36,7 +32,7 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
   bool showOptions = false;
   FocusNode focusTextField = FocusNode();
   TextEditingController controllerInputMessage = TextEditingController();
-  SendFile _sendFile = SendFile();
+  final SendFile _sendFile = SendFile();
   List<dynamic> listMessage = [];
 
   late StompClient client;
@@ -149,6 +145,9 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                                   sex: widget.inforUserChat.sex,
                                   showAvatar: isConsecutive,
                                   type: e.type,
+                                  idMessage: e.idMessage,
+                                  idReceiver:
+                                      widget.inforUserChat.idUserRecipient,
                                 );
                               }
                             }).toList(),

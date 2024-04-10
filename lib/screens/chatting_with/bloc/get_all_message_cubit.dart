@@ -24,12 +24,17 @@ class MessageOfList {
   });
 
   factory MessageOfList.fromJson(Map<String, dynamic> json) {
+    DateTime dateTime = DateTime.parse(json['timestamp'] ?? "");
+
+    String formattedTimestamp =
+        "${dateTime.hour}:${dateTime.minute} ${dateTime.day}/${dateTime.month}";
+
     return MessageOfList(
       idMessage: json['id'] ?? "",
       idChat: json['chatId'] ?? "",
       idSender: json['senderId'] ?? "",
       idReceiver: json['recipientId'] ?? "",
-      timestamp: json['timestamp'] ?? "",
+      timestamp: formattedTimestamp,
       content: json['content'] ?? "",
       type: json['type'] ?? "",
     );

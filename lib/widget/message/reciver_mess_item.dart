@@ -1,5 +1,9 @@
 import 'package:app_zalo/constants/index.dart';
+import 'package:app_zalo/screens/forward/bloc/forward_message_cubit.dart';
+import 'package:app_zalo/screens/forward/ui/forward_message_screen.dart';
+import 'package:app_zalo/screens/home_chat/bloc/get_all_rooms_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ReciverMessItem extends StatefulWidget {
   String? avatarReceiver;
@@ -8,6 +12,8 @@ class ReciverMessItem extends StatefulWidget {
   bool? sex;
   bool? showAvatar;
   String? type;
+  String? idMessage;
+  String? idReceiver;
   ReciverMessItem(
       {super.key,
       this.avatarReceiver,
@@ -15,7 +21,9 @@ class ReciverMessItem extends StatefulWidget {
       this.time,
       this.sex,
       this.showAvatar,
-      this.type});
+      this.type,
+      this.idMessage,
+      this.idReceiver});
 
   @override
   State<ReciverMessItem> createState() => _ReciverMessItemState();
@@ -79,6 +87,10 @@ class _ReciverMessItemState extends State<ReciverMessItem> {
                   ),
                 ),
                 Container(
+                    constraints: BoxConstraints(
+                      minWidth: 0,
+                      maxWidth: width * 0.65,
+                    ),
                     margin: EdgeInsets.only(left: 10.sp),
                     padding: EdgeInsets.symmetric(
                         vertical: 10.sp, horizontal: 17.sp),
@@ -110,20 +122,43 @@ class _ReciverMessItemState extends State<ReciverMessItem> {
                       color: boxMessShareColor.withOpacity(0.4), width: 1.sp)),
               child:
                   Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                Column(
-                  children: [
-                    ImageAssets.pngAsset(
-                      Png.icForward,
-                      width: 30.sp,
-                      height: 30.sp,
-                    ),
-                    SizedBox(height: 5.sp),
-                    Text(
-                      "Chuyển tiếp",
-                      style: text14.medium.copyWith(
-                          color: lightBlue.withOpacity(0.8), fontSize: 13.sp),
-                    )
-                  ],
+                InkWell(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => MultiBlocProvider(
+                                  providers: [
+                                    BlocProvider<GetAllRoomCubit>(
+                                      create: (BuildContext context) =>
+                                          GetAllRoomCubit(),
+                                    ),
+                                    BlocProvider<ForwardMessageCubit>(
+                                      create: (BuildContext context) =>
+                                          ForwardMessageCubit(),
+                                    ),
+                                  ],
+                                  child: ForwardMessageScreen(
+                                    idMessage: widget.idMessage!,
+                                    idReceiver: widget.idReceiver!,
+                                  ))),
+                    );
+                  },
+                  child: Column(
+                    children: [
+                      ImageAssets.pngAsset(
+                        Png.icForward,
+                        width: 30.sp,
+                        height: 30.sp,
+                      ),
+                      SizedBox(height: 5.sp),
+                      Text(
+                        "Chuyển tiếp",
+                        style: text14.medium.copyWith(
+                            color: lightBlue.withOpacity(0.8), fontSize: 13.sp),
+                      )
+                    ],
+                  ),
                 )
               ]),
             )
@@ -195,6 +230,10 @@ class _ReciverMessItemState extends State<ReciverMessItem> {
                   });
                 },
                 child: Container(
+                    constraints: BoxConstraints(
+                      minWidth: 0,
+                      maxWidth: width * 0.6,
+                    ),
                     margin: EdgeInsets.only(left: 10.sp),
                     padding:
                         EdgeInsets.symmetric(vertical: 8.sp, horizontal: 15.sp),

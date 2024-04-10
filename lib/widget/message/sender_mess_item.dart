@@ -42,6 +42,10 @@ class _SenderMessItemState extends State<SenderMessItem> {
                   });
                 },
                 child: Container(
+                    constraints: BoxConstraints(
+                      minWidth: 0,
+                      maxWidth: width * 0.65,
+                    ),
                     margin: EdgeInsets.only(right: 15.sp),
                     padding:
                         EdgeInsets.symmetric(vertical: 8.sp, horizontal: 15.sp),

@@ -16,10 +16,9 @@ class RoomsUser {
   });
   factory RoomsUser.fromJson(Map<String, dynamic> json) {
     return RoomsUser(
-      idRoom: json['id'],
-      userRecipient: UserRecipient.fromJson(json['userRecipient']),
-      lastMessage: LastMessage.fromJson(json['lastMessage']),
-    );
+        idRoom: json['id'],
+        userRecipient: UserRecipient.fromJson(json['userRecipient']),
+        lastMessage: LastMessage.fromJson(json['lastMessage']));
   }
 }
 
@@ -42,7 +41,7 @@ class UserRecipient {
 
   factory UserRecipient.fromJson(Map<String, dynamic> json) {
     return UserRecipient(
-      idRecipient: json['id'],
+      idRecipient: json['id'] ?? "",
       name: json['name'] ?? "",
       avatar: json['avatar'] ?? "",
       imageCover: json['imageCover'] ?? "",
