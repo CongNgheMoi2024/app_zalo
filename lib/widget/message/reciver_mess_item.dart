@@ -78,6 +78,10 @@ class _ReciverMessItemState extends State<ReciverMessItem> {
                   ),
                 ),
                 Container(
+                    constraints: BoxConstraints(
+                      minWidth: 0,
+                      maxWidth: width * 0.65,
+                    ),
                     margin: EdgeInsets.only(left: 10.sp),
                     padding: EdgeInsets.symmetric(
                         vertical: 10.sp, horizontal: 17.sp),
@@ -197,6 +201,10 @@ class _ReciverMessItemState extends State<ReciverMessItem> {
                   });
                 },
                 child: Container(
+                    constraints: BoxConstraints(
+                      minWidth: 0,
+                      maxWidth: width * 0.6,
+                    ),
                     margin: EdgeInsets.only(left: 10.sp),
                     padding:
                         EdgeInsets.symmetric(vertical: 8.sp, horizontal: 15.sp),
