@@ -9,6 +9,7 @@ import 'package:app_zalo/screens/chatting_with/bloc/get_all_message_state.dart';
 import 'package:app_zalo/storages/storage.dart';
 import 'package:app_zalo/widget/dismiss_keyboard_widget.dart';
 import 'package:app_zalo/widget/header/header_of_chatting.dart';
+import 'package:app_zalo/widget/media_options_box/media_options_box.dart';
 import 'package:app_zalo/widget/message/reciver_mess_item.dart';
 import 'package:app_zalo/widget/message/sender_mess_item.dart';
 import 'package:file_picker/file_picker.dart';
@@ -31,86 +32,26 @@ class ChattingWithScreen extends StatefulWidget {
 class _ChattingWithScreenState extends State<ChattingWithScreen> {
   String idUser = HiveStorage().idUser;
   bool showOptions = false;
+  FocusNode focusTextField = FocusNode();
   TextEditingController controllerInputMessage = TextEditingController();
 
   List<dynamic> listMessage = [];
 
   late StompClient client;
 
-  final int sizeMax = 100 * 1024 * 1024;
   void toggleOptions() => setState(() {
         showOptions = !showOptions;
       });
-
-  Future<void> getImages() async {
-    try {
-      final picker = ImagePicker();
-
-      final XFile? pickedFile1 = await picker.pickImage(
-          source: ImageSource.gallery,
-          maxHeight: 480,
-          maxWidth: 640,
-          imageQuality: 90);
-      if (pickedFile1 != null) {
-        setState(() {
-          // pathImage1 = File(pickedFile1.path);
-          // sizeImage = pathImage1!.lengthSync();
-        });
-      } else {
-        print('No image selected.');
-      }
-    } catch (e) {
-      print("Error: $e");
-    }
-  }
-
-  Future<List<File>> getFiles(BuildContext context) async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-      allowMultiple: true,
-      type: FileType.any,
-    );
-    if (result != null) {
-      List<File> files = [];
-      for (String? path in result.paths) {
-        if (path != null) {
-          File file = File(path);
-          if (await file.length() < sizeMax) {
-            files.add(file);
-          } else {
-            showAlertDialog();
-            return [];
-          }
-        }
-      }
-      return files;
-    } else {
-      return [];
-    }
-  }
-
-  void showAlertDialog() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text("Thông báo"),
-          content: Text("Kích thước tệp vượt quá 100MB."),
-          actions: <Widget>[
-            TextButton(
-              child: Text("OK"),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
   @override
   void initState() {
     super.initState();
+    focusTextField.addListener(() {
+      if(focusTextField.hasFocus){
+        setState(() {
+          showOptions =false;
+        });
+      }
+    });
     client = StompClient(
         config: StompConfig.sockJS(
       url: '${Env.url}/ws',
@@ -252,6 +193,7 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                               right: 5.sp,
                             ),
                             child: TextField(
+                              focusNode: focusTextField,
                               controller: controllerInputMessage,
                               decoration: InputDecoration(
                                 contentPadding: EdgeInsets.symmetric(
@@ -329,9 +271,14 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                                     top: 10.sp,
                                     bottom: 10.sp),
                                 child: GestureDetector(
-                                  onTap: () => setState(() {
-                                    toggleOptions();
-                                  }),
+                                  onTap: () {
+                                    if(showOptions == false){
+                                      focusTextField.unfocus();
+                                    }
+                                    setState(() {
+                                      toggleOptions();
+                                    });
+                                  },
                                   child: ImageAssets.pngAsset(
                                     Png.iconMore,
                                     width: 30.sp,
@@ -341,67 +288,9 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                       ],
                     ),
                   ),
-                  Visibility(
-                      visible: showOptions,
-                      child: Container(
-                        margin: EdgeInsets.only(top: 5.sp),
-                        decoration: BoxDecoration(
-                            border: Border(
-                                top: BorderSide(
-                                    width: 1, color: grey03.withOpacity(0.5)))),
-                        height: 200.sp,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            GestureDetector(
-                              onTap: () async {
-                                getImages();
-                              },
-                              child: Container(
-                                padding: EdgeInsets.all(5.sp),
-                                margin: EdgeInsets.all(5.sp),
-                                child: Column(
-                                  children: [
-                                    ImageAssets.pngAsset(Png.iconPhoto,
-                                        width: 60.sp, height: 60.sp),
-                                    const Text('Hình ảnh'),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: () {},
-                              child: Container(
-                                padding: EdgeInsets.all(5.sp),
-                                margin: EdgeInsets.all(5.sp),
-                                child: Column(
-                                  children: [
-                                    ImageAssets.pngAsset(Png.iconAudio,
-                                        width: 60.sp, height: 60.sp),
-                                    const Text('Âm thanh'),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                getFiles(context);
-                              },
-                              child: Container(
-                                padding: EdgeInsets.all(5.sp),
-                                margin: EdgeInsets.all(5.sp),
-                                child: Column(
-                                  children: [
-                                    ImageAssets.pngAsset(Png.iconDocument,
-                                        width: 60.sp, height: 60.sp),
-                                    const Text('Tài liệu'),
-                                  ],
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
-                      ))
+                  MediaOptions(visible: showOptions, onFileSelected: (xFiles ) {
+                   xFiles.forEach((element) { print('FIle pick ====================${element.name}');});
+                  },)
                 ],
               ),
             )),

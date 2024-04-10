@@ -7,14 +7,15 @@ class ReciverMessItem extends StatefulWidget {
   String? time;
   bool? sex;
   bool? showAvatar;
-
+  String? type;
   ReciverMessItem(
       {super.key,
       this.avatarReceiver,
       this.message,
       this.time,
       this.sex,
-      this.showAvatar});
+      this.showAvatar,
+      this.type});
 
   @override
   State<ReciverMessItem> createState() => _ReciverMessItemState();
@@ -88,10 +89,10 @@ class _ReciverMessItemState extends State<ReciverMessItem> {
                     decoration: BoxDecoration(
                         color: primaryColor.withOpacity(0.1),
                         borderRadius: BorderRadius.circular(20.sp)),
-                    child: Text(
-                      widget.message!,
-                      style: text18.primary.regular,
-                    )),
+                    child:  Text(widget.message!)
+
+
+                      ),
               ],
             ),
             Container(

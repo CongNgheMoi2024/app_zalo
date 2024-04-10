@@ -50,8 +50,10 @@ dependencies:
   string_validator: ^1.0.2
   stomp_dart_client: ^1.0.3
   intl: ^0.19.0
-  file_picker: ^8.0.0+1
-
+  wechat_assets_picker: ^8.6.3
+  photo_manager: ^2.6.0
+  file_picker: ^7.0.2
+#  file_picker: ^8.0.0+1
 dev_dependencies:
   flutter_test:
     sdk: flutter
