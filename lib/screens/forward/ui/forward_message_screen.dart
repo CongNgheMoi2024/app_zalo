@@ -1,4 +1,7 @@
 import 'package:app_zalo/constants/index.dart';
+import 'package:app_zalo/models/chat/infor_user_chat.dart';
+import 'package:app_zalo/screens/chatting_with/bloc/get_all_message_cubit.dart';
+import 'package:app_zalo/screens/chatting_with/ui/chatting_with_screen.dart';
 import 'package:app_zalo/screens/forward/bloc/forward_message_cubit.dart';
 import 'package:app_zalo/screens/forward/bloc/forward_message_state.dart';
 import 'package:app_zalo/screens/home_chat/bloc/get_all_rooms_cubit.dart';
@@ -11,7 +14,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ForwardMessageScreen extends StatefulWidget {
   String? idMessage;
-  ForwardMessageScreen({super.key, this.idMessage});
+  String? idReceiver;
+  ForwardMessageScreen({super.key, this.idMessage, this.idReceiver});
 
   @override
   State<ForwardMessageScreen> createState() => _ForwardMessageScreenState();
@@ -25,6 +29,7 @@ class _ForwardMessageScreenState extends State<ForwardMessageScreen> {
     BlocProvider.of<GetAllRoomCubit>(context).getAllRoomsUser();
   }
 
+  InforUserChat? inforUserChat;
   List<bool> listChecked = [];
   List<String> listIdRecipient = [];
 
@@ -82,11 +87,6 @@ class _ForwardMessageScreenState extends State<ForwardMessageScreen> {
                                               .entries
                                               .map<Widget>(
                                           (entry) {
-                                            List.generate(state.data.length,
-                                                (index) {
-                                              listChecked.add(false);
-                                            });
-
                                             DateTime messageTime =
                                                 DateTime.parse(entry.value
                                                     .lastMessage.timestamp);
@@ -107,6 +107,29 @@ class _ForwardMessageScreenState extends State<ForwardMessageScreen> {
                                             } else {
                                               timeAgoText = 'vừa mới';
                                             }
+                                            if (entry.value.userRecipient
+                                                    .idRecipient ==
+                                                widget.idReceiver) {
+                                            inforUserChat =
+                                                  InforUserChat(
+                                                      idUserRecipient: entry
+                                                          .value
+                                                          .userRecipient
+                                                          .idRecipient,
+                                                      name: entry.value
+                                                          .userRecipient.name,
+                                                      avatar: entry.value
+                                                          .userRecipient.avatar,
+                                                      timeActive: timeAgoText,
+                                                      sex: entry.value
+                                                          .userRecipient.sex);
+                                            }
+
+                                            List.generate(state.data.length,
+                                                (index) {
+                                              listChecked.add(false);
+                                            });
+
                                             return Column(
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
@@ -234,7 +257,17 @@ class _ForwardMessageScreenState extends State<ForwardMessageScreen> {
                       builder: (context, state) {
                     if (state is ForwardSuccessState) {
                       Future.delayed(Duration.zero, () {
-                        Navigator.pop(context);
+                        Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) => BlocProvider<
+                                                          GetAllMessageCubit>(
+                                                      create: (BuildContext
+                                                              context) =>
+                                                          GetAllMessageCubit(),
+                                                      child: ChattingWithScreen(
+                                                        inforUserChat:  inforUserChat!,
+                                                      ))));
                       });
                       return const SizedBox();
                     } else if (state is LoadingForwardMessageState) {

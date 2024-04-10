@@ -13,6 +13,7 @@ class ReciverMessItem extends StatefulWidget {
   bool? showAvatar;
   String? type;
   String? idMessage;
+  String? idReceiver;
   ReciverMessItem(
       {super.key,
       this.avatarReceiver,
@@ -21,7 +22,8 @@ class ReciverMessItem extends StatefulWidget {
       this.sex,
       this.showAvatar,
       this.type,
-      this.idMessage});
+      this.idMessage,
+      this.idReceiver});
 
   @override
   State<ReciverMessItem> createState() => _ReciverMessItemState();
@@ -138,6 +140,7 @@ class _ReciverMessItemState extends State<ReciverMessItem> {
                                   ],
                                   child: ForwardMessageScreen(
                                     idMessage: widget.idMessage!,
+                                    idReceiver: widget.idReceiver!,
                                   ))),
                     );
                   },

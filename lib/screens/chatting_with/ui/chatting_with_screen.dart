@@ -142,6 +142,8 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                                   sex: widget.inforUserChat.sex,
                                   showAvatar: isConsecutive,
                                   idMessage: e.idMessage,
+                                  idReceiver:
+                                      widget.inforUserChat.idUserRecipient,
                                 );
                               }
                             }).toList(),
