@@ -1,11 +1,16 @@
+import 'dart:io';
+
 import 'package:app_zalo/constants/index.dart';
 import 'package:app_zalo/utils/pick_file/pick_file.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 
-class MediaOptions  extends StatefulWidget {
+import '../../env.dart';
+import '../../storages/hive_storage.dart';
+
+class MediaOptions  extends StatefulWidget  {
   final bool visible;
-  final void Function(List<XFile>) onFileSelected;
+  final void Function(List<File>) onFileSelected;
 
   const MediaOptions({super.key, required this.visible, required this.onFileSelected});
   @override
@@ -30,7 +35,7 @@ class _MediaOptionsState extends State<MediaOptions> {
             children: [
               GestureDetector(
                 onTap: () async {
-                   List<XFile> files = await _pickFile.pickMultiImage();
+                   List<File> files = await _pickFile.pickMultiImage();
                    widget.onFileSelected(files);
                 },
                 child: Container(
@@ -61,7 +66,7 @@ class _MediaOptionsState extends State<MediaOptions> {
               ),
               GestureDetector(
                 onTap: () async {
-                  List<XFile> files = await _pickFile.pickMultiMedia();
+                  List<File> files = await _pickFile.pickMultiMedia();
                   widget.onFileSelected(files);
                 },
                 child: Container(
@@ -81,3 +86,5 @@ class _MediaOptionsState extends State<MediaOptions> {
         ));
   }
 }
+
+

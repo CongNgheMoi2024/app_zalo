@@ -6,6 +6,7 @@ import 'package:app_zalo/models/chat/infor_user_chat.dart';
 import 'package:app_zalo/screens/chatting_with/bloc/get_all_message_cubit.dart';
 import 'package:app_zalo/screens/chatting_with/bloc/get_all_message_state.dart';
 import 'package:app_zalo/storages/storage.dart';
+import 'package:app_zalo/utils/send_file.dart';
 import 'package:app_zalo/widget/dismiss_keyboard_widget.dart';
 import 'package:app_zalo/widget/header/header_of_chatting.dart';
 import 'package:app_zalo/widget/media_options_box/media_options_box.dart';
@@ -31,7 +32,7 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
   bool showOptions = false;
   FocusNode focusTextField = FocusNode();
   TextEditingController controllerInputMessage = TextEditingController();
-
+  final SendFile _sendFile = SendFile();
   List<dynamic> listMessage = [];
 
   late StompClient client;
@@ -57,14 +58,15 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
             destination: "/user/$idUser/queue/messages",
             callback: (StompFrame frame) {
               setState(() {
+                Map<String, dynamic> data = jsonDecode(frame.body ?? "");
                 listMessage.add(MessageOfList(
-                    idMessage: jsonDecode(frame.body!)["id"],
+                    idMessage: data["id"],
                     idChat: "",
-                    idSender: jsonDecode(frame.body!)["senderId"],
-                    idReceiver: jsonDecode(frame.body!)["recipientId"],
+                    idSender: data["senderId"],
+                    idReceiver: data["recipientId"],
                     timestamp: DateTime.now().millisecondsSinceEpoch.toString(),
-                    content: jsonDecode(frame.body!)["content"],
-                    type: ""));
+                    content: data["content"],
+                    type: data.containsKey("type") ? data["type"] : "TEXT"));
               });
               print("Supriseber on ${frame.body}");
             });
@@ -130,9 +132,11 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                                 return SenderMessItem(
                                   content: e.content,
                                   time: e.timestamp,
+                                  type: e.type,
                                   idMessage: e.idMessage,
                                   idReceiver:
                                       widget.inforUserChat.idUserRecipient,
+
                                 );
                               } else {
                                 isConsecutive =
@@ -144,6 +148,7 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                                   time: e.timestamp,
                                   sex: widget.inforUserChat.sex,
                                   showAvatar: isConsecutive,
+                                  type: e.type,
                                   idMessage: e.idMessage,
                                   idReceiver:
                                       widget.inforUserChat.idUserRecipient,
@@ -293,10 +298,43 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                   ),
                   MediaOptions(
                     visible: showOptions,
-                    onFileSelected: (xFiles) {
-                      xFiles.forEach((element) {
-                        print('FIle pick ====================${element.name}');
-                      });
+                    onFileSelected: (files) async {
+                      List<dynamic> data = await _sendFile.sendFile(
+                          idUser, widget.inforUserChat.idUserRecipient, files);
+                      if (data.isEmpty) {
+                        const AlertDialog(
+                          title: Text("Thông báo"),
+                          content: Text("Đã xảy ra lỗi!"),
+                        );
+                      } else {
+                        for (var element in data) {
+                          client.send(
+                            destination: "/app/chat",
+                            body: jsonEncode({
+                              "content": element["content"].toString(),
+                              "senderId": idUser,
+                              "recipientId":
+                                  widget.inforUserChat.idUserRecipient,
+                              "timestamp":
+                                  DateTime.now().millisecondsSinceEpoch,
+                              "type": element["type"]
+                            }),
+                          );
+                          setState(() {
+                            listMessage.add(MessageOfList(
+                                idMessage: "",
+                                idChat: "",
+                                idSender: idUser,
+                                idReceiver:
+                                    widget.inforUserChat.idUserRecipient,
+                                timestamp: DateTime.now()
+                                    .millisecondsSinceEpoch
+                                    .toString(),
+                                content: element["content"].toString(),
+                                type: element["type"].toString()));
+                          });
+                        }
+                      }
                     },
                   )
                 ],

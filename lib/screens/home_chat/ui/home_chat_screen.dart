@@ -107,7 +107,10 @@ class _HomeChatScreenState extends State<HomeChatScreen> {
                                                                 .value
                                                                 .userRecipient
                                                                 .sex),
-                                                      ))));
+                                                      )
+                                                  )
+                                              )
+                                          );
                                         },
                                         child: Row(
                                           children: [

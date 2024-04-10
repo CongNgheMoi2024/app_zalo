@@ -8,10 +8,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class SenderMessItem extends StatefulWidget {
   String? content;
   String? time;
+  String? type;
   String? idMessage;
   String? idReceiver;
-  SenderMessItem(
-      {super.key, this.content, this.time, this.idMessage, this.idReceiver});
+
+  SenderMessItem({super.key, required content, required time, required type, required idMessage, required String idReceiver});
 
   @override
   State<SenderMessItem> createState() => _SenderMessItemState();
@@ -183,10 +184,17 @@ class _SenderMessItemState extends State<SenderMessItem> {
                         bottomLeft: Radius.circular(20.sp),
                       ),
                     ),
-                    child: Text(
-                      widget.content!,
-                      style: text16.primary.regular,
-                    )),
+                    child: widget.type == "IMAGE"
+                        ? Image.network(
+                            widget.content!,
+                            height: 150.sp,
+                            width: 250.sp,
+                            fit: BoxFit.cover,
+                          )
+                        : Text(
+                            widget.content!,
+                            style: text16.primary.regular,
+                          )),
               ),
             ],
           ),
