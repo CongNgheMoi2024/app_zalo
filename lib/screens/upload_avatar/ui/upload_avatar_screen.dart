@@ -27,16 +27,16 @@ class _UploadAvatarScreenState extends State<UploadAvatarScreen> {
     try {
       final picker = ImagePicker();
 
-      final XFile? pickedFile1 = await picker.pickImage(
-          source: ImageSource.gallery,
+      final List<XFile>? pickedFile1 = await picker.pickMultiImage(
+
           maxHeight: 480,
           maxWidth: 640,
           imageQuality: 90);
       if (pickedFile1 != null) {
-        setState(() {
-          pathImage1 = File(pickedFile1.path);
-          sizeImage = pathImage1!.lengthSync();
-        });
+        // setState(() {
+        //   pathImage1 = File(pickedFile1.path);
+        //   sizeImage = pathImage1!.lengthSync();
+        // });
       } else {
         print('No image selected.');
       }

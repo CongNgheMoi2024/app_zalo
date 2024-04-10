@@ -85,8 +85,8 @@ class _ReciverMessItemState extends State<ReciverMessItem> {
                     decoration: BoxDecoration(
                         color: primaryColor.withOpacity(0.1),
                         borderRadius: BorderRadius.circular(20.sp)),
-                    child: widget.type == null ? Text(widget.message!):
-                             NetworkImage(widget.message!)
+                    child:  Text(widget.message!)
+
 
                       ),
               ],
