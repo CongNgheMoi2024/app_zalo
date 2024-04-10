@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:app_zalo/constants/index.dart';
 import 'package:app_zalo/env.dart';
+import 'package:app_zalo/models/chat/infor_user_chat.dart';
 import 'package:app_zalo/screens/chatting_with/bloc/get_all_message_cubit.dart';
 import 'package:app_zalo/screens/chatting_with/bloc/get_all_message_state.dart';
 import 'package:app_zalo/storages/storage.dart';
@@ -17,20 +18,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:stomp_dart_client/stomp.dart';
 import 'package:stomp_dart_client/stomp_config.dart';
 import 'package:stomp_dart_client/stomp_frame.dart';
-
-class InforUserChat {
-  String idUserRecipient;
-  String name;
-  String avatar;
-  String timeActive;
-  bool sex;
-  InforUserChat(
-      {required this.idUserRecipient,
-      required this.name,
-      required this.avatar,
-      required this.timeActive,
-      required this.sex});
-}
 
 // ignore: must_be_immutable
 class ChattingWithScreen extends StatefulWidget {
