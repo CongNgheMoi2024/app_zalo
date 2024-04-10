@@ -226,13 +226,13 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                                 isConsecutive =
                                     prevIndex != null && prevIndex == index - 1;
                                 prevIndex = index;
-                                print("isConsecutive$isConsecutive");
                                 return ReciverMessItem(
                                   avatarReceiver: widget.inforUserChat.avatar,
                                   message: e.content,
                                   time: e.timestamp,
                                   sex: widget.inforUserChat.sex,
                                   showAvatar: isConsecutive,
+                                  type: ,
                                 );
                               }
                             }).toList(),
@@ -312,15 +312,6 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                             ),
                           ),
                         ),
-                        // Padding(
-                        //   padding: EdgeInsets.only(
-                        //       left: 10.sp, right: 15.sp, top: 10.sp, bottom: 10.sp),
-                        //   child: Icon(
-                        //     Icons.send,
-                        //     color: primaryColor,
-                        //     size: 30.sp,
-                        //   ),
-                        // ),
                         MediaQuery.of(context).viewInsets.bottom > 10
                             ? InkWell(
                                 onTap: () {
@@ -400,7 +391,13 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             GestureDetector(
-                              onTap: () {
+                              onTap: () async {
+                                getImagesAndVideos()
+                                    .then((List<AssetEntity> assets) {
+                                  print('Photo ======== ${assets.first.title}');
+                                }).catchError((error) {
+                                  // Xử lý lỗi nếu có
+                                });
                               },
                               child: Container(
                                 padding: EdgeInsets.all(5.sp),
