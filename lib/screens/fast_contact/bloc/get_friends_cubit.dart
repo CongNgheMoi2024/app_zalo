@@ -24,7 +24,6 @@ class GetFriendsCubit extends Cubit<GetFriendsState> {
         emit(ErrorGetFriendsPhoneBookState("GetFriends failed.  "));
       }
     } catch (e) {
-      print("Looixiii ${e.toString()}");
       emit(ErrorGetFriendsPhoneBookState(e.toString()));
     }
   }

@@ -30,7 +30,6 @@ class LoginCubit extends Cubit<LoginState> {
         emit(ErrorLoginState("Login failed. ${response.data['message']}"));
       }
     } catch (e) {
-      print("Looixiii ${e.toString()}");
       emit(ErrorLoginState(e.toString()));
     }
   }

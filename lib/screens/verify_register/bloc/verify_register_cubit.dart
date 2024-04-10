@@ -14,7 +14,6 @@ class VerifyRegisterCubit extends Cubit<VerifyRegisterState> {
     emit(LoadingVerifyRegisterState());
 
     try {
-      print("OTP: $otp - $phoneNumber");
       Dio dio = Dio();
       String apiUrl = "${Env.url}/api/v1/otp";
       Response response = await dio.post(apiUrl,

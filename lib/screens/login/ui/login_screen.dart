@@ -1,14 +1,11 @@
-import 'package:app_zalo/constants/colors.dart';
 import 'package:app_zalo/constants/index.dart';
 import 'package:app_zalo/routes/routes.dart';
-import 'package:app_zalo/screens/boarding/boarding_screen.dart';
 import 'package:app_zalo/screens/login/bloc/login_cubit.dart';
 import 'package:app_zalo/screens/login/bloc/login_state.dart';
 import 'package:app_zalo/utils/regex.dart';
 import 'package:app_zalo/widget/dismiss_keyboard_widget.dart';
 import 'package:app_zalo/widget/text_input/text_input_login.dart';
 import 'package:app_zalo/widget/text_input/text_input_password.dart';
-import 'package:app_zalo/widget/text_input/text_input_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

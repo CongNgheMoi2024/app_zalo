@@ -102,9 +102,7 @@ class GetAllRoomCubit extends Cubit<GetAllRoomState> {
               .map((e) => RoomsUser.fromJson(e))
               .toList(),
         ));
-        // print("GET ALLLLLLLLLLLLLLLLLLLLLLLLLL ${response.data["data"]}");
       } else {
-        print("Loiii iii22222222222");
         emit(ErrorGetAllRoomState("Error GET ALL ROOMS USER"));
       }
     } catch (e) {

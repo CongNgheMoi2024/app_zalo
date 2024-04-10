@@ -34,14 +34,13 @@ class _UploadCoverImageScreenState extends State<UploadCoverImageScreen> {
       if (pickedFile1 != null) {
         // ignore: use_build_context_synchronously
         Navigator.pushReplacementNamed(
-            context, RouterName.uploadImageCoverScreen,
+            // ignore: use_build_context_synchronously
+            context,
+            RouterName.uploadImageCoverScreen,
             arguments: {'imageFile': File(pickedFile1.path)});
-      } else {
-        print('No image selected.');
-      }
-    } catch (e) {
-      print("Error: $e");
-    }
+      } else {}
+      // ignore: empty_catches
+    } catch (e) {}
   }
 
   void showCustomModalBottomSheet(BuildContext context) {

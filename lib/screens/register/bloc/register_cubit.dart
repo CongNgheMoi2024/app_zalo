@@ -25,8 +25,6 @@ class RegisterCubit extends Cubit<RegisterState> {
       });
 
       if (response.statusCode == 200) {
-        print("Access Token: ${response.data['data']['access_token']}");
-        print("Refresh Token: ${response.data['data']['refresh_token']}");
         HiveStorage().updateToken("${response.data['data']['access_token']}");
         HiveStorage()
             .updateRefreshToken("${response.data['data']['refresh_token']}");

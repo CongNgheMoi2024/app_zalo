@@ -1,6 +1,5 @@
 import 'package:app_zalo/env.dart';
 import 'package:app_zalo/screens/forgot_password/bloc/otp_forgot_state.dart';
-import 'package:app_zalo/storages/hive_storage.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

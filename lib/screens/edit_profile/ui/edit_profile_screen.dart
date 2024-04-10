@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
+// ignore: must_be_immutable
 class EditProfileScreen extends StatefulWidget {
   String? name;
   String? dateOfBirth;
@@ -48,7 +49,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
 
     return DismissKeyboard(
       child: SafeArea(

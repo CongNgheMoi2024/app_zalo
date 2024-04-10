@@ -5,6 +5,7 @@ import 'package:app_zalo/screens/home_chat/bloc/get_all_rooms_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+// ignore: must_be_immutable
 class SenderMessItem extends StatefulWidget {
   String? content;
   String? time;
@@ -71,7 +72,17 @@ class _SenderMessItemState extends State<SenderMessItem> {
                     decoration: BoxDecoration(
                         color: primaryColor.withOpacity(0.1),
                         borderRadius: BorderRadius.circular(20.sp)),
-                    child: Text(widget.content!)),
+                    child: widget.type == "IMAGE"
+                        ? Image.network(
+                            widget.content!,
+                            height: 150.sp,
+                            width: 250.sp,
+                            fit: BoxFit.cover,
+                          )
+                        : Text(
+                            "${widget.content}",
+                            style: text16.primary.regular,
+                          )),
               ],
             ),
             Container(

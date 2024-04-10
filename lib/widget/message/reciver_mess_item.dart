@@ -5,6 +5,7 @@ import 'package:app_zalo/screens/home_chat/bloc/get_all_rooms_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+// ignore: must_be_immutable
 class ReciverMessItem extends StatefulWidget {
   String? avatarReceiver;
   String? message;
@@ -97,7 +98,17 @@ class _ReciverMessItemState extends State<ReciverMessItem> {
                     decoration: BoxDecoration(
                         color: primaryColor.withOpacity(0.1),
                         borderRadius: BorderRadius.circular(20.sp)),
-                    child: Text(widget.message!)),
+                    child: widget.type == "IMAGE"
+                        ? Image.network(
+                            widget.message!,
+                            fit: BoxFit.cover,
+                            height: 150.sp,
+                            width: 250.sp,
+                          )
+                        : Text(
+                            widget.message!,
+                            style: text16.primary.regular,
+                          ))
               ],
             ),
             Container(
@@ -257,13 +268,7 @@ class _ReciverMessItemState extends State<ReciverMessItem> {
                         : Text(
                             widget.message!,
                             style: text16.primary.regular,
-                          )
-
-                    // Text(
-                    //   widget.message!,
-                    //   style: text16.primary.regular,
-                    // )
-                    ),
+                          )),
               ),
             ],
           ),

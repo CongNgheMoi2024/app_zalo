@@ -54,7 +54,6 @@ class _HomeChatScreenState extends State<HomeChatScreen> {
                           ? Wrap(
                               children: state.data.asMap().entries.map<Widget>(
                               (entry) {
-                                print("Entry ${entry.value.userRecipient.sex}");
                                 DateTime messageTime = DateTime.parse(
                                     entry.value.lastMessage.timestamp);
 
@@ -107,10 +106,7 @@ class _HomeChatScreenState extends State<HomeChatScreen> {
                                                                 .value
                                                                 .userRecipient
                                                                 .sex),
-                                                      )
-                                                  )
-                                              )
-                                          );
+                                                      ))));
                                         },
                                         child: Row(
                                           children: [

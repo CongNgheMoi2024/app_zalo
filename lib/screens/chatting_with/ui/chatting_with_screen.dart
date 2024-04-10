@@ -77,6 +77,7 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
         await Future.delayed(const Duration(milliseconds: 200));
       },
       onWebSocketError: (dynamic error) =>
+          // ignore: avoid_print
           print("LoiKaiWkAIII${error.toString()}"),
     ));
     client.activate();
@@ -128,7 +129,6 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                             children: listMessage.asMap().entries.map((entry) {
                               final index = entry.key;
                               final e = entry.value;
-                              print("eEEEEEEEEEEEEEEEEEJJJ ${e.content}");
                               if (e.idSender == idUser) {
                                 return SenderMessItem(
                                   content: e.content,
@@ -170,7 +170,7 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
               ],
             ),
             bottomNavigationBar: AnimatedContainer(
-              duration: Duration(milliseconds: 0),
+              duration: const Duration(milliseconds: 0),
               height: showOptions
                   ? 255.sp + MediaQuery.of(context).viewInsets.bottom
                   : 50.sp + MediaQuery.of(context).viewInsets.bottom,

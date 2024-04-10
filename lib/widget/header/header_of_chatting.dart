@@ -1,6 +1,7 @@
 import 'package:app_zalo/constants/index.dart';
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class HeaderOfChatting extends StatefulWidget {
   String? nameReceiver;
   String? timeActive;

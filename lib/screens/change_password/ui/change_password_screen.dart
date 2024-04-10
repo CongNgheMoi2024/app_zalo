@@ -10,6 +10,7 @@ import 'package:app_zalo/widget/text_input/text_input_password.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+// ignore: must_be_immutable
 class ChangePasswordScreen extends StatefulWidget {
   String? phone;
   ChangePasswordScreen({super.key, this.phone});

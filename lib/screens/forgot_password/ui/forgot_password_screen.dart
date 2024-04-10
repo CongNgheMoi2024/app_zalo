@@ -92,7 +92,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   return Container();
                 } else {
                   return state is LoadingForgotPasswordState
-                      ? CircularProgressIndicator()
+                      ? const CircularProgressIndicator()
                       : Column(
                           children: [
                             ButtonBottomNavigated(

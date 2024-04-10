@@ -21,28 +21,26 @@ class UploadAvatarScreen extends StatefulWidget {
 
 class _UploadAvatarScreenState extends State<UploadAvatarScreen> {
   int? selectedRadio;
+
   int sizeImage = 0;
   File? pathImage1;
   Future<void> _pickImage() async {
     try {
       final picker = ImagePicker();
 
-      final List<XFile>? pickedFile1 = await picker.pickMultiImage(
-
+      final XFile? pickedFile1 = await picker.pickImage(
+          source: ImageSource.gallery,
           maxHeight: 480,
           maxWidth: 640,
           imageQuality: 90);
       if (pickedFile1 != null) {
-        // setState(() {
-        //   pathImage1 = File(pickedFile1.path);
-        //   sizeImage = pathImage1!.lengthSync();
-        // });
-      } else {
-        print('No image selected.');
-      }
-    } catch (e) {
-      print("Error: $e");
-    }
+        setState(() {
+          pathImage1 = File(pickedFile1.path);
+          sizeImage = pathImage1!.lengthSync();
+        });
+      } else {}
+      // ignore: empty_catches
+    } catch (e) {}
   }
 
   @override
@@ -169,8 +167,7 @@ class _UploadAvatarScreenState extends State<UploadAvatarScreen> {
                   builder: (context, state) {
                 if (state is UploadAvatarSuccessState) {
                   WidgetsBinding.instance.addPostFrameCallback((_) {
-                    Navigator.pushReplacementNamed(
-                        context, RouterName.dashboardScreen);
+                    Navigator.pushNamed(context, RouterName.dashboardScreen);
                     context.read<UploadAvatarCubit>().resetState();
                   });
                   return Container();

@@ -1,6 +1,7 @@
 import 'package:app_zalo/constants/index.dart';
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class ButtonBottomNavigated extends StatefulWidget {
   String? title;
   Function? onPressed;

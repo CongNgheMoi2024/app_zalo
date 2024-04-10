@@ -18,8 +18,6 @@ class ForgotPasswordCubit extends Cubit<ForgotPasswordState> {
           .post(apiUrl, data: {"phoneNo": "+84${phoneNumber.substring(1)}"});
 
       if (response.statusCode == 200) {
-        ;
-
         emit(ForgotPasswordenticatedState(phoneNumber));
       } else {
         emit(ErrorForgotPasswordState(

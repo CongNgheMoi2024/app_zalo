@@ -11,8 +11,8 @@ import 'package:app_zalo/widget/dismiss_keyboard_widget.dart';
 import 'package:contacts_service/contacts_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:string_validator/string_validator.dart';
 
+// ignore: must_be_immutable
 class FastContactScreen extends StatefulWidget {
   List<Contact>? contacts = [];
   FastContactScreen({super.key, this.contacts});
@@ -29,7 +29,6 @@ class _FastContactScreenState extends State<FastContactScreen> {
 
   @override
   Widget build(BuildContext context) {
-    double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
 
     return DismissKeyboard(
