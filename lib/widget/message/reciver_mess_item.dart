@@ -1,5 +1,8 @@
 import 'package:app_zalo/constants/index.dart';
+import 'package:app_zalo/screens/forward/ui/forward_message_screen.dart';
+import 'package:app_zalo/screens/home_chat/bloc/get_all_rooms_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ReciverMessItem extends StatefulWidget {
   String? avatarReceiver;
@@ -89,10 +92,7 @@ class _ReciverMessItemState extends State<ReciverMessItem> {
                     decoration: BoxDecoration(
                         color: primaryColor.withOpacity(0.1),
                         borderRadius: BorderRadius.circular(20.sp)),
-                    child:  Text(widget.message!)
-
-
-                      ),
+                    child: Text(widget.message!)),
               ],
             ),
             Container(
@@ -117,20 +117,33 @@ class _ReciverMessItemState extends State<ReciverMessItem> {
                       color: boxMessShareColor.withOpacity(0.4), width: 1.sp)),
               child:
                   Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                Column(
-                  children: [
-                    ImageAssets.pngAsset(
-                      Png.icForward,
-                      width: 30.sp,
-                      height: 30.sp,
-                    ),
-                    SizedBox(height: 5.sp),
-                    Text(
-                      "Chuyển tiếp",
-                      style: text14.medium.copyWith(
-                          color: lightBlue.withOpacity(0.8), fontSize: 13.sp),
-                    )
-                  ],
+                InkWell(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => BlocProvider<GetAllRoomCubit>(
+                          create: (BuildContext context) => GetAllRoomCubit(),
+                          child: ForwardMessageScreen(),
+                        ),
+                      ),
+                    );
+                  },
+                  child: Column(
+                    children: [
+                      ImageAssets.pngAsset(
+                        Png.icForward,
+                        width: 30.sp,
+                        height: 30.sp,
+                      ),
+                      SizedBox(height: 5.sp),
+                      Text(
+                        "Chuyển tiếp",
+                        style: text14.medium.copyWith(
+                            color: lightBlue.withOpacity(0.8), fontSize: 13.sp),
+                      )
+                    ],
+                  ),
                 )
               ]),
             )
