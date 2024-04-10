@@ -32,21 +32,26 @@ class ChattingWithScreen extends StatefulWidget {
 class _ChattingWithScreenState extends State<ChattingWithScreen> {
   String idUser = HiveStorage().idUser;
   bool showOptions = false;
+  FocusNode focusTextField = FocusNode();
   TextEditingController controllerInputMessage = TextEditingController();
 
   List<dynamic> listMessage = [];
 
   late StompClient client;
 
-  final int sizeMax = 100 * 1024 * 1024;
   void toggleOptions() => setState(() {
         showOptions = !showOptions;
       });
-
-
   @override
   void initState() {
     super.initState();
+    focusTextField.addListener(() {
+      if(focusTextField.hasFocus){
+        setState(() {
+          showOptions =false;
+        });
+      }
+    });
     client = StompClient(
         config: StompConfig.sockJS(
       url: '${Env.url}/ws',
@@ -188,6 +193,7 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                               right: 5.sp,
                             ),
                             child: TextField(
+                              focusNode: focusTextField,
                               controller: controllerInputMessage,
                               decoration: InputDecoration(
                                 contentPadding: EdgeInsets.symmetric(
@@ -265,9 +271,14 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                                     top: 10.sp,
                                     bottom: 10.sp),
                                 child: GestureDetector(
-                                  onTap: () => setState(() {
-                                    toggleOptions();
-                                  }),
+                                  onTap: () {
+                                    if(showOptions == false){
+                                      focusTextField.unfocus();
+                                    }
+                                    setState(() {
+                                      toggleOptions();
+                                    });
+                                  },
                                   child: ImageAssets.pngAsset(
                                     Png.iconMore,
                                     width: 30.sp,
