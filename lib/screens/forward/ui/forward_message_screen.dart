@@ -110,19 +110,18 @@ class _ForwardMessageScreenState extends State<ForwardMessageScreen> {
                                             if (entry.value.userRecipient
                                                     .idRecipient ==
                                                 widget.idReceiver) {
-                                            inforUserChat =
-                                                  InforUserChat(
-                                                      idUserRecipient: entry
-                                                          .value
-                                                          .userRecipient
-                                                          .idRecipient,
-                                                      name: entry.value
-                                                          .userRecipient.name,
-                                                      avatar: entry.value
-                                                          .userRecipient.avatar,
-                                                      timeActive: timeAgoText,
-                                                      sex: entry.value
-                                                          .userRecipient.sex);
+                                              inforUserChat = InforUserChat(
+                                                  idUserRecipient: entry
+                                                      .value
+                                                      .userRecipient
+                                                      .idRecipient,
+                                                  name: entry
+                                                      .value.userRecipient.name,
+                                                  avatar: entry.value
+                                                      .userRecipient.avatar,
+                                                  timeActive: timeAgoText,
+                                                  sex: entry
+                                                      .value.userRecipient.sex);
                                             }
 
                                             List.generate(state.data.length,
@@ -257,17 +256,17 @@ class _ForwardMessageScreenState extends State<ForwardMessageScreen> {
                       builder: (context, state) {
                     if (state is ForwardSuccessState) {
                       Future.delayed(Duration.zero, () {
+                        Navigator.pop(context);
                         Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) => BlocProvider<
-                                                          GetAllMessageCubit>(
-                                                      create: (BuildContext
-                                                              context) =>
-                                                          GetAllMessageCubit(),
-                                                      child: ChattingWithScreen(
-                                                        inforUserChat:  inforUserChat!,
-                                                      ))));
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    BlocProvider<GetAllMessageCubit>(
+                                        create: (BuildContext context) =>
+                                            GetAllMessageCubit(),
+                                        child: ChattingWithScreen(
+                                          inforUserChat: inforUserChat!,
+                                        ))));
                       });
                       return const SizedBox();
                     } else if (state is LoadingForwardMessageState) {

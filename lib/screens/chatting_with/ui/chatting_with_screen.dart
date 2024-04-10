@@ -116,7 +116,7 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                           return SizedBox(
                             height: height - 200.sp,
                             width: width,
-                            child: Center(
+                            child: const Center(
                               child: CircularProgressIndicator(),
                             ),
                           );
@@ -130,6 +130,9 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                                 return SenderMessItem(
                                   content: e.content,
                                   time: e.timestamp,
+                                  idMessage: e.idMessage,
+                                  idReceiver:
+                                      widget.inforUserChat.idUserRecipient,
                                 );
                               } else {
                                 isConsecutive =
