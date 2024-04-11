@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:app_zalo/routes/route_generate.dart';
 import 'package:app_zalo/routes/routes.dart';
 import 'package:app_zalo/storages/key_storage.dart';
@@ -42,11 +40,6 @@ class MyNavigatorObserver extends NavigatorObserver {
   void didPush(Route route, Route? previousRoute) {
     RouteGenerate.setSaveRouterName(routerName: route.settings.name);
     super.didPush(route, previousRoute);
-  }
-
-  @override
-  void didRemove(Route route, Route? previousRoute) {
-    super.didRemove(route, previousRoute);
   }
 
   @override

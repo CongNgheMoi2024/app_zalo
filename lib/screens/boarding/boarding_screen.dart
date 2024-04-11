@@ -3,7 +3,6 @@ import 'package:app_zalo/routes/routes.dart';
 import 'package:app_zalo/screens/boarding/onboarding1.dart';
 import 'package:app_zalo/screens/boarding/onboarding2.dart';
 import 'package:app_zalo/screens/boarding/onboarding3.dart';
-import 'package:app_zalo/storages/hive_storage.dart';
 import 'package:app_zalo/widget/button/button_bottom_navigated.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -48,7 +47,7 @@ class _BoardingScreenState extends State<BoardingScreen> {
                         curve: Curves.ease);
                   },
                 ),
-                Onboarding3(),
+                const Onboarding3(),
               ],
             ),
           ),

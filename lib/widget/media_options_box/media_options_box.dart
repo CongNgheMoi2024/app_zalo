@@ -2,17 +2,14 @@ import 'dart:io';
 
 import 'package:app_zalo/constants/index.dart';
 import 'package:app_zalo/utils/pick_file/pick_file.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
-import '../../env.dart';
-import '../../storages/hive_storage.dart';
-
-class MediaOptions  extends StatefulWidget  {
+class MediaOptions extends StatefulWidget {
   final bool visible;
   final void Function(List<File>) onFileSelected;
 
-  const MediaOptions({super.key, required this.visible, required this.onFileSelected});
+  const MediaOptions(
+      {super.key, required this.visible, required this.onFileSelected});
   @override
   State<MediaOptions> createState() => _MediaOptionsState();
 }
@@ -27,16 +24,15 @@ class _MediaOptionsState extends State<MediaOptions> {
           margin: EdgeInsets.only(top: 5.sp),
           decoration: BoxDecoration(
               border: Border(
-                  top: BorderSide(
-                      width: 1, color: grey03.withOpacity(0.5)))),
+                  top: BorderSide(width: 1, color: grey03.withOpacity(0.5)))),
           height: 200.sp,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               GestureDetector(
                 onTap: () async {
-                   List<File> files = await _pickFile.pickMultiImage();
-                   widget.onFileSelected(files);
+                  List<File> files = await _pickFile.pickMultiImage();
+                  widget.onFileSelected(files);
                 },
                 child: Container(
                   padding: EdgeInsets.all(5.sp),
@@ -86,5 +82,3 @@ class _MediaOptionsState extends State<MediaOptions> {
         ));
   }
 }
-
-

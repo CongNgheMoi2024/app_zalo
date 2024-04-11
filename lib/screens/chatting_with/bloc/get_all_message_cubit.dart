@@ -67,7 +67,6 @@ class GetAllMessageCubit extends Cubit<GetAllMessageState> {
         emit(ErrorGetAllMessageState("GetAllMessage failed. "));
       }
     } catch (e) {
-      print("Looixiii ${e.toString()}");
       emit(ErrorGetAllMessageState(e.toString()));
     }
   }

@@ -7,9 +7,9 @@ import 'package:app_zalo/widget/show_message_by_type/show_file.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import '../page_view_image/page_view_image.dart';
 
+// ignore: must_be_immutable
 class SenderMessItem extends StatefulWidget {
   String? content;
   String? time;
@@ -17,13 +17,6 @@ class SenderMessItem extends StatefulWidget {
   String? idMessage;
   String? idReceiver;
   SenderMessItem({super.key, this.content, this.time, this.type, this.idMessage, this.idReceiver});
-  // final String content;
-  // final String time;
-  // final String type;
-  // final String idMessage;
-  // final String idReceiver;
-  //
-  // const SenderMessItem({super.key, required this.content, required this.time, required this.type, required this.idMessage, required this.idReceiver});
   @override
   State<SenderMessItem> createState() => _SenderMessItemState();
 }
@@ -75,7 +68,17 @@ class _SenderMessItemState extends State<SenderMessItem> {
                     decoration: BoxDecoration(
                         color: primaryColor.withOpacity(0.1),
                         borderRadius: BorderRadius.circular(20.sp)),
-                    child: Text(widget.content!)),
+                    child: widget.type == "IMAGE"
+                        ? Image.network(
+                            widget.content!,
+                            height: 150.sp,
+                            width: 250.sp,
+                            fit: BoxFit.cover,
+                          )
+                        : Text(
+                            "${widget.content}",
+                            style: text16.primary.regular,
+                          )),
               ],
             ),
             Container(

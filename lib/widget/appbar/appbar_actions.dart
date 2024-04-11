@@ -29,7 +29,7 @@ class _AppbarActionsState extends State<AppbarActions> {
         padding: EdgeInsets.only(
           top: 5.sp,
         ),
-        decoration: BoxDecoration(color: whiteColor),
+        decoration: const BoxDecoration(color: whiteColor),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.start,

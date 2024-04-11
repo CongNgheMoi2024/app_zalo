@@ -5,8 +5,9 @@ import 'package:dio/dio.dart';
 import '../env.dart';
 import '../storages/hive_storage.dart';
 
-class SendFile{
-  Future<List<dynamic>> sendFile(String senderId, String recipientId, List<File> files) async {
+class SendFile {
+  Future<List<dynamic>> sendFile(
+      String senderId, String recipientId, List<File> files) async {
     String token = HiveStorage().token;
     try {
       Dio dio = Dio();
@@ -39,7 +40,6 @@ class SendFile{
         return [];
       }
     } catch (error) {
-      print('Error seding file message : $error');
       return [];
     }
   }

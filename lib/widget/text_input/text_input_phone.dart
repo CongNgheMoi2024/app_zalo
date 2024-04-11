@@ -1,6 +1,7 @@
 import 'package:app_zalo/constants/index.dart';
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class TextInputPhone extends StatefulWidget {
   String? title;
   Function? onChanged;
@@ -12,7 +13,7 @@ class TextInputPhone extends StatefulWidget {
 }
 
 class _TextInputPhoneState extends State<TextInputPhone> {
-  TextEditingController _controller = TextEditingController();
+  final TextEditingController _controller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -43,14 +44,14 @@ class _TextInputPhoneState extends State<TextInputPhone> {
                 hintStyle: text16.copyWith(color: greyIcBot.withOpacity(0.7)),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.sp),
-                  borderSide: BorderSide(
+                  borderSide: const BorderSide(
                     color: Colors.transparent,
                     width: 1,
                   ),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.sp),
-                  borderSide: BorderSide(
+                  borderSide: const BorderSide(
                     color: Colors.transparent,
                     width: 1,
                   ),

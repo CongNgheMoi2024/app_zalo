@@ -11,6 +11,7 @@ import 'package:app_zalo/widget/text_input_picked_day/text_input_picked_day.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+// ignore: must_be_immutable
 class RegisterScreen extends StatefulWidget {
   String? phoneNumber;
   RegisterScreen({super.key, this.phoneNumber});

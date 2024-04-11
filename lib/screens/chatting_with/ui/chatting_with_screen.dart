@@ -77,6 +77,7 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
         await Future.delayed(const Duration(milliseconds: 200));
       },
       onWebSocketError: (dynamic error) =>
+          // ignore: avoid_print
           print("LoiKaiWkAIII${error.toString()}"),
     ));
     client.activate();
@@ -136,7 +137,6 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                                   idMessage: e.idMessage,
                                   idReceiver:
                                       widget.inforUserChat.idUserRecipient,
-
                                 );
                               } else {
                                 isConsecutive =
@@ -170,7 +170,7 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
               ],
             ),
             bottomNavigationBar: AnimatedContainer(
-              duration: Duration(milliseconds: 0),
+              duration: const Duration(milliseconds: 0),
               height: showOptions
                   ? 255.sp + MediaQuery.of(context).viewInsets.bottom
                   : 50.sp + MediaQuery.of(context).viewInsets.bottom,

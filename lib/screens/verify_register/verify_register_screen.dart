@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
+// ignore: must_be_immutable
 class VerifyRegisterScreen extends StatefulWidget {
   String? phoneNumber;
   VerifyRegisterScreen({super.key, this.phoneNumber});
@@ -27,8 +28,6 @@ class _VerifyRegisterScreenState extends State<VerifyRegisterScreen> {
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
-    double width = MediaQuery.of(context).size.width;
-
     return DismissKeyboard(
       child: Scaffold(
         body: SafeArea(
@@ -127,7 +126,7 @@ class _VerifyRegisterScreenState extends State<VerifyRegisterScreen> {
                   return Container();
                 } else {
                   return state is LoadingVerifyRegisterState
-                      ? CircularProgressIndicator()
+                      ? const CircularProgressIndicator()
                       : Column(
                           children: [
                             state is ErrorVerifyRegisterState

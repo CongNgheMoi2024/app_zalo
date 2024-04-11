@@ -12,6 +12,7 @@ import 'package:app_zalo/widget/text_input/text_input_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+// ignore: must_be_immutable
 class ForwardMessageScreen extends StatefulWidget {
   String? idMessage;
   String? idReceiver;
@@ -42,9 +43,7 @@ class _ForwardMessageScreenState extends State<ForwardMessageScreen> {
             child: Scaffold(
                 body: BlocBuilder<GetAllRoomCubit, GetAllRoomState>(
                     builder: (context, state) {
-                  if (state is GetAllRoomSuccessState) {
-                    print("Data ${state.data}");
-                  }
+                  if (state is GetAllRoomSuccessState) {}
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [

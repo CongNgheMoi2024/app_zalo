@@ -184,7 +184,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                 ),
           Container(
             color: Colors.yellow,
-            child: Text("Text1"),
+            child: const Text("Tính năng đang phát triển"),
           ),
           MultiBlocProvider(
             providers: [

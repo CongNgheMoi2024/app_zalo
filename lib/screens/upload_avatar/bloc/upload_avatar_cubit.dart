@@ -5,6 +5,7 @@ import 'package:app_zalo/screens/upload_avatar/bloc/upload_avatar_state.dart';
 import 'package:app_zalo/storages/hive_storage.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+// ignore: depend_on_referenced_packages
 import 'package:http_parser/http_parser.dart';
 
 class UploadAvatarCubit extends Cubit<UploadAvatarState> {
