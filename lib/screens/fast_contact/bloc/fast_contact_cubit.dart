@@ -20,7 +20,7 @@ class FastContactCubit extends Cubit<FastContactState> {
         options: Options(headers: {"Authorization": "Bearer $accessToken"}),
       );
       if (response.statusCode == 200) {
-        emit(FastContactFriendsSuccessdState(response.data['data']));
+        emit(FastContactFriendsSuccessdState(response.data['data'] ?? []));
       } else {
         emit(ErrorFastContactState("FastContact failed.  "));
       }
