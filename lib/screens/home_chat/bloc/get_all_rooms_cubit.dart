@@ -58,6 +58,7 @@ class LastMessage {
   final String content;
   final String type;
   final String timestamp;
+  final String status;
 
   LastMessage({
     required this.idMessage,
@@ -66,6 +67,7 @@ class LastMessage {
     required this.content,
     required this.type,
     required this.timestamp,
+    required this.status,
   });
   factory LastMessage.fromJson(Map<String, dynamic> json) {
     return LastMessage(
@@ -75,6 +77,7 @@ class LastMessage {
       content: json['content'] ?? "",
       type: json['type'] ?? "",
       timestamp: json['timestamp'] ?? "",
+      status: json['status'] ?? "",
     );
   }
 }

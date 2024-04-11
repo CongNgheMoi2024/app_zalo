@@ -284,7 +284,7 @@ class _SenderMessItemState extends State<SenderMessItem> {
                           vertical: 8.sp, horizontal: 16.sp),
                       decoration: BoxDecoration(
                         color: whiteColor,
-                        border: Border.all(color: errorColor, width: 1.sp),
+                        border: Border.all(color: primaryColor, width: 1.sp),
                         borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(20.sp),
                           topRight: Radius.circular(20.sp),
@@ -292,9 +292,9 @@ class _SenderMessItemState extends State<SenderMessItem> {
                         ),
                       ),
                       child: Text(
-                        "Tin nhắn đã bị xóa",
-                        style:
-                            text16.primary.regular.copyWith(color: errorColor),
+                        "Tin nhắn đã được thu hồi",
+                        style: text16.primary.regular
+                            .copyWith(color: primaryColor),
                       ),
                     )
                   : InkWell(

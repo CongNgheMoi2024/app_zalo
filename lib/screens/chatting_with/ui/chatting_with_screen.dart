@@ -170,7 +170,6 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                                             idUser,
                                             widget
                                                 .inforUserChat.idUserRecipient);
-                                    // setState(() {});
                                   },
                                 );
                               } else {

@@ -4,10 +4,12 @@ import 'package:app_zalo/constants/index.dart';
 import 'package:app_zalo/models/chat/infor_user_chat.dart';
 import 'package:app_zalo/screens/chatting_with/bloc/get_all_message_cubit.dart';
 import 'package:app_zalo/screens/chatting_with/ui/chatting_with_screen.dart';
+import 'package:app_zalo/screens/fast_contact/bloc/acept_friend.dart';
 import 'package:app_zalo/screens/fast_contact/bloc/fast_contact_cubit.dart';
 import 'package:app_zalo/screens/fast_contact/bloc/fast_contact_state.dart';
 import 'package:app_zalo/screens/fast_contact/bloc/get_friends_cubit.dart';
 import 'package:app_zalo/screens/fast_contact/bloc/get_friends_state.dart';
+import 'package:app_zalo/screens/fast_contact/bloc/get_requests_friend.dart';
 import 'package:app_zalo/utils/regex.dart';
 import 'package:app_zalo/widget/async_phonebook/async_phonebook.dart';
 import 'package:app_zalo/widget/dismiss_keyboard_widget.dart';
@@ -37,9 +39,22 @@ class _FastContactScreenState extends State<FastContactScreen> {
     context.read<GetFriendsCubit>().getFriendsPhoneBook();
   }
 
+  void showSnackBar(
+    BuildContext context,
+  ) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Đã chấp nhận lời mời kết bạn'),
+      ),
+    );
+  }
+
+  List<UserRequest>? list = [];
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
+    context.read<FastContactCubit>().FastContactenticate();
+    context.read<GetFriendsCubit>().getFriendsPhoneBook();
 
     return DismissKeyboard(
       child: Scaffold(
@@ -49,6 +64,72 @@ class _FastContactScreenState extends State<FastContactScreen> {
             AsyncPhonebook(
               contacts: widget.contacts,
             ),
+            FutureBuilder<List<UserRequest>>(
+                future: GetRequestFriend().getRequestFriend(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return CircularProgressIndicator(); // Or any other loading indicator
+                  } else if (snapshot.hasError) {
+                    return Text('Error: ${snapshot.error}');
+                  } else {
+                    print("KKKKKKKKKKKKKKKKKK");
+                    list = snapshot.data;
+
+                    return Wrap(
+                        children: list!.asMap().entries.map<Widget>((entry) {
+                      return Container(
+                        margin: EdgeInsets.only(top: 10.sp, bottom: 10.sp),
+                        height: 55.sp,
+                        width: width,
+                        child: Row(
+                          children: [
+                            CircleAvatar(
+                              radius: 20,
+                              backgroundImage: const AssetImage(Png.imgUserGirl)
+                                  as ImageProvider,
+                            ),
+                            SizedBox.fromSize(
+                              size: Size.fromWidth(30.sp),
+                            ),
+                            Expanded(child: Text(entry.value.name ?? "")),
+                            InkWell(
+                              onTap: () async {
+                                final result = await AcceptFriend()
+                                    .acceptFriend(entry.value.idUser!);
+
+                                if (result) {
+                                  // ignore: use_build_context_synchronously
+                                  showSnackBar(context);
+                                  setState(() {
+                                    list!.removeAt(entry.key);
+                                  });
+                                }
+                              },
+                              child: Container(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 15.sp, vertical: 7.sp),
+                                child: Text("Chấp nhận",
+                                    style: text15.regular
+                                        .copyWith(color: greenDC)),
+                              ),
+                            ),
+                            InkWell(
+                              child: Padding(
+                                padding:
+                                    EdgeInsets.symmetric(horizontal: 10.sp),
+                                child: Icon(
+                                  Icons.close_sharp,
+                                  size: 25.sp,
+                                  color: errorColor.withOpacity(0.8),
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      );
+                    }).toList());
+                  }
+                }),
             Padding(
               padding: EdgeInsets.only(
                   left: 15.sp, top: 10.sp, right: 15.sp, bottom: 5.sp),

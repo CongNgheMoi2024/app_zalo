@@ -168,7 +168,13 @@ class _HomeChatScreenState extends State<HomeChatScreen> {
                                                     width: width * 0.55,
                                                     child: Text(
                                                       entry.value.lastMessage
-                                                          .content,
+                                                                  .status ==
+                                                              "DELETED"
+                                                          ? "Tin nhắn đã được thu hồi"
+                                                          : entry
+                                                              .value
+                                                              .lastMessage
+                                                              .content,
                                                       overflow:
                                                           TextOverflow.ellipsis,
                                                       style: text16
