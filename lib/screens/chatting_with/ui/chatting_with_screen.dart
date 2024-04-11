@@ -62,12 +62,12 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                 Map<String, dynamic> data = jsonDecode(frame.body ?? "");
                 listMessage.add(MessageOfList(
                     idMessage: data["id"],
-                    idChat: "",
+                    idChat: data["chatId"],
                     idSender: data["senderId"],
                     idReceiver: data["recipientId"],
                     timestamp: DateTime.now().millisecondsSinceEpoch.toString(),
                     content: data["content"],
-                    type: data.containsKey("type") ? data["type"] : "TEXT"));
+                    type: data["type"] ?? "TEXT"));
               });
               print("Supriseber on ${frame.body}");
             });

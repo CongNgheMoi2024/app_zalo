@@ -17,24 +17,8 @@ class RoomsUser {
   factory RoomsUser.fromJson(Map<String, dynamic> json) {
     return RoomsUser(
         idRoom: json['id'],
-        userRecipient: json['userRecipient'] != null
-            ? UserRecipient.fromJson(json['userRecipient'])
-            : UserRecipient(
-                idRecipient: "",
-                name: "",
-                avatar: "",
-                imageCover: "",
-                sex: true,
-                onlineStatus: false),
-        lastMessage: json['lastMessage'] != null
-            ? LastMessage.fromJson(json['lastMessage'])
-            : LastMessage(
-                idMessage: "",
-                idSender: "",
-                idRecipient: "",
-                content: "",
-                type: "",
-                timestamp: ""));
+        userRecipient: UserRecipient.fromJson(json['userRecipient']),
+        lastMessage: LastMessage.fromJson(json['lastMessage']));
   }
 }
 
@@ -113,17 +97,16 @@ class GetAllRoomCubit extends Cubit<GetAllRoomState> {
       );
 
       if (response.statusCode == 200) {
-        print("aaaaaaaaaaaaaaaaaaa" + response.data["data"]);
-        // emit(GetAllRoomSuccessState(
-        //   (response.data["data"] as List)
-        //       .map((e) => RoomsUser.fromJson(e))
-        //       .toList(),
-        // ));
+        emit(GetAllRoomSuccessState(
+          (response.data["data"] as List)
+              .map((e) => RoomsUser.fromJson(e))
+              .toList(),
+        ));
       } else {
         emit(ErrorGetAllRoomState("Error GET ALL ROOMS USER"));
       }
     } catch (e) {
-      print("Loiii iii222 ${e.toString()}");
+      print("Loiii iii ${e.toString()}");
       emit(ErrorGetAllRoomState(e.toString()));
     }
   }
