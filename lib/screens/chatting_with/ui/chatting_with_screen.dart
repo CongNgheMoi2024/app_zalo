@@ -228,11 +228,6 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                               right: 10.sp,
                               top: 11.sp,
                               bottom: 11.sp),
-                          // child: ImageAssets.pngAsset(
-                          //   Png.iconSticker,
-                          //   height: 28.sp,
-                          //   color: primaryColor,
-                          // ),
                         ),
                         Expanded(
                           child: Padding(
@@ -348,18 +343,6 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                         );
                       } else {
                         for (var element in data) {
-                          client.send(
-                            destination: "/app/chat",
-                            body: jsonEncode({
-                              "content": element["content"].toString(),
-                              "senderId": idUser,
-                              "recipientId":
-                                  widget.inforUserChat.idUserRecipient,
-                              "timestamp":
-                                  DateTime.now().millisecondsSinceEpoch,
-                              "type": element["type"]
-                            }),
-                          );
                           setState(() {
                             listMessage.add(MessageOfList(
                                 idMessage: "",
