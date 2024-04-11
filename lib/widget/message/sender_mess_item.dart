@@ -18,7 +18,9 @@ class SenderMessItem extends StatefulWidget {
   String? type;
   String? idMessage;
   String? idReceiver;
+  String? status;
   Function? onDelete;
+  Function? onRecall;
 
   SenderMessItem(
       {super.key,
@@ -27,7 +29,9 @@ class SenderMessItem extends StatefulWidget {
       this.type,
       this.idMessage,
       this.idReceiver,
-      this.onDelete});
+      this.status,
+      this.onDelete,
+      this.onRecall});
 
   @override
   State<SenderMessItem> createState() => _SenderMessItemState();
@@ -192,6 +196,34 @@ class _SenderMessItemState extends State<SenderMessItem> {
                     ),
                   ),
                 ),
+                InkWell(
+                  onTap: widget.onDelete != null
+                      ? () {
+                          widget.onRecall!();
+                          Navigator.pop(context);
+                        }
+                      : () {},
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 30.sp),
+                    child: Column(
+                      children: [
+                        ImageAssets.pngAsset(
+                          Png.icRecall,
+                          width: 30.sp,
+                          height: 30.sp,
+                          fit: BoxFit.contain,
+                        ),
+                        SizedBox(height: 5.sp),
+                        Text(
+                          "Thu hồi",
+                          style: text14.medium.copyWith(
+                              color: primaryColor.withOpacity(0.8),
+                              fontSize: 13.sp),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
               ]),
             )
           ]),
@@ -245,106 +277,130 @@ class _SenderMessItemState extends State<SenderMessItem> {
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              InkWell(
-                onLongPress: () {
-                  _showMessageDetailsModal(context);
-                },
-                onDoubleTap: _onDoubleTap,
-                onTap: () {
-                  setState(() {
-                    visibleDetail = !visibleDetail;
-                  });
-                },
-                child: BlocProvider(
-                  create: (BuildContext context) => DownloadCubit(),
-                  child: Container(
-                      constraints: BoxConstraints(
-                        minWidth: 0,
-                        maxWidth: width * 0.65,
-                      ),
+              widget.status == "DELETED"
+                  ? Container(
                       margin: EdgeInsets.only(right: 15.sp),
                       padding: EdgeInsets.symmetric(
-                          vertical: 8.sp, horizontal: 15.sp),
+                          vertical: 8.sp, horizontal: 16.sp),
                       decoration: BoxDecoration(
-                        color: widget.type == "IMAGE" || widget.type == "VIDEO"
-                            ? Colors.transparent
-                            : primaryColor.withOpacity(0.1),
+                        color: whiteColor,
+                        border: Border.all(color: errorColor, width: 1.sp),
                         borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(20.sp),
                           topRight: Radius.circular(20.sp),
                           bottomLeft: Radius.circular(20.sp),
                         ),
                       ),
-                      child: widget.type == "IMAGE"
-                          ? ExtendedImageCustom(url: widget.content!)
-                          : widget.type == "VIDEO"
-                              ? InkWell(
-                                  onTap: () {
-                                    setState(() {
-                                      if (_videoPalyerController
-                                          .value.isPlaying) {
-                                        _videoPalyerController.pause();
-                                      } else {
-                                        _videoPalyerController.play();
-                                      }
-                                    });
-                                  },
-                                  child: FutureBuilder(
-                                    future: _initializeVideoPlayerFuture,
-                                    builder: (context, snapshot) {
-                                      if (snapshot.connectionState ==
-                                          ConnectionState.done) {
-                                        return AspectRatio(
-                                          aspectRatio: _videoPalyerController
-                                              .value.aspectRatio,
-                                          child: VideoPlayer(
-                                              _videoPalyerController),
-                                        );
-                                      } else {
-                                        return CircularProgressIndicator();
-                                      }
-                                    },
-                                  ),
-                                )
-                              : widget.type == "FILE"
-                                  ? FileView(
-                                      url: widget.content!,
-                                    )
-                                  : widget.type == "AUDIO"
-                                      ? InkWell(
-                                          onTap: () {
-                                            if (isPlaying) {
-                                              audioPlayer.pause();
-                                              setState(() {
-                                                isPlaying = false;
-                                              });
+                      child: Text(
+                        "Tin nhắn đã bị xóa",
+                        style:
+                            text16.primary.regular.copyWith(color: errorColor),
+                      ),
+                    )
+                  : InkWell(
+                      onLongPress: () {
+                        _showMessageDetailsModal(context);
+                      },
+                      onDoubleTap: _onDoubleTap,
+                      onTap: () {
+                        setState(() {
+                          visibleDetail = !visibleDetail;
+                        });
+                      },
+                      child: BlocProvider(
+                        create: (BuildContext context) => DownloadCubit(),
+                        child: Container(
+                            constraints: BoxConstraints(
+                              minWidth: 0,
+                              maxWidth: width * 0.65,
+                            ),
+                            margin: EdgeInsets.only(right: 15.sp),
+                            padding: EdgeInsets.symmetric(
+                                vertical: 8.sp, horizontal: 15.sp),
+                            decoration: BoxDecoration(
+                              color: widget.type == "IMAGE" ||
+                                      widget.type == "VIDEO"
+                                  ? Colors.transparent
+                                  : primaryColor.withOpacity(0.1),
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(20.sp),
+                                topRight: Radius.circular(20.sp),
+                                bottomLeft: Radius.circular(20.sp),
+                              ),
+                            ),
+                            child: widget.type == "IMAGE"
+                                ? ExtendedImageCustom(url: widget.content!)
+                                : widget.type == "VIDEO"
+                                    ? InkWell(
+                                        onTap: () {
+                                          setState(() {
+                                            if (_videoPalyerController
+                                                .value.isPlaying) {
+                                              _videoPalyerController.pause();
                                             } else {
-                                              audioPlayer.play(
-                                                  UrlSource(widget.content!));
-                                              setState(() {
-                                                isPlaying = true;
-                                              });
+                                              _videoPalyerController.play();
+                                            }
+                                          });
+                                        },
+                                        child: FutureBuilder(
+                                          future: _initializeVideoPlayerFuture,
+                                          builder: (context, snapshot) {
+                                            if (snapshot.connectionState ==
+                                                ConnectionState.done) {
+                                              return AspectRatio(
+                                                aspectRatio:
+                                                    _videoPalyerController
+                                                        .value.aspectRatio,
+                                                child: VideoPlayer(
+                                                    _videoPalyerController),
+                                              );
+                                            } else {
+                                              return CircularProgressIndicator();
                                             }
                                           },
-                                          child: isPlaying == false
-                                              ? Text(
-                                                  "Pause Audio Audio.mp3",
-                                                  style: text16.regular.error,
-                                                )
-                                              : Text(
-                                                  "Play Audio Audio.mp3",
-                                                  style: text16.regular
-                                                      .copyWith(
-                                                          color: lightBlue),
-                                                ),
-                                        )
-                                      : Text(
-                                          widget.content!,
-                                          softWrap: true,
-                                          style: text16.primary.regular,
-                                        )),
-                ),
-              ),
+                                        ),
+                                      )
+                                    : widget.type == "FILE"
+                                        ? FileView(
+                                            url: widget.content!,
+                                          )
+                                        : widget.type == "AUDIO"
+                                            ? InkWell(
+                                                onTap: () {
+                                                  if (isPlaying) {
+                                                    audioPlayer.pause();
+                                                    setState(() {
+                                                      isPlaying = false;
+                                                    });
+                                                  } else {
+                                                    audioPlayer.play(UrlSource(
+                                                        widget.content!));
+                                                    setState(() {
+                                                      isPlaying = true;
+                                                    });
+                                                  }
+                                                },
+                                                child: isPlaying == false
+                                                    ? Text(
+                                                        "Pause Audio Audio.mp3",
+                                                        style: text16
+                                                            .regular.error,
+                                                      )
+                                                    : Text(
+                                                        "Play Audio Audio.mp3",
+                                                        style: text16.regular
+                                                            .copyWith(
+                                                                color:
+                                                                    lightBlue),
+                                                      ),
+                                              )
+                                            : Text(
+                                                widget.content!,
+                                                softWrap: true,
+                                                style: text16.primary.regular,
+                                              )),
+                      ),
+                    ),
             ],
           ),
           visibleDetail

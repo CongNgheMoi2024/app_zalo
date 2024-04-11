@@ -137,6 +137,7 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                                   idMessage: e.idMessage,
                                   idReceiver:
                                       widget.inforUserChat.idUserRecipient,
+                                  status: e.status,
                                   onDelete: () async {
                                     try {
                                       String accToken = HiveStorage().token;
@@ -156,6 +157,20 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                                         print("Xoa thanh cong");
                                       } else {}
                                     } catch (e) {}
+                                  },
+                                  onRecall: () {
+                                    client.send(
+                                      destination: "/app/delete",
+                                      body: jsonEncode({
+                                        "id": e.idMessage,
+                                      }),
+                                    );
+                                    BlocProvider.of<GetAllMessageCubit>(context)
+                                        .GetAllMessageenticate(
+                                            idUser,
+                                            widget
+                                                .inforUserChat.idUserRecipient);
+                                    // setState(() {});
                                   },
                                 );
                               } else {
@@ -188,7 +203,6 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                                         setState(() {
                                           listMessage.removeAt(index);
                                         });
-                                        print("Xoa thanh cong");
                                       } else {}
                                     } catch (e) {}
                                   },

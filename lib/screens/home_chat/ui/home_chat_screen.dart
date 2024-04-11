@@ -39,7 +39,7 @@ class _HomeChatScreenState extends State<HomeChatScreen> {
           Expanded(
             child: RefreshIndicator(
               onRefresh: () async {
-                print("Refreshed");
+                BlocProvider.of<GetAllRoomCubit>(context).getAllRoomsUser();
               },
               child: SingleChildScrollView(
                   physics: const AlwaysScrollableScrollPhysics(),
