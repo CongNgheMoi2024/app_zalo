@@ -84,10 +84,15 @@ class _SenderMessItemState extends State<SenderMessItem> {
                             width: 250.sp,
                             fit: BoxFit.cover,
                           )
-                        : Text(
-                            "${widget.content}",
-                            style: text16.primary.regular,
-                          )),
+                        : widget.type == "VIDEO"
+                            ? Text(
+                                "VIDEO_MEDIA.mp4",
+                                style: text16.primary.regular,
+                              )
+                            : Text(
+                                "${widget.content}",
+                                style: text16.primary.regular,
+                              )),
               ],
             ),
             Container(
@@ -167,12 +172,7 @@ class _SenderMessItemState extends State<SenderMessItem> {
     super.initState();
     if (widget.type == "VIDEO") {
       _videoPalyerController = VideoPlayerController.network(widget.content!);
-      _initializeVideoPlayerFuture =
-          _videoPalyerController.initialize().then((_) {
-        _videoPalyerController.play();
-        _videoPalyerController.setLooping(true);
-        setState(() {});
-      });
+      _initializeVideoPlayerFuture = _videoPalyerController.initialize();
     }
   }
 
@@ -237,28 +237,40 @@ class _SenderMessItemState extends State<SenderMessItem> {
                       child: widget.type == "IMAGE"
                           ? ExtendedImageCustom(url: widget.content!)
                           : widget.type == "VIDEO"
-                              ? FutureBuilder(
-                                  future: _initializeVideoPlayerFuture,
-                                  builder: (context, snapshot) {
-                                    if (snapshot.connectionState ==
-                                        ConnectionState.done) {
-                                      return AspectRatio(
-                                        aspectRatio: _videoPalyerController
-                                            .value.aspectRatio,
-                                        child:
-                                            VideoPlayer(_videoPalyerController),
-                                      );
-                                    } else {
-                                      return CircularProgressIndicator();
-                                    }
+                              ? InkWell(
+                                  onTap: () {
+                                    setState(() {
+                                      if (_videoPalyerController
+                                          .value.isPlaying) {
+                                        _videoPalyerController.pause();
+                                      } else {
+                                        _videoPalyerController.play();
+                                      }
+                                    });
                                   },
+                                  child: FutureBuilder(
+                                    future: _initializeVideoPlayerFuture,
+                                    builder: (context, snapshot) {
+                                      if (snapshot.connectionState ==
+                                          ConnectionState.done) {
+                                        return AspectRatio(
+                                          aspectRatio: _videoPalyerController
+                                              .value.aspectRatio,
+                                          child: VideoPlayer(
+                                              _videoPalyerController),
+                                        );
+                                      } else {
+                                        return CircularProgressIndicator();
+                                      }
+                                    },
+                                  ),
                                 )
                               : widget.type == "FILE"
                                   ? FileView(
                                       url: widget.content!,
                                     )
                                   : Text(
-                                      " ${widget.content!} + ${widget.type}",
+                                      widget.content!,
                                       softWrap: true,
                                       style: text16.primary.regular,
                                     )),
