@@ -47,7 +47,10 @@ class _MediaOptionsState extends State<MediaOptions> {
                 ),
               ),
               GestureDetector(
-                onTap: () {},
+                onTap: () async {
+                  List<File> files = await _pickFile.pickAudioFiles();
+                  widget.onFileSelected(files);
+                },
                 child: Container(
                   padding: EdgeInsets.all(5.sp),
                   margin: EdgeInsets.all(5.sp),

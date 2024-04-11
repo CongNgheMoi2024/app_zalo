@@ -66,4 +66,20 @@ class PickFile {
 
     return files;
   }
+
+  Future<List<File>> pickAudioFiles() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['mp3', 'wav'],
+      allowMultiple: true,
+    );
+
+    if (result == null || result.files.isEmpty) {
+      return [];
+    }
+
+    List<File> files = result.paths.map((path) => File(path!)).toList();
+
+    return files;
+  }
 }

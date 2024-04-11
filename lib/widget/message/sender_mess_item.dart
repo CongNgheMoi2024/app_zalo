@@ -5,6 +5,7 @@ import 'package:app_zalo/screens/home_chat/bloc/get_all_rooms_cubit.dart';
 import 'package:app_zalo/widget/show_message_by_type/bloc/download_cubit.dart';
 import 'package:app_zalo/widget/show_message_by_type/extended_image.dart';
 import 'package:app_zalo/widget/show_message_by_type/show_file.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:video_player/video_player.dart';
@@ -203,7 +204,7 @@ class _SenderMessItemState extends State<SenderMessItem> {
     if (widget.type == "VIDEO") {
       _videoPalyerController = VideoPlayerController.network(widget.content!);
       _initializeVideoPlayerFuture = _videoPalyerController.initialize();
-    }
+    } else if (widget.type == "AUDIO") {}
   }
 
   @override
@@ -213,6 +214,9 @@ class _SenderMessItemState extends State<SenderMessItem> {
     }
     super.dispose();
   }
+
+  AudioPlayer audioPlayer = AudioPlayer();
+  bool isPlaying = false;
 
   @override
   Widget build(BuildContext context) {
@@ -301,11 +305,39 @@ class _SenderMessItemState extends State<SenderMessItem> {
                                   ? FileView(
                                       url: widget.content!,
                                     )
-                                  : Text(
-                                      widget.content!,
-                                      softWrap: true,
-                                      style: text16.primary.regular,
-                                    )),
+                                  : widget.type == "AUDIO"
+                                      ? InkWell(
+                                          onTap: () {
+                                            if (isPlaying) {
+                                              audioPlayer.pause();
+                                              setState(() {
+                                                isPlaying = false;
+                                              });
+                                            } else {
+                                              audioPlayer.play(
+                                                  UrlSource(widget.content!));
+                                              setState(() {
+                                                isPlaying = true;
+                                              });
+                                            }
+                                          },
+                                          child: isPlaying == false
+                                              ? Text(
+                                                  "Pause Audio Audio.mp3",
+                                                  style: text16.regular.error,
+                                                )
+                                              : Text(
+                                                  "Play Audio Audio.mp3",
+                                                  style: text16.regular
+                                                      .copyWith(
+                                                          color: lightBlue),
+                                                ),
+                                        )
+                                      : Text(
+                                          widget.content!,
+                                          softWrap: true,
+                                          style: text16.primary.regular,
+                                        )),
                 ),
               ),
             ],
