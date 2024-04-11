@@ -3,13 +3,10 @@ import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 
 class PickFile {
-
   Future<List<File>> pickMultiImage() async {
     final picker = ImagePicker();
     final List<XFile> xfiles = await picker.pickMultiImage(
-        maxHeight: 2024,
-        maxWidth: 2024,
-        imageQuality: 90);
+        maxHeight: 2024, maxWidth: 2024, imageQuality: 90);
     if (xfiles.isNotEmpty) {
       List<File> files = [];
       for (XFile xFile in xfiles) {
@@ -24,9 +21,7 @@ class PickFile {
   Future<List<File>> pickMultiMedia() async {
     final picker = ImagePicker();
     final List<XFile> xfiles = await picker.pickMultipleMedia(
-        maxHeight: 480,
-        maxWidth: 640,
-        imageQuality: 90);
+        maxHeight: 480, maxWidth: 640, imageQuality: 90);
     if (xfiles.isNotEmpty) {
       List<File> files = [];
       for (XFile xFile in xfiles) {
@@ -37,5 +32,21 @@ class PickFile {
     } else {
       return [];
     }
+  }
+
+  Future<List<File>> pickVideo() async {
+    final picker = ImagePicker();
+    final XFile? pickedFile =
+        await picker.pickVideo(source: ImageSource.gallery);
+
+    if (pickedFile == null) {
+      return [];
+    }
+
+    List<File> files = [];
+    print(pickedFile.path);
+    files.add(File(pickedFile.path));
+
+    return files;
   }
 }

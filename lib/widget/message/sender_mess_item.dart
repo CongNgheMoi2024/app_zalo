@@ -5,9 +5,9 @@ import 'package:app_zalo/screens/home_chat/bloc/get_all_rooms_cubit.dart';
 import 'package:app_zalo/widget/show_message_by_type/bloc/download_cubit.dart';
 import 'package:app_zalo/widget/show_message_by_type/extended_image.dart';
 import 'package:app_zalo/widget/show_message_by_type/show_file.dart';
-import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:video_player/video_player.dart';
 
 import '../page_view_image/page_view_image.dart';
 
@@ -159,6 +159,31 @@ class _SenderMessItemState extends State<SenderMessItem> {
     );
   }
 
+  late VideoPlayerController _videoPalyerController;
+  late Future<void> _initializeVideoPlayerFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.type == "VIDEO") {
+      _videoPalyerController = VideoPlayerController.network(widget.content!);
+      _initializeVideoPlayerFuture =
+          _videoPalyerController.initialize().then((_) {
+        _videoPalyerController.play();
+        _videoPalyerController.setLooping(true);
+        setState(() {});
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    if (widget.type == "VIDEO") {
+      _videoPalyerController.dispose();
+    }
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -192,15 +217,15 @@ class _SenderMessItemState extends State<SenderMessItem> {
                   });
                 },
                 child: BlocProvider(
-                  create: (BuildContext context)=> DownloadCubit(),
+                  create: (BuildContext context) => DownloadCubit(),
                   child: Container(
                       constraints: BoxConstraints(
                         minWidth: 0,
                         maxWidth: width * 0.65,
                       ),
                       margin: EdgeInsets.only(right: 15.sp),
-                      padding:
-                          EdgeInsets.symmetric(vertical: 8.sp, horizontal: 15.sp),
+                      padding: EdgeInsets.symmetric(
+                          vertical: 8.sp, horizontal: 15.sp),
                       decoration: BoxDecoration(
                         color: primaryColor.withOpacity(0.1),
                         borderRadius: BorderRadius.only(
@@ -211,15 +236,32 @@ class _SenderMessItemState extends State<SenderMessItem> {
                       ),
                       child: widget.type == "IMAGE"
                           ? ExtendedImageCustom(url: widget.content!)
-                          : widget.type == "FILE"
-                              ? FileView(
-                                  url: widget.content!,
+                          : widget.type == "VIDEO"
+                              ? FutureBuilder(
+                                  future: _initializeVideoPlayerFuture,
+                                  builder: (context, snapshot) {
+                                    if (snapshot.connectionState ==
+                                        ConnectionState.done) {
+                                      return AspectRatio(
+                                        aspectRatio: _videoPalyerController
+                                            .value.aspectRatio,
+                                        child:
+                                            VideoPlayer(_videoPalyerController),
+                                      );
+                                    } else {
+                                      return CircularProgressIndicator();
+                                    }
+                                  },
                                 )
-                              : Text(
-                                  widget.content!,
-                                  softWrap: true,
-                                  style: text16.primary.regular,
-                                )),
+                              : widget.type == "FILE"
+                                  ? FileView(
+                                      url: widget.content!,
+                                    )
+                                  : Text(
+                                      " ${widget.content!} + ${widget.type}",
+                                      softWrap: true,
+                                      style: text16.primary.regular,
+                                    )),
                 ),
               ),
             ],

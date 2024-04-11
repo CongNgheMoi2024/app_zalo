@@ -76,6 +76,26 @@ class _MediaOptionsState extends State<MediaOptions> {
                     ],
                   ),
                 ),
+              ),
+              GestureDetector(
+                onTap: () async {
+                  List<File> files = await _pickFile.pickVideo();
+                  widget.onFileSelected(files);
+                },
+                child: Container(
+                  padding: EdgeInsets.all(5.sp),
+                  margin: EdgeInsets.all(5.sp),
+                  child: Column(
+                    children: [
+                      Icon(
+                        Icons.video_file_outlined,
+                        size: 60.sp,
+                        color: Colors.blue,
+                      ),
+                      const Text('Video'),
+                    ],
+                  ),
+                ),
               )
             ],
           ),
