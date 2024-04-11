@@ -17,6 +17,7 @@ class SenderMessItem extends StatefulWidget {
   String? type;
   String? idMessage;
   String? idReceiver;
+  Function? onDelete;
 
   SenderMessItem(
       {super.key,
@@ -24,7 +25,8 @@ class SenderMessItem extends StatefulWidget {
       this.time,
       this.type,
       this.idMessage,
-      this.idReceiver});
+      this.idReceiver,
+      this.onDelete});
 
   @override
   State<SenderMessItem> createState() => _SenderMessItemState();
@@ -32,6 +34,7 @@ class SenderMessItem extends StatefulWidget {
 
 class _SenderMessItemState extends State<SenderMessItem> {
   bool visibleDetail = false;
+
   void _showMessageDetailsModal(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
@@ -155,7 +158,34 @@ class _SenderMessItemState extends State<SenderMessItem> {
                       )
                     ],
                   ),
-                )
+                ),
+                InkWell(
+                  onTap: widget.onDelete != null
+                      ? () {
+                          widget.onDelete!();
+                          Navigator.pop(context);
+                        }
+                      : () {},
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 30.sp),
+                    child: Column(
+                      children: [
+                        ImageAssets.pngAsset(
+                          Png.icDelete,
+                          width: 30.sp,
+                          height: 30.sp,
+                        ),
+                        SizedBox(height: 5.sp),
+                        Text(
+                          "Xóa",
+                          style: text14.medium.copyWith(
+                              color: errorColor.withOpacity(0.8),
+                              fontSize: 13.sp),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
               ]),
             )
           ]),

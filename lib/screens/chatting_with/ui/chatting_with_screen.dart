@@ -12,6 +12,7 @@ import 'package:app_zalo/widget/header/header_of_chatting.dart';
 import 'package:app_zalo/widget/media_options_box/media_options_box.dart';
 import 'package:app_zalo/widget/message/reciver_mess_item.dart';
 import 'package:app_zalo/widget/message/sender_mess_item.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:stomp_dart_client/stomp.dart';
@@ -70,7 +71,6 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
               });
               print("Supriseber on ${frame.body}");
             });
-
         print('onConnect     tHANHHCOONGG');
       },
       beforeConnect: () async {
@@ -137,6 +137,26 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                                   idMessage: e.idMessage,
                                   idReceiver:
                                       widget.inforUserChat.idUserRecipient,
+                                  onDelete: () async {
+                                    try {
+                                      String accToken = HiveStorage().token;
+                                      Dio dio = Dio();
+                                      String apiUrl =
+                                          "${Env.url}/api/v1/delete-messages/${e.idMessage}";
+
+                                      Response response = await dio.put(apiUrl,
+                                          options: Options(headers: {
+                                            "Content-Type": "application/json",
+                                            "Authorization": "Bearer $accToken",
+                                          }));
+                                      if (response.statusCode == 200) {
+                                        setState(() {
+                                          listMessage.removeAt(index);
+                                        });
+                                        print("Xoa thanh cong");
+                                      } else {}
+                                    } catch (e) {}
+                                  },
                                 );
                               } else {
                                 isConsecutive =
@@ -152,6 +172,26 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                                   idMessage: e.idMessage,
                                   idReceiver:
                                       widget.inforUserChat.idUserRecipient,
+                                  onDelete: () async {
+                                    try {
+                                      String accToken = HiveStorage().token;
+                                      Dio dio = Dio();
+                                      String apiUrl =
+                                          "${Env.url}/api/v1/delete-messages/${e.idMessage}";
+
+                                      Response response = await dio.put(apiUrl,
+                                          options: Options(headers: {
+                                            "Content-Type": "application/json",
+                                            "Authorization": "Bearer $accToken",
+                                          }));
+                                      if (response.statusCode == 200) {
+                                        setState(() {
+                                          listMessage.removeAt(index);
+                                        });
+                                        print("Xoa thanh cong");
+                                      } else {}
+                                    } catch (e) {}
+                                  },
                                 );
                               }
                             }).toList(),

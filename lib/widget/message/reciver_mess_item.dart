@@ -21,6 +21,7 @@ class ReciverMessItem extends StatefulWidget {
   String? idMessage;
   String? idReceiver;
   String? fileName;
+  Function? onDelete;
 
   ReciverMessItem(
       {super.key,
@@ -32,7 +33,8 @@ class ReciverMessItem extends StatefulWidget {
       this.type,
       this.idMessage,
       this.idReceiver,
-      this.fileName});
+      this.fileName,
+      this.onDelete});
 
   @override
   State<ReciverMessItem> createState() => _ReciverMessItemState();
@@ -183,7 +185,34 @@ class _ReciverMessItemState extends State<ReciverMessItem> {
                       )
                     ],
                   ),
-                )
+                ),
+                InkWell(
+                  onTap: widget.onDelete != null
+                      ? () {
+                          widget.onDelete!();
+                          Navigator.pop(context);
+                        }
+                      : () {},
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 30.sp),
+                    child: Column(
+                      children: [
+                        ImageAssets.pngAsset(
+                          Png.icDelete,
+                          width: 30.sp,
+                          height: 30.sp,
+                        ),
+                        SizedBox(height: 5.sp),
+                        Text(
+                          "Xóa",
+                          style: text14.medium.copyWith(
+                              color: errorColor.withOpacity(0.8),
+                              fontSize: 13.sp),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
               ]),
             )
           ]),

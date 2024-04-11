@@ -12,6 +12,7 @@ class MessageOfList {
   final String timestamp;
   final String content;
   final String type;
+  final String? status;
 
   MessageOfList({
     required this.idMessage,
@@ -21,6 +22,7 @@ class MessageOfList {
     required this.timestamp,
     required this.content,
     required this.type,
+    this.status,
   });
 
   factory MessageOfList.fromJson(Map<String, dynamic> json) {
@@ -37,6 +39,7 @@ class MessageOfList {
       timestamp: formattedTimestamp,
       content: json['content'] ?? "",
       type: json['type'] ?? "",
+      status: json['status'] ?? "",
     );
   }
 }
