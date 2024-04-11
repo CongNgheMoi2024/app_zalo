@@ -2,13 +2,13 @@ import 'package:app_zalo/constants/index.dart';
 import 'package:app_zalo/screens/forward/bloc/forward_message_cubit.dart';
 import 'package:app_zalo/screens/forward/ui/forward_message_screen.dart';
 import 'package:app_zalo/screens/home_chat/bloc/get_all_rooms_cubit.dart';
+import 'package:app_zalo/widget/page_view_image/page_view_image.dart';
+import 'package:app_zalo/widget/show_message_by_type/bloc/download_cubit.dart';
+import 'package:app_zalo/widget/show_message_by_type/extended_image.dart';
 import 'package:app_zalo/widget/show_message_by_type/show_file.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:video_player/video_player.dart';
-import '../page_view_image/page_view_image.dart';
-import '../show_message_by_type/bloc/download_cubit.dart';
-import '../show_message_by_type/extended_image.dart';
 
 // ignore: must_be_immutable
 class ReciverMessItem extends StatefulWidget {
