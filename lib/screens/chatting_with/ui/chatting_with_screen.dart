@@ -18,6 +18,8 @@ import 'package:stomp_dart_client/stomp.dart';
 import 'package:stomp_dart_client/stomp_config.dart';
 import 'package:stomp_dart_client/stomp_frame.dart';
 
+import '../../../widget/show_message_by_type/bloc/download_cubit.dart';
+
 // ignore: must_be_immutable
 class ChattingWithScreen extends StatefulWidget {
   InforUserChat inforUserChat;
