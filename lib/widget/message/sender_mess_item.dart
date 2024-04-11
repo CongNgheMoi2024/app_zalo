@@ -2,21 +2,30 @@ import 'package:app_zalo/constants/index.dart';
 import 'package:app_zalo/screens/forward/bloc/forward_message_cubit.dart';
 import 'package:app_zalo/screens/forward/ui/forward_message_screen.dart';
 import 'package:app_zalo/screens/home_chat/bloc/get_all_rooms_cubit.dart';
+import 'package:app_zalo/widget/show_message_by_type/bloc/download_cubit.dart';
 import 'package:app_zalo/widget/show_message_by_type/extended_image.dart';
 import 'package:app_zalo/widget/show_message_by_type/show_file.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import '../page_view_image/page_view_image.dart';
 
-// ignore: must_be_immutable
 class SenderMessItem extends StatefulWidget {
   String? content;
   String? time;
   String? type;
   String? idMessage;
   String? idReceiver;
-  SenderMessItem({super.key, this.content, this.time, this.type, this.idMessage, this.idReceiver});
+
+  SenderMessItem(
+      {super.key,
+      this.content,
+      this.time,
+      this.type,
+      this.idMessage,
+      this.idReceiver});
+
   @override
   State<SenderMessItem> createState() => _SenderMessItemState();
 }
@@ -176,35 +185,42 @@ class _SenderMessItemState extends State<SenderMessItem> {
                 onLongPress: () {
                   _showMessageDetailsModal(context);
                 },
-                onDoubleTap:_onDoubleTap,
+                onDoubleTap: _onDoubleTap,
                 onTap: () {
                   setState(() {
                     visibleDetail = !visibleDetail;
                   });
                 },
-                child: Container(
-                    constraints: BoxConstraints(
-                      minWidth: 0,
-                      maxWidth: width * 0.65,
-                    ),
-                    margin: EdgeInsets.only(right: 15.sp),
-                    padding:
-                        EdgeInsets.symmetric(vertical: 8.sp, horizontal: 15.sp),
-                    decoration: BoxDecoration(
-                      color: primaryColor.withOpacity(0.1),
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(20.sp),
-                        topRight: Radius.circular(20.sp),
-                        bottomLeft: Radius.circular(20.sp),
+                child: BlocProvider(
+                  create: (BuildContext context)=> DownloadCubit(),
+                  child: Container(
+                      constraints: BoxConstraints(
+                        minWidth: 0,
+                        maxWidth: width * 0.65,
                       ),
-                    ),
-                    child: widget.type == "IMAGE"
-                        ? ExtendedImageCustom(url: widget.content!)
-                        : widget.type =="FILE" ? FileView(url: widget.content!,):
-                    Text(
-                            widget.content!,
-                            style: text16.primary.regular,
-                          )),
+                      margin: EdgeInsets.only(right: 15.sp),
+                      padding:
+                          EdgeInsets.symmetric(vertical: 8.sp, horizontal: 15.sp),
+                      decoration: BoxDecoration(
+                        color: primaryColor.withOpacity(0.1),
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(20.sp),
+                          topRight: Radius.circular(20.sp),
+                          bottomLeft: Radius.circular(20.sp),
+                        ),
+                      ),
+                      child: widget.type == "IMAGE"
+                          ? ExtendedImageCustom(url: widget.content!)
+                          : widget.type == "FILE"
+                              ? FileView(
+                                  url: widget.content!,
+                                )
+                              : Text(
+                                  widget.content!,
+                                  softWrap: true,
+                                  style: text16.primary.regular,
+                                )),
+                ),
               ),
             ],
           ),
@@ -226,7 +242,7 @@ class _SenderMessItemState extends State<SenderMessItem> {
   }
 
   void _onDoubleTap() {
-    if(widget.type=="IMAGE"){
+    if (widget.type == "IMAGE") {
       Navigator.of(context).push(
         MaterialPageRoute(
           builder: (context) => ImagePageView(url: widget.content!),

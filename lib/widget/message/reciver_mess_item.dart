@@ -7,6 +7,7 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../page_view_image/page_view_image.dart';
+import '../show_message_by_type/bloc/download_cubit.dart';
 import '../show_message_by_type/extended_image.dart';
 
 // ignore: must_be_immutable
@@ -19,6 +20,7 @@ class ReciverMessItem extends StatefulWidget {
   String? type;
   String? idMessage;
   String? idReceiver;
+  String? fileName;
 
   ReciverMessItem(
       {super.key,
@@ -29,7 +31,8 @@ class ReciverMessItem extends StatefulWidget {
       this.showAvatar,
       this.type,
       this.idMessage,
-      this.idReceiver});
+      this.idReceiver,
+      this.fileName});
 
   @override
   State<ReciverMessItem> createState() => _ReciverMessItemState();
@@ -246,34 +249,37 @@ class _ReciverMessItemState extends State<ReciverMessItem> {
                     visibleDetail = !visibleDetail;
                   });
                 },
-                child: Container(
-                    constraints: BoxConstraints(
-                      minWidth: 0,
-                      maxWidth: width * 0.6,
-                    ),
-                    margin: EdgeInsets.only(left: 10.sp),
-                    padding:
-                        EdgeInsets.symmetric(vertical: 8.sp, horizontal: 15.sp),
-                    decoration: BoxDecoration(
-                      color: primaryColor.withOpacity(0.1),
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(
-                              !widget.showAvatar! ? 20.sp : 5.sp),
-                          topRight: Radius.circular(
-                              !widget.showAvatar! ? 20.sp : 5.sp),
-                          bottomLeft: Radius.circular(5.sp),
-                          bottomRight: Radius.circular(5.sp)),
-                    ),
-                    child: widget.type == "IMAGE"
-                        ? ExtendedImageCustom(url: widget.message!)
-                        : widget.type == "FILE"
-                            ? FileView(
-                                url: widget.message!,
-                              )
-                            : Text(
-                                widget.message!,
-                                style: text16.primary.regular,
-                              )),
+                child: BlocProvider(
+                  create: (BuildContext context)=> DownloadCubit(),
+                  child: Container(
+                      constraints: BoxConstraints(
+                        minWidth: 0,
+                        maxWidth: width * 0.6,
+                      ),
+                      margin: EdgeInsets.only(left: 10.sp),
+                      padding:
+                          EdgeInsets.symmetric(vertical: 8.sp, horizontal: 15.sp),
+                      decoration: BoxDecoration(
+                        color: primaryColor.withOpacity(0.1),
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(
+                                !widget.showAvatar! ? 20.sp : 5.sp),
+                            topRight: Radius.circular(
+                                !widget.showAvatar! ? 20.sp : 5.sp),
+                            bottomLeft: Radius.circular(5.sp),
+                            bottomRight: Radius.circular(5.sp)),
+                      ),
+                      child: widget.type == "IMAGE"
+                          ? ExtendedImageCustom(url: widget.message!)
+                          : widget.type == "FILE"
+                              ? FileView(
+                                  url: widget.message!,
+                                )
+                              : Text(
+                                  widget.message!,
+                                  style: text16.primary.regular,
+                                )),
+                ),
               ),
             ],
           ),

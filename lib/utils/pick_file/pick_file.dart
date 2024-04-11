@@ -30,6 +30,7 @@ class PickFile {
     if (xfiles.isNotEmpty) {
       List<File> files = [];
       for (XFile xFile in xfiles) {
+        print(xFile.path);
         files.add(File(xFile.path));
       }
       return files;
