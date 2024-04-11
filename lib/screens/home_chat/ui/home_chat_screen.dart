@@ -27,6 +27,7 @@ class _HomeChatScreenState extends State<HomeChatScreen> {
 
   @override
   Widget build(BuildContext context) {
+    BlocProvider.of<GetAllRoomCubit>(context).getAllRoomsUser();
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     return DismissKeyboard(child: Scaffold(body: SafeArea(child:

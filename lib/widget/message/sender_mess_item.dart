@@ -93,10 +93,15 @@ class _SenderMessItemState extends State<SenderMessItem> {
                                 "VIDEO_MEDIA.mp4",
                                 style: text16.primary.regular,
                               )
-                            : Text(
-                                "${widget.content}",
-                                style: text16.primary.regular,
-                              )),
+                            : widget.type == "AUDIO"
+                                ? Text(
+                                    "AUDIO_MEDIA.mp3",
+                                    style: text16.primary.regular,
+                                  )
+                                : Text(
+                                    "${widget.content}",
+                                    style: text16.primary.regular,
+                                  )),
               ],
             ),
             Container(

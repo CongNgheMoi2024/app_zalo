@@ -1,6 +1,9 @@
 import 'dart:math';
 
 import 'package:app_zalo/constants/index.dart';
+import 'package:app_zalo/models/chat/infor_user_chat.dart';
+import 'package:app_zalo/screens/chatting_with/bloc/get_all_message_cubit.dart';
+import 'package:app_zalo/screens/chatting_with/ui/chatting_with_screen.dart';
 import 'package:app_zalo/screens/fast_contact/bloc/fast_contact_cubit.dart';
 import 'package:app_zalo/screens/fast_contact/bloc/fast_contact_state.dart';
 import 'package:app_zalo/screens/fast_contact/bloc/get_friends_cubit.dart';
@@ -164,93 +167,125 @@ class _FastContactScreenState extends State<FastContactScreen> {
                                                     ],
                                                   ),
                                                 ),
-                                        Container(
-                                          height: 65.sp,
-                                          width: width,
-                                          padding: EdgeInsets.only(
-                                              top: 10.sp,
-                                              left: 10.sp,
-                                              right: 10.sp),
-                                          child: Row(
-                                            children: [
-                                              data["avatar"] != null &&
-                                                      data["avatar"]!.isNotEmpty
-                                                  ? ClipRRect(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              60),
-                                                      child: ImageAssets
-                                                          .networkImage(
-                                                              height: 46.sp,
-                                                              width: 46.sp,
-                                                              url: data[
-                                                                  "avatar"]!),
-                                                    )
-                                                  : Container(
-                                                      height: 46.sp,
-                                                      width: 46.sp,
-                                                      decoration: BoxDecoration(
-                                                        color: Color.fromARGB(
-                                                            255,
-                                                            255,
-                                                            131 +
-                                                                Random()
-                                                                    .nextInt(
-                                                                        100),
-                                                            122 +
-                                                                Random()
-                                                                    .nextInt(
-                                                                        70)),
+                                        InkWell(
+                                          onTap: () {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) => BlocProvider<
+                                                            GetAllMessageCubit>(
+                                                        create: (BuildContext
+                                                                context) =>
+                                                            GetAllMessageCubit(),
+                                                        child:
+                                                            ChattingWithScreen(
+                                                          inforUserChat:
+                                                              InforUserChat(
+                                                            idUserRecipient:
+                                                                data["id"] ??
+                                                                    "",
+                                                            name: data[
+                                                                    "name"] ??
+                                                                "Chưa đặt tên",
+                                                            avatar: data[
+                                                                    "avatar"] ??
+                                                                "",
+                                                            timeActive:
+                                                                "1 phút trước",
+                                                            sex: true,
+                                                          ),
+                                                        ))));
+                                          },
+                                          child: Container(
+                                            height: 65.sp,
+                                            width: width,
+                                            padding: EdgeInsets.only(
+                                                top: 10.sp,
+                                                left: 10.sp,
+                                                right: 10.sp),
+                                            child: Row(
+                                              children: [
+                                                data["avatar"] != null &&
+                                                        data["avatar"]!
+                                                            .isNotEmpty
+                                                    ? ClipRRect(
                                                         borderRadius:
                                                             BorderRadius
                                                                 .circular(60),
-                                                      ),
-                                                      child: Center(
-                                                        child: Text(
-                                                          data["name"]![0]
-                                                              .toUpperCase(),
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          style: text22.white.bold.copyWith(
-                                                              color: Color.fromARGB(
-                                                                  255,
-                                                                  0,
-                                                                  106 +
-                                                                      Random().nextInt(
-                                                                          100) +
-                                                                      1,
-                                                                  122 +
-                                                                      Random().nextInt(
-                                                                          40))),
+                                                        child: ImageAssets
+                                                            .networkImage(
+                                                                height: 46.sp,
+                                                                width: 46.sp,
+                                                                url: data[
+                                                                    "avatar"]!),
+                                                      )
+                                                    : Container(
+                                                        height: 46.sp,
+                                                        width: 46.sp,
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          color: Color.fromARGB(
+                                                              255,
+                                                              255,
+                                                              131 +
+                                                                  Random()
+                                                                      .nextInt(
+                                                                          100),
+                                                              122 +
+                                                                  Random()
+                                                                      .nextInt(
+                                                                          70)),
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(60),
+                                                        ),
+                                                        child: Center(
+                                                          child: Text(
+                                                            data["name"]![0]
+                                                                .toUpperCase(),
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            style: text22.white.bold.copyWith(
+                                                                color: Color.fromARGB(
+                                                                    255,
+                                                                    0,
+                                                                    106 +
+                                                                        Random().nextInt(
+                                                                            100) +
+                                                                        1,
+                                                                    122 +
+                                                                        Random()
+                                                                            .nextInt(40))),
+                                                          ),
                                                         ),
                                                       ),
+                                                SizedBox(
+                                                  width: 10.sp,
+                                                ),
+                                                Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.start,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    SizedBox(
+                                                      height: 1.sp,
                                                     ),
-                                              SizedBox(
-                                                width: 10.sp,
-                                              ),
-                                              Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.start,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  SizedBox(
-                                                    height: 1.sp,
-                                                  ),
-                                                  Text(
-                                                      data["name"] ??
-                                                          "Chưa đặt tên",
-                                                      style:
-                                                          text16.black.medium),
-                                                  SizedBox(
-                                                    height: 2.sp,
-                                                  ),
-                                                  Text(data["phone"],
-                                                      style:
-                                                          text16.black.regular),
-                                                ],
-                                              ),
-                                            ],
+                                                    Text(
+                                                        data["name"] ??
+                                                            "Chưa đặt tên",
+                                                        style: text16
+                                                            .black.medium),
+                                                    SizedBox(
+                                                      height: 2.sp,
+                                                    ),
+                                                    Text(data["phone"],
+                                                        style: text16
+                                                            .black.regular),
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
                                           ),
                                         ),
                                       ],

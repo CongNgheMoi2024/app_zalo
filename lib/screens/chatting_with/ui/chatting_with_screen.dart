@@ -228,11 +228,11 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                               right: 10.sp,
                               top: 11.sp,
                               bottom: 11.sp),
-                          child: ImageAssets.pngAsset(
-                            Png.iconSticker,
-                            height: 28.sp,
-                            color: primaryColor,
-                          ),
+                          // child: ImageAssets.pngAsset(
+                          //   Png.iconSticker,
+                          //   height: 28.sp,
+                          //   color: primaryColor,
+                          // ),
                         ),
                         Expanded(
                           child: Padding(
