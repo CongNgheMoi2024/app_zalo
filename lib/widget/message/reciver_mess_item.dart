@@ -2,8 +2,12 @@ import 'package:app_zalo/constants/index.dart';
 import 'package:app_zalo/screens/forward/bloc/forward_message_cubit.dart';
 import 'package:app_zalo/screens/forward/ui/forward_message_screen.dart';
 import 'package:app_zalo/screens/home_chat/bloc/get_all_rooms_cubit.dart';
+import 'package:app_zalo/widget/show_message_by_type/show_file.dart';
+import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../page_view_image/page_view_image.dart';
+import '../show_message_by_type/extended_image.dart';
 
 class ReciverMessItem extends StatefulWidget {
   String? avatarReceiver;
@@ -14,6 +18,7 @@ class ReciverMessItem extends StatefulWidget {
   String? type;
   String? idMessage;
   String? idReceiver;
+
   ReciverMessItem(
       {super.key,
       this.avatarReceiver,
@@ -139,8 +144,8 @@ class _ReciverMessItemState extends State<ReciverMessItem> {
                                     ),
                                   ],
                                   child: ForwardMessageScreen(
-                                    idMessage: widget.idMessage!,
-                                    idReceiver: widget.idReceiver!,
+                                    idMessage: widget.idMessage,
+                                    idReceiver: widget.idReceiver,
                                   ))),
                     );
                   },
@@ -224,6 +229,7 @@ class _ReciverMessItemState extends State<ReciverMessItem> {
                 onLongPress: () {
                   _showMessageDetailsModal(context);
                 },
+                onDoubleTap: _onDoubleTap,
                 onTap: () {
                   setState(() {
                     visibleDetail = !visibleDetail;
@@ -248,22 +254,15 @@ class _ReciverMessItemState extends State<ReciverMessItem> {
                           bottomRight: Radius.circular(5.sp)),
                     ),
                     child: widget.type == "IMAGE"
-                        ? Image.network(
-                            widget.message!,
-                            fit: BoxFit.cover,
-                            height: 150.sp,
-                            width: 250.sp,
-                          )
-                        : Text(
-                            widget.message!,
-                            style: text16.primary.regular,
-                          )
-
-                    // Text(
-                    //   widget.message!,
-                    //   style: text16.primary.regular,
-                    // )
-                    ),
+                        ? ExtendedImageCustom(url: widget.message!)
+                        : widget.type == "FILE"
+                            ? FileView(
+                                url: widget.message!,
+                              )
+                            : Text(
+                                widget.message!,
+                                style: text16.primary.regular,
+                              )),
               ),
             ],
           ),
@@ -282,5 +281,15 @@ class _ReciverMessItemState extends State<ReciverMessItem> {
         ],
       ),
     );
+  }
+
+  void _onDoubleTap() {
+    if (widget.type == "IMAGE") {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => ImagePageView(url: widget.message!),
+        ),
+      );
+    }
   }
 }

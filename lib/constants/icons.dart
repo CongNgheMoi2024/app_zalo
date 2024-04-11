@@ -22,8 +22,10 @@ class Png {
   static const String iconPhoto = 'assets/images/iconPhoto.png';
   static const String iconAudio = 'assets/images/iconAudio.png';
   static const String iconDocument = 'assets/images/iconDocument.png';
+  static const String imgFail = 'assets/images/fail.png';
 }
 
 class CommonGif {
   CommonGif._();
+  static const String loading ='assets/images/loading.gif' ;
 }

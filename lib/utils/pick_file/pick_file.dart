@@ -7,8 +7,8 @@ class PickFile {
   Future<List<File>> pickMultiImage() async {
     final picker = ImagePicker();
     final List<XFile> xfiles = await picker.pickMultiImage(
-        maxHeight: 480,
-        maxWidth: 640,
+        maxHeight: 2024,
+        maxWidth: 2024,
         imageQuality: 90);
     if (xfiles.isNotEmpty) {
       List<File> files = [];

@@ -2,8 +2,13 @@ import 'package:app_zalo/constants/index.dart';
 import 'package:app_zalo/screens/forward/bloc/forward_message_cubit.dart';
 import 'package:app_zalo/screens/forward/ui/forward_message_screen.dart';
 import 'package:app_zalo/screens/home_chat/bloc/get_all_rooms_cubit.dart';
+import 'package:app_zalo/widget/show_message_by_type/extended_image.dart';
+import 'package:app_zalo/widget/show_message_by_type/show_file.dart';
+import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../page_view_image/page_view_image.dart';
 
 class SenderMessItem extends StatefulWidget {
   String? content;
@@ -11,9 +16,14 @@ class SenderMessItem extends StatefulWidget {
   String? type;
   String? idMessage;
   String? idReceiver;
-
-  SenderMessItem({super.key, required content, required time, required type, required idMessage, required String idReceiver});
-
+  SenderMessItem({super.key, this.content, this.time, this.type, this.idMessage, this.idReceiver});
+  // final String content;
+  // final String time;
+  // final String type;
+  // final String idMessage;
+  // final String idReceiver;
+  //
+  // const SenderMessItem({super.key, required this.content, required this.time, required this.type, required this.idMessage, required this.idReceiver});
   @override
   State<SenderMessItem> createState() => _SenderMessItemState();
 }
@@ -108,8 +118,8 @@ class _SenderMessItemState extends State<SenderMessItem> {
                                     ),
                                   ],
                                   child: ForwardMessageScreen(
-                                    idMessage: widget.idMessage!,
-                                    idReceiver: widget.idReceiver!,
+                                    idMessage: widget.idMessage,
+                                    idReceiver: widget.idReceiver,
                                   ))),
                     );
                   },
@@ -163,6 +173,7 @@ class _SenderMessItemState extends State<SenderMessItem> {
                 onLongPress: () {
                   _showMessageDetailsModal(context);
                 },
+                onDoubleTap:_onDoubleTap,
                 onTap: () {
                   setState(() {
                     visibleDetail = !visibleDetail;
@@ -185,13 +196,9 @@ class _SenderMessItemState extends State<SenderMessItem> {
                       ),
                     ),
                     child: widget.type == "IMAGE"
-                        ? Image.network(
-                            widget.content!,
-                            height: 150.sp,
-                            width: 250.sp,
-                            fit: BoxFit.cover,
-                          )
-                        : Text(
+                        ? ExtendedImageCustom(url: widget.content!)
+                        : widget.type =="FILE" ? FileView(url: widget.content!,):
+                    Text(
                             widget.content!,
                             style: text16.primary.regular,
                           )),
@@ -213,5 +220,15 @@ class _SenderMessItemState extends State<SenderMessItem> {
         ],
       ),
     );
+  }
+
+  void _onDoubleTap() {
+    if(widget.type=="IMAGE"){
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => ImagePageView(url: widget.content!),
+        ),
+      );
+    }
   }
 }
