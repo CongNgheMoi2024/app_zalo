@@ -62,7 +62,7 @@ class _MediaOptionsState extends State<MediaOptions> {
               ),
               GestureDetector(
                 onTap: () async {
-                  List<File> files = await _pickFile.pickMultiMedia();
+                  List<File> files = await _pickFile.pickDocument();
                   widget.onFileSelected(files);
                 },
                 child: Container(

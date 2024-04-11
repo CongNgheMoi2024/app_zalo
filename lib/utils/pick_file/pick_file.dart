@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:image_picker/image_picker.dart';
 
 class PickFile {
@@ -46,6 +47,22 @@ class PickFile {
     List<File> files = [];
     print(pickedFile.path);
     files.add(File(pickedFile.path));
+
+    return files;
+  }
+
+  Future<List<File>> pickDocument() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['docx', 'pdf'],
+      allowMultiple: true,
+    );
+
+    if (result == null || result.files.isEmpty) {
+      return [];
+    }
+
+    List<File> files = result.paths.map((path) => File(path!)).toList();
 
     return files;
   }
