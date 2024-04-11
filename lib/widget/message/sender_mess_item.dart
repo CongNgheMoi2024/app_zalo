@@ -227,7 +227,9 @@ class _SenderMessItemState extends State<SenderMessItem> {
                       padding: EdgeInsets.symmetric(
                           vertical: 8.sp, horizontal: 15.sp),
                       decoration: BoxDecoration(
-                        color: primaryColor.withOpacity(0.1),
+                        color: widget.type == "IMAGE" || widget.type == "VIDEO"
+                            ? Colors.transparent
+                            : primaryColor.withOpacity(0.1),
                         borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(20.sp),
                           topRight: Radius.circular(20.sp),

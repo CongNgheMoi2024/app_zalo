@@ -3,9 +3,9 @@ import 'package:app_zalo/screens/forward/bloc/forward_message_cubit.dart';
 import 'package:app_zalo/screens/forward/ui/forward_message_screen.dart';
 import 'package:app_zalo/screens/home_chat/bloc/get_all_rooms_cubit.dart';
 import 'package:app_zalo/widget/show_message_by_type/show_file.dart';
-import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:video_player/video_player.dart';
 import '../page_view_image/page_view_image.dart';
 import '../show_message_by_type/bloc/download_cubit.dart';
 import '../show_message_by_type/extended_image.dart';
@@ -113,10 +113,15 @@ class _ReciverMessItemState extends State<ReciverMessItem> {
                             height: 150.sp,
                             width: 250.sp,
                           )
-                        : Text(
-                            widget.message!,
-                            style: text16.primary.regular,
-                          ))
+                        : widget.type == "VIDEO"
+                            ? Text(
+                                "VIDEO_MEDIA.mp4",
+                                style: text16.primary.regular,
+                              )
+                            : Text(
+                                widget.message!,
+                                style: text16.primary.regular,
+                              ))
               ],
             ),
             Container(
@@ -187,6 +192,26 @@ class _ReciverMessItemState extends State<ReciverMessItem> {
     );
   }
 
+  late VideoPlayerController _videoPalyerController;
+  late Future<void> _initializeVideoPlayerFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.type == "VIDEO") {
+      _videoPalyerController = VideoPlayerController.network(widget.message!);
+      _initializeVideoPlayerFuture = _videoPalyerController.initialize();
+    }
+  }
+
+  @override
+  void dispose() {
+    if (widget.type == "VIDEO") {
+      _videoPalyerController.dispose();
+    }
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -250,17 +275,19 @@ class _ReciverMessItemState extends State<ReciverMessItem> {
                   });
                 },
                 child: BlocProvider(
-                  create: (BuildContext context)=> DownloadCubit(),
+                  create: (BuildContext context) => DownloadCubit(),
                   child: Container(
                       constraints: BoxConstraints(
                         minWidth: 0,
                         maxWidth: width * 0.6,
                       ),
                       margin: EdgeInsets.only(left: 10.sp),
-                      padding:
-                          EdgeInsets.symmetric(vertical: 8.sp, horizontal: 15.sp),
+                      padding: EdgeInsets.symmetric(
+                          vertical: 8.sp, horizontal: 15.sp),
                       decoration: BoxDecoration(
-                        color: primaryColor.withOpacity(0.1),
+                        color: widget.type == "IMAGE" || widget.type == "VIDEO"
+                            ? Colors.transparent
+                            : primaryColor.withOpacity(0.1),
                         borderRadius: BorderRadius.only(
                             topLeft: Radius.circular(
                                 !widget.showAvatar! ? 20.sp : 5.sp),
@@ -271,14 +298,43 @@ class _ReciverMessItemState extends State<ReciverMessItem> {
                       ),
                       child: widget.type == "IMAGE"
                           ? ExtendedImageCustom(url: widget.message!)
-                          : widget.type == "FILE"
-                              ? FileView(
-                                  url: widget.message!,
+                          : widget.type == "VIDEO"
+                              ? InkWell(
+                                  onTap: () {
+                                    setState(() {
+                                      if (_videoPalyerController
+                                          .value.isPlaying) {
+                                        _videoPalyerController.pause();
+                                      } else {
+                                        _videoPalyerController.play();
+                                      }
+                                    });
+                                  },
+                                  child: FutureBuilder(
+                                    future: _initializeVideoPlayerFuture,
+                                    builder: (context, snapshot) {
+                                      if (snapshot.connectionState ==
+                                          ConnectionState.done) {
+                                        return AspectRatio(
+                                          aspectRatio: _videoPalyerController
+                                              .value.aspectRatio,
+                                          child: VideoPlayer(
+                                              _videoPalyerController),
+                                        );
+                                      } else {
+                                        return CircularProgressIndicator();
+                                      }
+                                    },
+                                  ),
                                 )
-                              : Text(
-                                  widget.message!,
-                                  style: text16.primary.regular,
-                                )),
+                              : widget.type == "FILE"
+                                  ? FileView(
+                                      url: widget.message!,
+                                    )
+                                  : Text(
+                                      widget.message!,
+                                      style: text16.primary.regular,
+                                    )),
                 ),
               ),
             ],
