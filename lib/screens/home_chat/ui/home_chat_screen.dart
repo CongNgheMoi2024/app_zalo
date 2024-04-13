@@ -117,38 +117,44 @@ class _HomeChatScreenState extends State<HomeChatScreen> {
                                                   right: 20.sp,
                                                   top: 12.sp,
                                                   bottom: 12.sp),
-                                              child: ClipRRect(
-                                                borderRadius:
-                                                    BorderRadius.circular(60),
-                                                child: entry.value.userRecipient.avatar == "" &&
-                                                        entry.value.userRecipient
-                                                                .sex ==
-                                                            true
-                                                    ? ImageAssets.pngAsset(
-                                                        Png.imgUserBoy,
-                                                        width: 65.sp,
-                                                        height: 65.sp,
-                                                        fit: BoxFit.cover)
-                                                    : entry.value.userRecipient.avatar == "" &&
-                                                            entry
-                                                                    .value
-                                                                    .userRecipient
-                                                                    .sex ==
-                                                                false
-                                                        ? ImageAssets.pngAsset(
-                                                            Png.imgUserGirl,
-                                                            width: 65.sp,
-                                                            height: 65.sp,
-                                                            fit: BoxFit.cover)
-                                                        : ImageAssets.networkImage(
-                                                            url: entry
-                                                                .value
-                                                                .userRecipient
-                                                                .avatar,
-                                                            width: 65.sp,
-                                                            height: 65.sp,
-                                                            fit: BoxFit.cover),
-                                              ),
+                                              child: entry.value.isGroup == true
+                                                  ? ImageAssets.pngAsset(
+                                                      Png.icAvatarGroup,
+                                                      width: 65.sp,
+                                                      height: 65.sp,
+                                                      fit: BoxFit.cover)
+                                                  : ClipRRect(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              60),
+                                                      child: entry.value.userRecipient.avatar == "" &&
+                                                              entry
+                                                                      .value
+                                                                      .userRecipient
+                                                                      .sex ==
+                                                                  true
+                                                          ? ImageAssets.pngAsset(
+                                                              Png.imgUserBoy,
+                                                              width: 65.sp,
+                                                              height: 65.sp,
+                                                              fit: BoxFit.cover)
+                                                          : entry.value.userRecipient.avatar == "" &&
+                                                                  entry.value.userRecipient.sex ==
+                                                                      false
+                                                              ? ImageAssets.pngAsset(Png.imgUserGirl,
+                                                                  width: 65.sp,
+                                                                  height: 65.sp,
+                                                                  fit: BoxFit
+                                                                      .cover)
+                                                              : ImageAssets.networkImage(
+                                                                  url: entry
+                                                                      .value
+                                                                      .userRecipient
+                                                                      .avatar,
+                                                                  width: 65.sp,
+                                                                  height: 65.sp,
+                                                                  fit: BoxFit.cover),
+                                                    ),
                                             ),
                                             Expanded(
                                               child: Column(
@@ -156,8 +162,11 @@ class _HomeChatScreenState extends State<HomeChatScreen> {
                                                     CrossAxisAlignment.start,
                                                 children: [
                                                   Text(
-                                                    entry.value.userRecipient
-                                                        .name,
+                                                    // ignore: unrelated_type_equality_checks
+                                                    entry.value.isGroup == true
+                                                        ? entry.value.groupName
+                                                        : entry.value
+                                                            .userRecipient.name,
                                                     style: text16.black.medium,
                                                   ),
                                                   SizedBox(

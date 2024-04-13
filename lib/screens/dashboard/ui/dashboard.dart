@@ -49,6 +49,64 @@ class _DashboardScreenState extends State<DashboardScreen>
     }
   }
 
+  void showModelCreateGroup() {
+    showDialog(
+        context: context,
+        builder: (context) {
+          double width = MediaQuery.of(context).size.width;
+          double height = MediaQuery.of(context).size.height;
+
+          return Container(
+              height: height,
+              width: width,
+              child: Align(
+                alignment: Alignment.topRight,
+                child: Container(
+                  margin: EdgeInsets.only(
+                    top: 63.sp,
+                  ),
+                  height: 66,
+                  width: 90,
+                  color: whiteColor,
+                  child: Column(
+                    children: [
+                      Container(
+                        height: 33,
+                        width: 90,
+                        color: whiteColor,
+                        child: TextButton(
+                          onPressed: () {},
+                          child: Text(
+                            "Tạo nhóm",
+                            style: TextStyle(
+                              color: blackColor,
+                              fontSize: 16.sp,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        height: 33,
+                        width: 90,
+                        color: whiteColor,
+                        child: TextButton(
+                          onPressed: () {},
+                          child: Text(
+                            "Tạo phòng",
+                            style: TextStyle(
+                              color: blackColor,
+                              fontSize: 16.sp,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ));
+        });
+  }
+
   void fetchContacts() async {
     ContactsService.getContacts().then((value) {
       contacts = value.toList();
@@ -69,7 +127,14 @@ class _DashboardScreenState extends State<DashboardScreen>
           icon1: _currentIndex == 0 || _currentIndex == 2
               ? Icons.qr_code_scanner_outlined
               : null,
-          icon2: _currentIndex == 0 || _currentIndex == 1 ? Icons.add : null,
+          icon2: _currentIndex == 0 || _currentIndex == 1
+              ? Icons.more_vert_outlined
+              : null,
+          action2: _currentIndex == 0 || _currentIndex == 1
+              ? () {
+                  showModelCreateGroup();
+                }
+              : () {},
         ),
         automaticallyImplyLeading: false,
       ),
