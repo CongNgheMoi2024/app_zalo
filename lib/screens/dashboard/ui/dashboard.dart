@@ -91,7 +91,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                                         create: (BuildContext context) =>
                                             CreateGroupCubit(),
                                       ),
-                                    ], child: CreateGroupScreen()),
+                                    ], child: const CreateGroupScreen()),
                                   ),
                                 );
                               },
