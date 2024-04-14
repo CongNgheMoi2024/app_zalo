@@ -3,8 +3,10 @@ import 'dart:convert';
 import 'package:app_zalo/constants/index.dart';
 import 'package:app_zalo/env.dart';
 import 'package:app_zalo/models/chat/infor_user_chat.dart';
+import 'package:app_zalo/routes/routes.dart';
 import 'package:app_zalo/screens/chatting_with/bloc/get_all_message_cubit.dart';
 import 'package:app_zalo/screens/chatting_with/bloc/get_all_message_state.dart';
+import 'package:app_zalo/screens/more_chatting/ui/more_chatting_screen.dart';
 import 'package:app_zalo/storages/storage.dart';
 import 'package:app_zalo/utils/send_file.dart';
 import 'package:app_zalo/widget/dismiss_keyboard_widget.dart';
@@ -108,6 +110,12 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                   timeActive: widget.inforUserChat.timeActive,
                   urlAvatar: widget.inforUserChat.avatar,
                   sex: widget.inforUserChat.sex,
+                  actionMenuMore: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const MoreChattingScreen()));
+                  },
                 ),
                 Expanded(
                   child: SingleChildScrollView(
