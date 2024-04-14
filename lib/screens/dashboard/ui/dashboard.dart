@@ -1,4 +1,6 @@
 import 'package:app_zalo/constants/index.dart';
+import 'package:app_zalo/screens/create_group/bloc/create_group_cubit.dart';
+import 'package:app_zalo/screens/create_group/ui/create_group_screen.dart';
 import 'package:app_zalo/screens/fast_contact/bloc/fast_contact_cubit.dart';
 import 'package:app_zalo/screens/fast_contact/bloc/get_friends_cubit.dart';
 import 'package:app_zalo/screens/fast_contact/ui/fast_contact_screen.dart';
@@ -56,7 +58,7 @@ class _DashboardScreenState extends State<DashboardScreen>
           double width = MediaQuery.of(context).size.width;
           double height = MediaQuery.of(context).size.height;
 
-          return Container(
+          return SizedBox(
               height: height,
               width: width,
               child: Align(
@@ -65,40 +67,38 @@ class _DashboardScreenState extends State<DashboardScreen>
                   margin: EdgeInsets.only(
                     top: 63.sp,
                   ),
-                  height: 66,
-                  width: 90,
+                  height: height * 0.12,
                   color: whiteColor,
                   child: Column(
                     children: [
                       Container(
-                        height: 33,
-                        width: 90,
-                        color: whiteColor,
-                        child: TextButton(
-                          onPressed: () {},
-                          child: Text(
-                            "Tạo nhóm",
-                            style: TextStyle(
-                              color: blackColor,
-                              fontSize: 16.sp,
+                          height: height * 0.06,
+                          width: width * 0.33,
+                          color: whiteColor,
+                          child: Center(
+                            child: TextButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => BlocProvider(
+                                      create: (context) => CreateGroupCubit(),
+                                      child: CreateGroupScreen(),
+                                    ),
+                                  ),
+                                );
+                              },
+                              child: Text(" Tạo nhóm ",
+                                  style: text16.primary.regular),
                             ),
-                          ),
-                        ),
-                      ),
+                          )),
                       Container(
-                        height: 33,
-                        width: 90,
+                        height: height * 0.06,
+                        width: width * 0.33,
                         color: whiteColor,
-                        child: TextButton(
-                          onPressed: () {},
-                          child: Text(
-                            "Tạo phòng",
-                            style: TextStyle(
-                              color: blackColor,
-                              fontSize: 16.sp,
-                            ),
-                          ),
-                        ),
+                        child: Center(
+                            child: Text("Tạo phòng",
+                                style: text16.primary.regular)),
                       ),
                     ],
                   ),
