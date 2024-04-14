@@ -81,10 +81,17 @@ class _DashboardScreenState extends State<DashboardScreen>
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => BlocProvider(
-                                      create: (context) => CreateGroupCubit(),
-                                      child: CreateGroupScreen(),
-                                    ),
+                                    builder: (context) =>
+                                        MultiBlocProvider(providers: [
+                                      BlocProvider<FastContactCubit>(
+                                        create: (BuildContext context) =>
+                                            FastContactCubit(),
+                                      ),
+                                      BlocProvider<CreateGroupCubit>(
+                                        create: (BuildContext context) =>
+                                            CreateGroupCubit(),
+                                      ),
+                                    ], child: CreateGroupScreen()),
                                   ),
                                 );
                               },
