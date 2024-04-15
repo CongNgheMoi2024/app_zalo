@@ -6,6 +6,7 @@ import 'package:app_zalo/models/chat/infor_user_chat.dart';
 import 'package:app_zalo/routes/routes.dart';
 import 'package:app_zalo/screens/chatting_with/bloc/get_all_message_cubit.dart';
 import 'package:app_zalo/screens/chatting_with/bloc/get_all_message_state.dart';
+import 'package:app_zalo/screens/more_chatting/bloc/delete_room_cubit.dart';
 import 'package:app_zalo/screens/more_chatting/ui/more_chatting_screen.dart';
 import 'package:app_zalo/storages/storage.dart';
 import 'package:app_zalo/utils/send_file.dart';
@@ -106,7 +107,9 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
             body: Column(
               children: [
                 HeaderOfChatting(
-                  nameReceiver: widget.inforUserChat.name,
+                  nameReceiver: widget.inforUserChat.isGroup == true
+                      ? widget.inforUserChat.nameGroup
+                      : widget.inforUserChat.name,
                   timeActive: widget.inforUserChat.timeActive,
                   urlAvatar: widget.inforUserChat.avatar,
                   sex: widget.inforUserChat.sex,
@@ -114,7 +117,12 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const MoreChattingScreen()));
+                            builder: (context) => BlocProvider<DeleteRoomCubit>(
+                                create: (BuildContext context) =>
+                                    DeleteRoomCubit(),
+                                child: MoreChattingScreen(
+                                  idRoom: widget.inforUserChat.idGroup,
+                                ))));
                   },
                 ),
                 Expanded(
