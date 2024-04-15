@@ -9,13 +9,15 @@ class HeaderOfChatting extends StatefulWidget {
   String? urlAvatar;
   bool? sex;
   Function? actionMenuMore;
+  bool? isGroup;
   HeaderOfChatting(
       {super.key,
       this.nameReceiver,
       this.timeActive,
       this.urlAvatar,
       this.sex,
-      this.actionMenuMore});
+      this.actionMenuMore,
+      this.isGroup = false});
 
   @override
   State<HeaderOfChatting> createState() => _HeaderOfChattingState();
@@ -25,7 +27,6 @@ class _HeaderOfChattingState extends State<HeaderOfChatting> {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
-
     return Container(
       height: 66.sp,
       width: width,
@@ -74,11 +75,14 @@ class _HeaderOfChattingState extends State<HeaderOfChatting> {
                     width: 45.sp,
                     height: 45.sp,
                     fit: BoxFit.cover)
-                : widget.sex == true
-                    ? ImageAssets.pngAsset(Png.imgUserBoy,
+                : widget.isGroup == true
+                    ? ImageAssets.pngAsset(Png.icAvatarGroup,
                         width: 45.sp, height: 45.sp, fit: BoxFit.cover)
-                    : ImageAssets.pngAsset(Png.imgUserGirl,
-                        width: 45.sp, height: 45.sp, fit: BoxFit.cover),
+                    : widget.sex == true
+                        ? ImageAssets.pngAsset(Png.imgUserBoy,
+                            width: 45.sp, height: 45.sp, fit: BoxFit.cover)
+                        : ImageAssets.pngAsset(Png.imgUserGirl,
+                            width: 45.sp, height: 45.sp, fit: BoxFit.cover),
           ),
         ),
         Expanded(

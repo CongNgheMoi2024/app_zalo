@@ -59,7 +59,9 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
       url: '${Env.url}/ws',
       onConnect: (StompFrame frame) {
         client.subscribe(
-            destination: "/user/$idUser/queue/messages",
+            destination: widget.inforUserChat.isGroup == false
+                ? "/user/$idUser/queue/messages"
+                : "/user/${widget.inforUserChat.idGroup}/queue/messages",
             callback: (StompFrame frame) {
               setState(() {
                 Map<String, dynamic> data = jsonDecode(frame.body ?? "");
@@ -67,7 +69,7 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                     idMessage: data["id"],
                     idChat: data["chatId"],
                     idSender: data["senderId"],
-                    idReceiver: data["recipientId"],
+                    idReceiver: data["recipientId"] ?? "",
                     timestamp: DateTime.now().millisecondsSinceEpoch.toString(),
                     content: data["content"],
                     type: data["type"] ?? "TEXT"));
@@ -81,7 +83,7 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
       },
       onWebSocketError: (dynamic error) =>
           // ignore: avoid_print
-          print("LoiKaiWkAIII${error.toString()}"),
+          print("LoiKaiWkAIIIIIIIIIIII${error.toString()}"),
     ));
     client.activate();
     BlocProvider.of<GetAllMessageCubit>(context)
@@ -101,6 +103,7 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
+
     return DismissKeyboard(
       child: SafeArea(
         child: Scaffold(
@@ -124,6 +127,7 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                                   idRoom: widget.inforUserChat.idGroup,
                                 ))));
                   },
+                  isGroup: widget.inforUserChat.isGroup,
                 ),
                 Expanded(
                   child: SingleChildScrollView(
@@ -293,24 +297,44 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                         MediaQuery.of(context).viewInsets.bottom > 10
                             ? InkWell(
                                 onTap: () {
+                                  print(
+                                      "IDDDDDDDD CHATTT ${widget.inforUserChat.idGroup}");
                                   String message = controllerInputMessage.text;
                                   if (message.isNotEmpty) {
-                                    client.send(
-                                      destination: "/app/chat",
-                                      body: jsonEncode({
-                                        "content": message,
-                                        "senderId": idUser,
-                                        "recipientId": widget
-                                            .inforUserChat.idUserRecipient,
-                                        "timestamp": DateTime.now()
-                                            .millisecondsSinceEpoch
-                                      }),
-                                    );
+                                    // ignore: unrelated_type_equality_checks
+                                    widget.inforUserChat.idGroup == true
+                                        ? client.send(
+                                            destination: "/app/chat/group",
+                                            body: jsonEncode({
+                                              "content": message,
+                                              "senderId": idUser,
+                                              // "recipientId": widget
+                                              //     .inforUserChat.idUserRecipient,
+                                              "chatId":
+                                                  widget.inforUserChat.idGroup,
+                                              "timestamp": DateTime.now()
+                                                  .millisecondsSinceEpoch
+                                            }),
+                                          )
+                                        : client.send(
+                                            destination: "/app/chat",
+                                            body: jsonEncode({
+                                              "content": message,
+                                              "senderId": idUser,
+                                              "recipientId": widget
+                                                  .inforUserChat
+                                                  .idUserRecipient,
+                                              // "chatId": widget.inforUserChat.idGroup,
+                                              "timestamp": DateTime.now()
+                                                  .millisecondsSinceEpoch
+                                            }),
+                                          );
 
                                     controllerInputMessage.clear();
                                     setState(() {
                                       listMessage.add(MessageOfList(
-                                          idMessage: "",
+                                          idMessage:
+                                              widget.inforUserChat.idGroup,
                                           idChat: "",
                                           idSender: idUser,
                                           idReceiver: widget
