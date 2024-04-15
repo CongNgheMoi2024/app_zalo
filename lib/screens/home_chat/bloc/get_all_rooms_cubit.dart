@@ -123,7 +123,6 @@ class GetAllRoomCubit extends Cubit<GetAllRoomState> {
       );
 
       if (response.statusCode == 200) {
-        print("Response: ${response.data["data"]}");
         emit(GetAllRoomSuccessState(
           (response.data["data"] as List)
               .map((e) => RoomsUser.fromJson(e))
