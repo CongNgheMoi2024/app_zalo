@@ -88,25 +88,32 @@ class _HomeChatScreenState extends State<HomeChatScreen> {
                                                               context) =>
                                                           GetAllMessageCubit(),
                                                       child: ChattingWithScreen(
-                                                        inforUserChat: InforUserChat(
-                                                            idUserRecipient: entry
-                                                                .value
-                                                                .userRecipient
-                                                                .idRecipient,
-                                                            name: entry
-                                                                .value
-                                                                .userRecipient
-                                                                .name,
-                                                            avatar: entry
-                                                                .value
-                                                                .userRecipient
-                                                                .avatar,
-                                                            timeActive:
-                                                                timeAgoText,
-                                                            sex: entry
-                                                                .value
-                                                                .userRecipient
-                                                                .sex),
+                                                        inforUserChat:
+                                                            InforUserChat(
+                                                          idUserRecipient: entry
+                                                              .value
+                                                              .userRecipient
+                                                              .idRecipient,
+                                                          name: entry
+                                                              .value
+                                                              .userRecipient
+                                                              .name,
+                                                          avatar: entry
+                                                              .value
+                                                              .userRecipient
+                                                              .avatar,
+                                                          timeActive:
+                                                              timeAgoText,
+                                                          sex: entry
+                                                              .value
+                                                              .userRecipient
+                                                              .sex,
+                                                          isGroup: entry
+                                                              .value.isGroup,
+                                                          idGroup: entry
+                                                              .value.idRoom,
+                                                              nameGroup: entry.value.groupName,
+                                                        ),
                                                       ))));
                                         },
                                         child: Row(
