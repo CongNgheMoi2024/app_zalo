@@ -149,6 +149,27 @@ class _ReciverMessItemState extends State<ReciverMessItem> {
               child:
                   Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                 InkWell(
+                  onTap: () {},
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 30.sp),
+                    child: Column(
+                      children: [
+                        ImageAssets.pngAsset(
+                          Png.icReply,
+                          width: 40.sp,
+                          height: 30.sp,
+                        ),
+                        SizedBox(height: 5.sp),
+                        Text(
+                          "Trả lời",
+                          style: text14.medium
+                              .copyWith(color: greenDC, fontSize: 13.sp),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+                InkWell(
                   onTap: () {
                     Navigator.push(
                       context,
@@ -351,7 +372,7 @@ class _ReciverMessItemState extends State<ReciverMessItem> {
                                               _videoPalyerController),
                                         );
                                       } else {
-                                        return CircularProgressIndicator();
+                                        return const CircularProgressIndicator();
                                       }
                                     },
                                   ),
@@ -359,6 +380,7 @@ class _ReciverMessItemState extends State<ReciverMessItem> {
                               : widget.type == "FILE"
                                   ? FileView(
                                       url: widget.message!,
+                                      fileName: widget.fileName!,
                                     )
                                   : Text(
                                       widget.message!,

@@ -67,7 +67,8 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                     idReceiver: data["recipientId"],
                     timestamp: DateTime.now().millisecondsSinceEpoch.toString(),
                     content: data["content"],
-                    type: data["type"] ?? "TEXT"));
+                    type: data["type"] ?? "TEXT",
+                    fileName: data["fileName"] ?? "",));
               });
               print("Supriseber on ${frame.body}");
             });
@@ -134,6 +135,7 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                                   content: e.content,
                                   time: e.timestamp,
                                   type: e.type,
+                                  fileName: e.fileName,
                                   idMessage: e.idMessage,
                                   idReceiver:
                                       widget.inforUserChat.idUserRecipient,
@@ -183,6 +185,7 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                                   sex: widget.inforUserChat.sex,
                                   showAvatar: isConsecutive,
                                   type: e.type,
+                                  fileName: e.fileName,
                                   idMessage: e.idMessage,
                                   idReceiver:
                                       widget.inforUserChat.idUserRecipient,
@@ -296,6 +299,7 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                                       listMessage.add(MessageOfList(
                                           idMessage: "",
                                           idChat: "",
+                                          fileName: "", //  KHÔI THÊM VÀO
                                           idSender: idUser,
                                           idReceiver: widget
                                               .inforUserChat.idUserRecipient,
@@ -360,6 +364,7 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                             listMessage.add(MessageOfList(
                                 idMessage: "",
                                 idChat: "",
+                                fileName: element["fileName"],
                                 idSender: idUser,
                                 idReceiver:
                                     widget.inforUserChat.idUserRecipient,

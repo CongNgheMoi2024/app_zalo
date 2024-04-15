@@ -12,6 +12,7 @@ class MessageOfList {
   final String timestamp;
   final String content;
   final String type;
+  final String? fileName;
   final String? status;
 
   MessageOfList({
@@ -22,6 +23,7 @@ class MessageOfList {
     required this.timestamp,
     required this.content,
     required this.type,
+    required this.fileName,
     this.status,
   });
 
@@ -39,6 +41,7 @@ class MessageOfList {
       timestamp: formattedTimestamp,
       content: json['content'] ?? "",
       type: json['type'] ?? "",
+      fileName: json['fileName'] ?? "",
       status: json['status'] ?? "",
     );
   }

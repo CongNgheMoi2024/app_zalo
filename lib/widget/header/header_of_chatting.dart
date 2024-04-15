@@ -1,4 +1,5 @@
 import 'package:app_zalo/constants/index.dart';
+import 'package:app_zalo/routes/routes.dart';
 import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
@@ -45,7 +46,7 @@ class _HeaderOfChattingState extends State<HeaderOfChatting> {
       child: Row(children: [
         InkWell(
           onTap: () {
-            Navigator.pop(context);
+            Navigator.pushReplacementNamed(context, RouterName.dashboardScreen);
           },
           child: Padding(
             padding: EdgeInsets.symmetric(

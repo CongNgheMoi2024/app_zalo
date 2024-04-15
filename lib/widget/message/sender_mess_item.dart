@@ -16,6 +16,7 @@ class SenderMessItem extends StatefulWidget {
   String? content;
   String? time;
   String? type;
+  String? fileName;
   String? idMessage;
   String? idReceiver;
   String? status;
@@ -27,6 +28,7 @@ class SenderMessItem extends StatefulWidget {
       this.content,
       this.time,
       this.type,
+      this.fileName,
       this.idMessage,
       this.idReceiver,
       this.status,
@@ -355,7 +357,7 @@ class _SenderMessItemState extends State<SenderMessItem> {
                                                     _videoPalyerController),
                                               );
                                             } else {
-                                              return CircularProgressIndicator();
+                                              return const CircularProgressIndicator();
                                             }
                                           },
                                         ),
@@ -363,6 +365,7 @@ class _SenderMessItemState extends State<SenderMessItem> {
                                     : widget.type == "FILE"
                                         ? FileView(
                                             url: widget.content!,
+                                            fileName: widget.fileName!,
                                           )
                                         : widget.type == "AUDIO"
                                             ? InkWell(

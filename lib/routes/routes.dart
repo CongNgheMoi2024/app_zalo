@@ -40,7 +40,6 @@ RouteFactory routes() {
             create: (context) => PhoneOtpRegisCubit(),
             child: const PhoneOTPRegisterScreen());
         break;
-
       case RouterName.uploadAvatarScreen:
         screen = BlocProvider(
             create: (context) => UploadAvatarCubit(),
@@ -80,7 +79,6 @@ RouteFactory routes() {
     );
   };
 }
-
 abstract class RouterName {
   static const String initScreen = '/';
   static const String dashboardScreen = '/dashboardScreen';
