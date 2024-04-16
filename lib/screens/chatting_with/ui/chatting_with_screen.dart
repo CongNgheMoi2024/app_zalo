@@ -20,6 +20,7 @@ import 'package:app_zalo/widget/message/sender_mess_item.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:stomp_dart_client/stomp.dart';
 import 'package:stomp_dart_client/stomp_config.dart';
 import 'package:stomp_dart_client/stomp_frame.dart';
@@ -54,25 +55,52 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
         config: StompConfig.sockJS(
       url: '${Env.url}/ws',
       onConnect: (StompFrame frame) {
-        client.subscribe(
-            destination: "/user/$idUser/queue/messages",
-            callback: (StompFrame frame) {
-              setState(() {
-                Map<String, dynamic> data = jsonDecode(frame.body ?? "");
-                listMessage.add(MessageOfList(
-                  idMessage: data["id"],
-                  idChat: data["chatId"],
-                  idSender: data["senderId"],
-                  idReceiver: data["recipientId"],
-                  timestamp: DateTime.now().millisecondsSinceEpoch.toString(),
-                  content: data["content"],
-                  type: data["type"] ?? "TEXT",
-                  replyTo: data["replyTo"] ?? "",
-                  fileName: data["fileName"] ?? "",
-                ));
-              });
-              print("Supriseber on ${frame.body}");
-            });
+        widget.inforUserChat.isGroup == true
+            ?
+            //  "/user/$idUser/queue/messages"
+            client.subscribe(
+                destination:
+                    "/user/${widget.inforUserChat.idGroup}/queue/messages",
+                callback: (StompFrame frame) {
+                  setState(() {
+                    Map<String, dynamic> data = jsonDecode(frame.body ?? "");
+                    listMessage.add(MessageOfList(
+                      idMessage: data["id"],
+                      idChat: data["chatId"],
+                      idSender: data["senderId"],
+                      idReceiver: data["recipientId"] ?? "",
+                      timestamp: DateFormat('HH:mm dd/MM').format(
+                          DateTime.fromMillisecondsSinceEpoch(
+                              data["timestamp"])),
+                      content: data["content"],
+                      type: data["type"] ?? "TEXT",
+                      replyTo: data["replyTo"] ?? "",
+                      fileName: data["fileName"] ?? "",
+                    ));
+                  });
+                  print("Supriseber on ${frame.body}");
+                })
+            : client.subscribe(
+                destination: "/user/$idUser/queue/messages",
+                callback: (StompFrame frame) {
+                  setState(() {
+                    Map<String, dynamic> data = jsonDecode(frame.body ?? "");
+                    listMessage.add(MessageOfList(
+                      idMessage: data["id"],
+                      idChat: data["chatId"],
+                      idSender: data["senderId"],
+                      idReceiver: data["recipientId"] ?? "",
+                      timestamp: DateFormat('HH:mm dd/MM').format(
+                          DateTime.fromMillisecondsSinceEpoch(
+                              data["timestamp"])),
+                      content: data["content"],
+                      type: data["type"] ?? "TEXT",
+                      replyTo: data["replyTo"] ?? "",
+                      fileName: data["fileName"] ?? "",
+                    ));
+                  });
+                  print("Supriseber on ${frame.body}");
+                });
         print('onConnect     tHANHHCOONGG');
       },
       beforeConnect: () async {
@@ -80,11 +108,14 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
       },
       onWebSocketError: (dynamic error) =>
           // ignore: avoid_print
-          print("LoiKaiWkAIII${error.toString()}"),
+          print("LoiKaiWkAIIIIIIIIIIII${error.toString()}"),
     ));
     client.activate();
-    BlocProvider.of<GetAllMessageCubit>(context)
-        .GetAllMessageenticate(idUser, widget.inforUserChat.idUserRecipient);
+    BlocProvider.of<GetAllMessageCubit>(context).GetAllMessageenticate(
+        idUser,
+        widget.inforUserChat.idUserRecipient,
+        widget.inforUserChat.isGroup,
+        widget.inforUserChat.idGroup);
   }
 
   @override
@@ -101,6 +132,7 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
+
     return DismissKeyboard(
       child: SafeArea(
         child: Scaffold(
@@ -124,6 +156,7 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                                   idRoom: widget.inforUserChat.idGroup,
                                 ))));
                   },
+                  isGroup: widget.inforUserChat.isGroup,
                 ),
                 Expanded(
                   child: SingleChildScrollView(
@@ -195,7 +228,9 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                                         .GetAllMessageenticate(
                                             idUser,
                                             widget
-                                                .inforUserChat.idUserRecipient);
+                                                .inforUserChat.idUserRecipient,
+                                            widget.inforUserChat.isGroup,
+                                            widget.inforUserChat.idGroup);
                                   },
                                 );
                               } else {
@@ -253,7 +288,22 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
               ],
             ),
             bottomNavigationBar:
-                BlocBuilder<SendMessageCubit, SendMessageState>(
+            IconButton(onPressed:(){setState(() {
+                                                listMessage.add(MessageOfList(
+                                                    idMessage: widget
+                                                        .inforUserChat.idGroup,
+                                                    idChat: "",
+                                                    idSender: idUser,
+                                                    idReceiver: widget
+                                                        .inforUserChat
+                                                        .idUserRecipient,
+                                                    timestamp: DateFormat(
+                                                            'yyyy-MM-ddTHH:mm:ss.SSSZ')
+                                                        .format(DateTime.now()),
+                                                    content: "testtttt",
+                                                    type: ""));
+                                              });} , icon: Icon(Icons.add)),
+            /*  BlocBuilder<SendMessageCubit, SendMessageState>(
               builder: (context, state) {
                 // ignore: unused_local_variable
                 bool isReply = state is ReplySendMessageState;
@@ -376,38 +426,50 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                                           );
                                         } else {
                                           client.send(
-                                            destination: "/app/chat",
+                                            destination:
+                                                // ignore: unrelated_type_equality_checks
+                                                widget.inforUserChat.isGroup ==
+                                                        true
+                                                    ? "/app/chat/group"
+                                                    : "/app/chat",
                                             body: jsonEncode({
-                                              "content": message,
+                                              "chatId":
+                                                  widget.inforUserChat.idGroup,
                                               "senderId": idUser,
                                               "recipientId": widget
                                                   .inforUserChat
                                                   .idUserRecipient,
-                                              "timestamp": DateTime.now()
-                                                  .millisecondsSinceEpoch
+                                              "content": message,
+                                              "timestamp": DateFormat(
+                                                      'yyyy-MM-ddTHH:mm:ss.SSSZ')
+                                                  .format(DateTime.now()),
                                             }),
                                           );
-                                          try {
-                                            setState(() {
-                                            listMessage.add(MessageOfList(
-                                                idMessage: "",
-                                                idChat: "",
-                                                idSender: idUser,
-                                                idReceiver: widget.inforUserChat
-                                                    .idUserRecipient,
-                                                timestamp: DateTime.now()
-                                                    .millisecondsSinceEpoch
-                                                    .toString(),
-                                                content: message,
-                                                type: ""));
-                                          });
-                                          } catch (e) {
-                                            print("ERROR======="+e.toString());
-                                          }
                                         }
-                                        ;
 
                                         controllerInputMessage.clear();
+                                        try {
+                                          if (widget.inforUserChat.isGroup =
+                                              true) {
+                                            setState(() {
+                                              listMessage.add(MessageOfList(
+                                                  idMessage: widget
+                                                      .inforUserChat.idGroup,
+                                                  idChat: "",
+                                                  idSender: idUser,
+                                                  idReceiver: widget
+                                                      .inforUserChat
+                                                      .idUserRecipient,
+                                                  timestamp: DateFormat(
+                                                          'yyyy-MM-ddTHH:mm:ss.SSSZ')
+                                                      .format(DateTime.now()),
+                                                  content: message,
+                                                  type: ""));
+                                            });
+                                          }
+                                        } catch (e) {
+                                          print("ERROR=======" + e.toString());
+                                        }
                                       }
                                     },
                                     child: Padding(
@@ -496,7 +558,8 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                   ),
                 );
               },
-            )),
+            ) */
+            ),
       ),
     );
   }

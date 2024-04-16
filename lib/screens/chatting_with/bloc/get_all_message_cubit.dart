@@ -54,13 +54,17 @@ class GetAllMessageCubit extends Cubit<GetAllMessageState> {
   GetAllMessageCubit() : super(InitialGetAllMessageState());
 
   // ignore: non_constant_identifier_names
-  Future<void> GetAllMessageenticate(String idSender, String idReceiver) async {
+  Future<void> GetAllMessageenticate(
+      String idSender, String idReceiver, bool isGroup, String idGroup) async {
     emit(LoadingGetAllMessageState());
     String accToken = HiveStorage().token;
 
     try {
+      print("IDSENDER $idSender, $idReceiver, $isGroup, $idGroup");
       Dio dio = Dio();
-      String apiUrl = "${Env.url}/api/v1/messages/$idSender/$idReceiver";
+      String apiUrl = isGroup
+          ? "${Env.url}/api/v1/group-messages/$idSender/$idGroup"
+          : "${Env.url}/api/v1/messages/$idSender/$idReceiver";
 
       Response response = await dio.get(apiUrl,
           options: Options(headers: {
@@ -76,6 +80,7 @@ class GetAllMessageCubit extends Cubit<GetAllMessageState> {
         emit(ErrorGetAllMessageState("GetAllMessage failed. "));
       }
     } catch (e) {
+      print("EEEEEEEEEEEEEEEEDDDDEEEEEEEEEE $e");
       emit(ErrorGetAllMessageState(e.toString()));
     }
   }
