@@ -120,7 +120,8 @@ class _ForwardMessageScreenState extends State<ForwardMessageScreen> {
                                                       .userRecipient.avatar,
                                                   timeActive: timeAgoText,
                                                   sex: entry
-                                                      .value.userRecipient.sex);
+                                                      .value.userRecipient.sex,
+                                                  members: []);
                                             }
 
                                             List.generate(state.data.length,

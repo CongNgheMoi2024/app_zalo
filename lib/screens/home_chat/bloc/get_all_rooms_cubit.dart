@@ -10,6 +10,7 @@ class RoomsUser {
   final LastMessage lastMessage;
   final bool isGroup;
   final String groupName;
+  List<String>? members = [];
 
   RoomsUser({
     required this.idRoom,
@@ -17,6 +18,7 @@ class RoomsUser {
     required this.lastMessage,
     required this.isGroup,
     required this.groupName,
+    this.members,
   });
   factory RoomsUser.fromJson(Map<String, dynamic> json) {
     return RoomsUser(
@@ -41,7 +43,10 @@ class RoomsUser {
                 timestamp: DateTime.now().toString(),
                 status: ""),
         isGroup: json['group'] ?? false,
-        groupName: json['groupName'] ?? "");
+        groupName: json['groupName'] ?? "",
+        members: json['members'] != null
+            ? (json['members'] as List).map((e) => e.toString()).toList()
+            : []);
   }
 }
 
@@ -123,6 +128,7 @@ class GetAllRoomCubit extends Cubit<GetAllRoomState> {
       );
 
       if (response.statusCode == 200) {
+        print("Response: ${response.data["data"]}");
         emit(GetAllRoomSuccessState(
           (response.data["data"] as List)
               .map((e) => RoomsUser.fromJson(e))

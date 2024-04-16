@@ -114,6 +114,7 @@ class _HomeChatScreenState extends State<HomeChatScreen> {
                                                               .value.idRoom,
                                                           nameGroup: entry
                                                               .value.groupName,
+                                                          members: entry.value.members!
                                                         ),
                                                       ))));
                                         },

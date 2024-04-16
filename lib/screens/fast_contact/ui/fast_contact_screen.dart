@@ -260,14 +260,16 @@ class _FastContactScreenState extends State<FastContactScreen> {
                                                             ChattingWithScreen(
                                                           inforUserChat:
                                                               InforUserChat(
-                                                            idUserRecipient:
-                                                                data.id,
-                                                            name: data.name,
-                                                            avatar: data.avatar,
-                                                            timeActive:
-                                                                "1 phút trước",
-                                                            sex: true,
-                                                          ),
+                                                                  idUserRecipient:
+                                                                      data.id,
+                                                                  name:
+                                                                      data.name,
+                                                                  avatar: data
+                                                                      .avatar,
+                                                                  timeActive:
+                                                                      "1 phút trước",
+                                                                  sex: true,
+                                                                  members: []),
                                                         ))));
                                           },
                                           child: Container(

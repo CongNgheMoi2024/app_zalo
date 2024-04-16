@@ -149,7 +149,7 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                                 create: (BuildContext context) =>
                                     DeleteRoomCubit(),
                                 child: MoreChattingScreen(
-                                  idRoom: widget.inforUserChat.idGroup,
+                                  inforUserChat: widget.inforUserChat,
                                 ))));
                   },
                   isGroup: widget.inforUserChat.isGroup,

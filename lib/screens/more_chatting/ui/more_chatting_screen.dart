@@ -1,4 +1,5 @@
 import 'package:app_zalo/constants/index.dart';
+import 'package:app_zalo/models/chat/infor_user_chat.dart';
 import 'package:app_zalo/routes/routes.dart';
 import 'package:app_zalo/screens/more_chatting/bloc/delete_room_cubit.dart';
 import 'package:app_zalo/screens/more_chatting/bloc/delete_room_state.dart';
@@ -7,8 +8,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MoreChattingScreen extends StatefulWidget {
-  String? idRoom;
-  MoreChattingScreen({super.key, this.idRoom});
+  InforUserChat? inforUserChat;
+
+  MoreChattingScreen({super.key, this.inforUserChat});
 
   @override
   State<MoreChattingScreen> createState() => _MoreChattingScreenState();
@@ -131,7 +133,7 @@ class _MoreChattingScreenState extends State<MoreChattingScreen> {
                   onTap: () {
                     context
                         .read<DeleteRoomCubit>()
-                        .DeleteRoomenticate(widget.idRoom!);
+                        .DeleteRoomenticate(widget.inforUserChat!.idGroup!);
                   },
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
