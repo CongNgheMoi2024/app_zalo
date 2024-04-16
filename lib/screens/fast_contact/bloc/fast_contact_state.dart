@@ -1,3 +1,5 @@
+import 'package:app_zalo/screens/fast_contact/bloc/fast_contact_cubit.dart';
+
 abstract class FastContactState {}
 
 class InitialFastContactState extends FastContactState {}
@@ -10,6 +12,6 @@ class ErrorFastContactState extends FastContactState {
 }
 
 class FastContactFriendsSuccessdState extends FastContactState {
-  dynamic data;
+  List<FriendsM> data;
   FastContactFriendsSuccessdState(this.data);
 }

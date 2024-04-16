@@ -1,4 +1,6 @@
 import 'package:app_zalo/constants/index.dart';
+import 'package:app_zalo/screens/create_group/bloc/create_group_cubit.dart';
+import 'package:app_zalo/screens/create_group/ui/create_group_screen.dart';
 import 'package:app_zalo/screens/fast_contact/bloc/fast_contact_cubit.dart';
 import 'package:app_zalo/screens/fast_contact/bloc/get_friends_cubit.dart';
 import 'package:app_zalo/screens/fast_contact/ui/fast_contact_screen.dart';
@@ -49,6 +51,69 @@ class _DashboardScreenState extends State<DashboardScreen>
     }
   }
 
+  void showModelCreateGroup() {
+    showDialog(
+        context: context,
+        builder: (context) {
+          double width = MediaQuery.of(context).size.width;
+          double height = MediaQuery.of(context).size.height;
+
+          return SizedBox(
+              height: height,
+              width: width,
+              child: Align(
+                alignment: Alignment.topRight,
+                child: Container(
+                  margin: EdgeInsets.only(
+                    top: 63.sp,
+                  ),
+                  height: height * 0.12,
+                  color: whiteColor,
+                  child: Column(
+                    children: [
+                      Container(
+                          height: height * 0.06,
+                          width: width * 0.33,
+                          color: whiteColor,
+                          child: Center(
+                            child: TextButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        MultiBlocProvider(providers: [
+                                      BlocProvider<FastContactCubit>(
+                                        create: (BuildContext context) =>
+                                            FastContactCubit(),
+                                      ),
+                                      BlocProvider<CreateGroupCubit>(
+                                        create: (BuildContext context) =>
+                                            CreateGroupCubit(),
+                                      ),
+                                    ], child: const CreateGroupScreen()),
+                                  ),
+                                );
+                              },
+                              child: Text(" Tạo nhóm ",
+                                  style: text16.primary.regular),
+                            ),
+                          )),
+                      Container(
+                        height: height * 0.06,
+                        width: width * 0.33,
+                        color: whiteColor,
+                        child: Center(
+                            child: Text("Tạo phòng",
+                                style: text16.primary.regular)),
+                      ),
+                    ],
+                  ),
+                ),
+              ));
+        });
+  }
+
   void fetchContacts() async {
     ContactsService.getContacts().then((value) {
       contacts = value.toList();
@@ -69,7 +134,14 @@ class _DashboardScreenState extends State<DashboardScreen>
           icon1: _currentIndex == 0 || _currentIndex == 2
               ? Icons.qr_code_scanner_outlined
               : null,
-          icon2: _currentIndex == 0 || _currentIndex == 1 ? Icons.add : null,
+          icon2: _currentIndex == 0 || _currentIndex == 1
+              ? Icons.more_vert_outlined
+              : null,
+          action2: _currentIndex == 0 || _currentIndex == 1
+              ? () {
+                  showModelCreateGroup();
+                }
+              : () {},
         ),
         automaticallyImplyLeading: false,
       ),

@@ -68,11 +68,10 @@ class _FastContactScreenState extends State<FastContactScreen> {
                 future: GetRequestFriend().getRequestFriend(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return CircularProgressIndicator(); // Or any other loading indicator
+                    return const CircularProgressIndicator();
                   } else if (snapshot.hasError) {
                     return Text('Error: ${snapshot.error}');
                   } else {
-                    print("KKKKKKKKKKKKKKKKKK");
                     list = snapshot.data;
 
                     return Wrap(
@@ -216,9 +215,8 @@ class _FastContactScreenState extends State<FastContactScreen> {
                                       .map<Widget>((entry) {
                                     final data = entry.value;
 
-                                    final firstLetter = data["name"]![0]
-                                        .toUpperCase()
-                                        .toString();
+                                    final firstLetter =
+                                        data.name[0].toUpperCase().toString();
 
                                     final isFirstLetterSame =
                                         firstLetter == previousFirstLetter1;
@@ -230,7 +228,7 @@ class _FastContactScreenState extends State<FastContactScreen> {
                                       children: [
                                         if (shouldShowFirstLetter)
                                           Regex.number(firstLetter) == true ||
-                                                  data["name"]!
+                                                  data.name
                                                       .startsWith("Contact")
                                               ? Container()
                                               : Padding(
@@ -263,14 +261,9 @@ class _FastContactScreenState extends State<FastContactScreen> {
                                                           inforUserChat:
                                                               InforUserChat(
                                                             idUserRecipient:
-                                                                data["id"] ??
-                                                                    "",
-                                                            name: data[
-                                                                    "name"] ??
-                                                                "Chưa đặt tên",
-                                                            avatar: data[
-                                                                    "avatar"] ??
-                                                                "",
+                                                                data.id,
+                                                            name: data.name,
+                                                            avatar: data.avatar,
                                                             timeActive:
                                                                 "1 phút trước",
                                                             sex: true,
@@ -286,9 +279,7 @@ class _FastContactScreenState extends State<FastContactScreen> {
                                                 right: 10.sp),
                                             child: Row(
                                               children: [
-                                                data["avatar"] != null &&
-                                                        data["avatar"]!
-                                                            .isNotEmpty
+                                                data.avatar.isNotEmpty
                                                     ? ClipRRect(
                                                         borderRadius:
                                                             BorderRadius
@@ -297,8 +288,8 @@ class _FastContactScreenState extends State<FastContactScreen> {
                                                             .networkImage(
                                                                 height: 46.sp,
                                                                 width: 46.sp,
-                                                                url: data[
-                                                                    "avatar"]!),
+                                                                url: data
+                                                                    .avatar),
                                                       )
                                                     : Container(
                                                         height: 46.sp,
@@ -322,7 +313,7 @@ class _FastContactScreenState extends State<FastContactScreen> {
                                                         ),
                                                         child: Center(
                                                           child: Text(
-                                                            data["name"]![0]
+                                                            data.name[0]
                                                                 .toUpperCase(),
                                                             textAlign: TextAlign
                                                                 .center,
@@ -352,15 +343,13 @@ class _FastContactScreenState extends State<FastContactScreen> {
                                                     SizedBox(
                                                       height: 1.sp,
                                                     ),
-                                                    Text(
-                                                        data["name"] ??
-                                                            "Chưa đặt tên",
+                                                    Text(data.name,
                                                         style: text16
                                                             .black.medium),
                                                     SizedBox(
                                                       height: 2.sp,
                                                     ),
-                                                    Text(data["phone"],
+                                                    Text(data.phone,
                                                         style: text16
                                                             .black.regular),
                                                   ],

@@ -3,8 +3,13 @@ import 'dart:convert';
 import 'package:app_zalo/constants/index.dart';
 import 'package:app_zalo/env.dart';
 import 'package:app_zalo/models/chat/infor_user_chat.dart';
+import 'package:app_zalo/routes/routes.dart';
 import 'package:app_zalo/screens/chatting_with/bloc/get_all_message_cubit.dart';
 import 'package:app_zalo/screens/chatting_with/bloc/get_all_message_state.dart';
+import 'package:app_zalo/screens/chatting_with/bloc/send_message_cubit.dart';
+import 'package:app_zalo/screens/chatting_with/bloc/send_message_state.dart';
+import 'package:app_zalo/screens/more_chatting/bloc/delete_room_cubit.dart';
+import 'package:app_zalo/screens/more_chatting/ui/more_chatting_screen.dart';
 import 'package:app_zalo/storages/storage.dart';
 import 'package:app_zalo/utils/send_file.dart';
 import 'package:app_zalo/widget/dismiss_keyboard_widget.dart';
@@ -32,6 +37,7 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
   String idUser = HiveStorage().idUser;
   bool showOptions = false;
   FocusNode focusTextField = FocusNode();
+  FocusNode focusMediaOptionsBox = FocusNode();
   TextEditingController controllerInputMessage = TextEditingController();
   final SendFile _sendFile = SendFile();
   List<dynamic> listMessage = [];
@@ -44,13 +50,6 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
   @override
   void initState() {
     super.initState();
-    focusTextField.addListener(() {
-      if (focusTextField.hasFocus) {
-        setState(() {
-          showOptions = false;
-        });
-      }
-    });
     client = StompClient(
         config: StompConfig.sockJS(
       url: '${Env.url}/ws',
@@ -61,14 +60,16 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
               setState(() {
                 Map<String, dynamic> data = jsonDecode(frame.body ?? "");
                 listMessage.add(MessageOfList(
-                    idMessage: data["id"],
-                    idChat: data["chatId"],
-                    idSender: data["senderId"],
-                    idReceiver: data["recipientId"],
-                    timestamp: DateTime.now().millisecondsSinceEpoch.toString(),
-                    content: data["content"],
-                    type: data["type"] ?? "TEXT",
-                    fileName: data["fileName"] ?? "",));
+                  idMessage: data["id"],
+                  idChat: data["chatId"],
+                  idSender: data["senderId"],
+                  idReceiver: data["recipientId"],
+                  timestamp: DateTime.now().millisecondsSinceEpoch.toString(),
+                  content: data["content"],
+                  type: data["type"] ?? "TEXT",
+                  replyTo: data["replyTo"] ?? "",
+                  fileName: data["fileName"] ?? "",
+                ));
               });
               print("Supriseber on ${frame.body}");
             });
@@ -90,6 +91,7 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
   void dispose() {
     client.deactivate();
     super.dispose();
+    focusTextField.dispose();
   }
 
   int? prevIndex;
@@ -105,10 +107,23 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
             body: Column(
               children: [
                 HeaderOfChatting(
-                  nameReceiver: widget.inforUserChat.name,
+                  nameReceiver: widget.inforUserChat.isGroup == true
+                      ? widget.inforUserChat.nameGroup
+                      : widget.inforUserChat.name,
                   timeActive: widget.inforUserChat.timeActive,
                   urlAvatar: widget.inforUserChat.avatar,
                   sex: widget.inforUserChat.sex,
+                  actionMenuMore: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => BlocProvider<DeleteRoomCubit>(
+                                create: (BuildContext context) =>
+                                    DeleteRoomCubit(),
+                                child: MoreChattingScreen(
+                                  idRoom: widget.inforUserChat.idGroup,
+                                ))));
+                  },
                 ),
                 Expanded(
                   child: SingleChildScrollView(
@@ -136,6 +151,15 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                                   time: e.timestamp,
                                   type: e.type,
                                   fileName: e.fileName,
+                                  idMessReply: e.replyTo,
+                                  contentMessReply: e.replyTo == ""
+                                      ? ""
+                                      : listMessage
+                                          .firstWhere((element) =>
+                                              element.idMessage == e.replyTo)
+                                          .content,
+                                  userNameReply: widget
+                                      .inforUserChat.name, //LỖI VỚI CHAT GROUP
                                   idMessage: e.idMessage,
                                   idReceiver:
                                       widget.inforUserChat.idUserRecipient,
@@ -186,6 +210,9 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                                   showAvatar: isConsecutive,
                                   type: e.type,
                                   fileName: e.fileName,
+                                  replyTo: e.replyTo,
+                                  userNameReply: widget
+                                      .inforUserChat.name, //LỖI VỚI CHAT GROUP
                                   idMessage: e.idMessage,
                                   idReceiver:
                                       widget.inforUserChat.idUserRecipient,
@@ -225,161 +252,250 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                 ),
               ],
             ),
-            bottomNavigationBar: AnimatedContainer(
-              duration: const Duration(milliseconds: 0),
-              height: showOptions
-                  ? 255.sp + MediaQuery.of(context).viewInsets.bottom
-                  : 50.sp + MediaQuery.of(context).viewInsets.bottom,
-              color: whiteColor,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    height: 50.sp,
-                    child: Row(
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.only(
-                              left: 16.sp,
-                              right: 10.sp,
-                              top: 11.sp,
-                              bottom: 11.sp),
-                        ),
-                        Expanded(
-                          child: Padding(
-                            padding: EdgeInsets.only(
-                              left: 5.sp,
-                              right: 5.sp,
-                            ),
-                            child: TextField(
-                              focusNode: focusTextField,
-                              controller: controllerInputMessage,
-                              decoration: InputDecoration(
-                                contentPadding: EdgeInsets.symmetric(
-                                    vertical: 10.sp, horizontal: 18.sp),
-                                hintText: 'Nhập tin nhắn...',
-                                hintStyle: text18.regular.primary,
-                                enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(30.sp),
-                                  borderSide: BorderSide(
-                                    color: primaryColor,
-                                    width: 1.sp,
+            bottomNavigationBar:
+                BlocBuilder<SendMessageCubit, SendMessageState>(
+              builder: (context, state) {
+                // ignore: unused_local_variable
+                bool isReply = state is ReplySendMessageState;
+                return AnimatedContainer(
+                  duration: const Duration(milliseconds: 0),
+                  height: showOptions
+                      ? 255.sp + MediaQuery.of(context).viewInsets.bottom
+                      : isReply
+                          ? 145.sp + MediaQuery.of(context).viewInsets.bottom
+                          : 50.sp + MediaQuery.of(context).viewInsets.bottom,
+                  color: whiteColor,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      isReply
+                          ? Container(
+                              margin: EdgeInsets.all(5.sp),
+                              padding: EdgeInsets.all(5.sp),
+                              color: primaryColor.withOpacity(0.1),
+                              height: 80.sp,
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: Column(
+                                      children: [
+                                        Text(
+                                          state.nameReply!,
+                                          style: text18.regular.black,
+                                        ),
+                                        Text(
+                                          state.contentMessRep!,
+                                          style: text14.regular.copyWith(
+                                              color: Colors.black
+                                                  .withOpacity(0.5)),
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 3,
+                                        ),
+                                      ],
+                                    ),
                                   ),
+                                  IconButton(
+                                      onPressed: () {
+                                        context
+                                            .read<SendMessageCubit>()
+                                            .defaultState();
+                                      },
+                                      icon: const Icon(
+                                        Icons.close,
+                                        size: 30,
+                                      ))
+                                ],
+                              ),
+                            )
+                          : Container(),
+                      SizedBox(
+                        height: 50.sp,
+                        child: Row(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  left: 16.sp,
+                                  right: 10.sp,
+                                  top: 11.sp,
+                                  bottom: 11.sp),
+                            ),
+                            Expanded(
+                              child: Padding(
+                                padding: EdgeInsets.only(
+                                  left: 5.sp,
+                                  right: 5.sp,
                                 ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(30.sp),
-                                  borderSide: BorderSide(
-                                    color: primaryColor,
-                                    width: 1.sp,
+                                child: TextField(
+                                  autofocus: true,
+                                  focusNode: focusTextField,
+                                  controller: controllerInputMessage,
+                                  decoration: InputDecoration(
+                                    contentPadding: EdgeInsets.symmetric(
+                                        vertical: 10.sp, horizontal: 18.sp),
+                                    hintText: 'Nhập tin nhắn...',
+                                    hintStyle: text18.regular.primary,
+                                    enabledBorder: OutlineInputBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(30.sp),
+                                      borderSide: BorderSide(
+                                        color: primaryColor,
+                                        width: 1.sp,
+                                      ),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(30.sp),
+                                      borderSide: BorderSide(
+                                        color: primaryColor,
+                                        width: 1.sp,
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
-                          ),
-                        ),
-                        MediaQuery.of(context).viewInsets.bottom > 10
-                            ? InkWell(
-                                onTap: () {
-                                  String message = controllerInputMessage.text;
-                                  if (message.isNotEmpty) {
-                                    client.send(
-                                      destination: "/app/chat",
-                                      body: jsonEncode({
-                                        "content": message,
-                                        "senderId": idUser,
-                                        "recipientId": widget
-                                            .inforUserChat.idUserRecipient,
-                                        "timestamp": DateTime.now()
-                                            .millisecondsSinceEpoch
-                                      }),
-                                    );
+                            MediaQuery.of(context).viewInsets.bottom > 10
+                                ? InkWell(
+                                    onTap: () {
+                                      String message =
+                                          controllerInputMessage.text;
+                                      if (message.isNotEmpty) {
+                                        if (isReply) {
+                                          client.send(
+                                            destination: "/app/chat",
+                                            body: jsonEncode({
+                                              "content": message,
+                                              "senderId": idUser,
+                                              "recipientId": widget
+                                                  .inforUserChat
+                                                  .idUserRecipient,
+                                              "timestamp": DateTime.now()
+                                                  .millisecondsSinceEpoch,
+                                              "replyTo": state.idMessageReply,
+                                            }),
+                                          );
+                                        } else {
+                                          client.send(
+                                            destination: "/app/chat",
+                                            body: jsonEncode({
+                                              "content": message,
+                                              "senderId": idUser,
+                                              "recipientId": widget
+                                                  .inforUserChat
+                                                  .idUserRecipient,
+                                              "timestamp": DateTime.now()
+                                                  .millisecondsSinceEpoch
+                                            }),
+                                          );
+                                          try {
+                                            setState(() {
+                                            listMessage.add(MessageOfList(
+                                                idMessage: "",
+                                                idChat: "",
+                                                idSender: idUser,
+                                                idReceiver: widget.inforUserChat
+                                                    .idUserRecipient,
+                                                timestamp: DateTime.now()
+                                                    .millisecondsSinceEpoch
+                                                    .toString(),
+                                                content: message,
+                                                type: ""));
+                                          });
+                                          } catch (e) {
+                                            print("ERROR======="+e.toString());
+                                          }
+                                        }
+                                        ;
 
-                                    controllerInputMessage.clear();
-                                    setState(() {
-                                      listMessage.add(MessageOfList(
-                                          idMessage: "",
-                                          idChat: "",
-                                          fileName: "", //  KHÔI THÊM VÀO
-                                          idSender: idUser,
-                                          idReceiver: widget
-                                              .inforUserChat.idUserRecipient,
-                                          timestamp: DateTime.now()
-                                              .millisecondsSinceEpoch
-                                              .toString(),
-                                          content: message,
-                                          type: ""));
-                                    });
-                                  }
-                                },
-                                child: Padding(
-                                  padding: EdgeInsets.only(
-                                      left: 10.sp,
-                                      right: 15.sp,
-                                      top: 10.sp,
-                                      bottom: 10.sp),
-                                  child: Icon(
-                                    Icons.send,
-                                    color: primaryColor,
-                                    size: 30.sp,
-                                  ),
-                                ),
-                              )
-                            : Padding(
-                                padding: EdgeInsets.only(
-                                    left: 10.sp,
-                                    right: 15.sp,
-                                    top: 10.sp,
-                                    bottom: 10.sp),
-                                child: GestureDetector(
-                                  onTap: () {
-                                    if (showOptions == false) {
-                                      focusTextField.unfocus();
-                                    }
-                                    setState(() {
-                                      toggleOptions();
-                                    });
-                                  },
-                                  child: ImageAssets.pngAsset(
-                                    Png.iconMore,
-                                    width: 30.sp,
-                                    height: 30.sp,
-                                  ),
-                                )),
-                      ],
-                    ),
+                                        controllerInputMessage.clear();
+                                      }
+                                    },
+                                    child: Padding(
+                                      padding: EdgeInsets.only(
+                                          left: 10.sp,
+                                          right: 15.sp,
+                                          top: 10.sp,
+                                          bottom: 10.sp),
+                                      child: Icon(
+                                        Icons.send,
+                                        color:
+                                            isReply ? greenColor : primaryColor,
+                                        size: 30.sp,
+                                      ),
+                                    ),
+                                  )
+                                : Padding(
+                                    padding: EdgeInsets.only(
+                                        left: 10.sp,
+                                        right: 15.sp,
+                                        top: 10.sp,
+                                        bottom: 10.sp),
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        setState(() {
+                                          toggleOptions();
+                                        });
+                                        if (focusMediaOptionsBox.hasFocus ==
+                                            false) {
+                                          FocusScope.of(context).requestFocus(
+                                              focusMediaOptionsBox);
+                                        }
+                                      },
+                                      child: ImageAssets.pngAsset(
+                                        Png.iconMore,
+                                        width: 30.sp,
+                                        height: 30.sp,
+                                      ),
+                                    )),
+                          ],
+                        ),
+                      ),
+                      Focus(
+                        focusNode: focusMediaOptionsBox,
+                        onFocusChange: (hasFocus) {
+                          if (!hasFocus) {
+                            setState(() {
+                              showOptions = false;
+                            });
+                          }
+                        },
+                        child: MediaOptions(
+                          visible: showOptions,
+                          onFileSelected: (files) async {
+                            List<dynamic> data = await _sendFile.sendFile(
+                                idUser,
+                                widget.inforUserChat.idUserRecipient,
+                                files);
+                            if (data.isEmpty) {
+                              const AlertDialog(
+                                title: Text("Thông báo"),
+                                content: Text("Đã xảy ra lỗi!"),
+                              );
+                            } else {
+                              for (var element in data) {
+                                setState(() {
+                                  listMessage.add(MessageOfList(
+                                      idMessage: "",
+                                      idChat: "",
+                                      fileName: element["fileName"],
+                                      idSender: idUser,
+                                      idReceiver:
+                                          widget.inforUserChat.idUserRecipient,
+                                      timestamp: DateTime.now()
+                                          .millisecondsSinceEpoch
+                                          .toString(),
+                                      content: element["content"].toString(),
+                                      type: element["type"].toString()));
+                                });
+                              }
+                            }
+                          },
+                        ),
+                      )
+                    ],
                   ),
-                  MediaOptions(
-                    visible: showOptions,
-                    onFileSelected: (files) async {
-                      List<dynamic> data = await _sendFile.sendFile(
-                          idUser, widget.inforUserChat.idUserRecipient, files);
-                      if (data.isEmpty) {
-                        const AlertDialog(
-                          title: Text("Thông báo"),
-                          content: Text("Đã xảy ra lỗi!"),
-                        );
-                      } else {
-                        for (var element in data) {
-                          setState(() {
-                            listMessage.add(MessageOfList(
-                                idMessage: "",
-                                idChat: "",
-                                fileName: element["fileName"],
-                                idSender: idUser,
-                                idReceiver:
-                                    widget.inforUserChat.idUserRecipient,
-                                timestamp: DateTime.now()
-                                    .millisecondsSinceEpoch
-                                    .toString(),
-                                content: element["content"].toString(),
-                                type: element["type"].toString()));
-                          });
-                        }
-                      }
-                    },
-                  )
-                ],
-              ),
+                );
+              },
             )),
       ),
     );

@@ -10,6 +10,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:video_player/video_player.dart';
 
+import '../../screens/chatting_with/bloc/send_message_cubit.dart';
+
 // ignore: must_be_immutable
 class ReciverMessItem extends StatefulWidget {
   String? avatarReceiver;
@@ -21,6 +23,8 @@ class ReciverMessItem extends StatefulWidget {
   String? idMessage;
   String? idReceiver;
   String? fileName;
+  String? replyTo;
+  String? userNameReply;
   Function? onDelete;
 
   ReciverMessItem(
@@ -34,6 +38,8 @@ class ReciverMessItem extends StatefulWidget {
       this.idMessage,
       this.idReceiver,
       this.fileName,
+      this.userNameReply,
+      this.replyTo,
       this.onDelete});
 
   @override
@@ -147,9 +153,12 @@ class _ReciverMessItemState extends State<ReciverMessItem> {
                   border: Border.all(
                       color: boxMessShareColor.withOpacity(0.4), width: 1.sp)),
               child:
-                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                 InkWell(
-                  onTap: () {},
+                  onTap: () {   
+                    context.read<SendMessageCubit>().replyMessage(widget.userNameReply!, widget.message!, widget.type!,widget.fileName!,widget.idMessage!);   
+                    Navigator.pop(context);        
+                  },
                   child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 30.sp),
                     child: Column(

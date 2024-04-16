@@ -8,12 +8,14 @@ class HeaderOfChatting extends StatefulWidget {
   String? timeActive;
   String? urlAvatar;
   bool? sex;
+  Function? actionMenuMore;
   HeaderOfChatting(
       {super.key,
       this.nameReceiver,
       this.timeActive,
       this.urlAvatar,
-      this.sex});
+      this.sex,
+      this.actionMenuMore});
 
   @override
   State<HeaderOfChatting> createState() => _HeaderOfChattingState();
@@ -113,15 +115,22 @@ class _HeaderOfChattingState extends State<HeaderOfChatting> {
             ],
           ),
         ),
-        Padding(
-          padding: EdgeInsets.symmetric(
-            horizontal: 16.sp,
-            vertical: 12.sp,
-          ),
-          child: Icon(
-            Icons.menu,
-            size: 31.sp,
-            color: whiteColor.withOpacity(0.9),
+        InkWell(
+          onTap: widget.actionMenuMore == null
+              ? () {}
+              : () {
+                  widget.actionMenuMore!();
+                },
+          child: Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: 16.sp,
+              vertical: 12.sp,
+            ),
+            child: Icon(
+              Icons.menu,
+              size: 31.sp,
+              color: whiteColor.withOpacity(0.9),
+            ),
           ),
         )
       ]),

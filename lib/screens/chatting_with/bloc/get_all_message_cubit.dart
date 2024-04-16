@@ -13,6 +13,7 @@ class MessageOfList {
   final String content;
   final String type;
   final String? fileName;
+  final String? replyTo;
   final String? status;
 
   MessageOfList({
@@ -23,7 +24,8 @@ class MessageOfList {
     required this.timestamp,
     required this.content,
     required this.type,
-    required this.fileName,
+    this.fileName,
+    this.replyTo,
     this.status,
   });
 
@@ -42,6 +44,7 @@ class MessageOfList {
       content: json['content'] ?? "",
       type: json['type'] ?? "",
       fileName: json['fileName'] ?? "",
+      replyTo: json['replyTo'] ?? "",
       status: json['status'] ?? "",
     );
   }

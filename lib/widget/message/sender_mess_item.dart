@@ -12,11 +12,15 @@ import 'package:video_player/video_player.dart';
 
 import '../page_view_image/page_view_image.dart';
 
+// ignore: must_be_immutable
 class SenderMessItem extends StatefulWidget {
   String? content;
   String? time;
   String? type;
   String? fileName;
+  String? contentMessReply;
+  String? idMessReply;
+  String? userNameReply;
   String? idMessage;
   String? idReceiver;
   String? status;
@@ -29,6 +33,9 @@ class SenderMessItem extends StatefulWidget {
       this.time,
       this.type,
       this.fileName,
+      this.contentMessReply,
+      this.idMessReply,
+      this.userNameReply,
       this.idMessage,
       this.idReceiver,
       this.status,

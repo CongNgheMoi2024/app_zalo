@@ -58,9 +58,7 @@ class _HeaderBackState extends State<HeaderBack> {
         Expanded(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(widget.title ?? 'Tiêu đề', style: text18.white.semiBold)
-            ],
+            children: [Text(widget.title ?? '', style: text18.white.semiBold)],
           ),
         ),
         widget.notCheck == false

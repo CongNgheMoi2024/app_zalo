@@ -40,10 +40,8 @@ class GetRequestFriend {
         for (var item in response.data['data']) {
           listUserRequest.add(UserRequest.fromJson(item));
         }
-        print("THANH CONGG");
         return listUserRequest;
       } else {
-        print("DDDDDDDDDDDD ${response.data['message']}");
         return [];
       }
     } catch (e) {

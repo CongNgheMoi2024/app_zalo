@@ -8,17 +8,40 @@ class RoomsUser {
   final String idRoom;
   final UserRecipient userRecipient;
   final LastMessage lastMessage;
+  final bool isGroup;
+  final String groupName;
 
   RoomsUser({
     required this.idRoom,
     required this.userRecipient,
     required this.lastMessage,
+    required this.isGroup,
+    required this.groupName,
   });
   factory RoomsUser.fromJson(Map<String, dynamic> json) {
     return RoomsUser(
         idRoom: json['id'],
-        userRecipient: UserRecipient.fromJson(json['userRecipient']),
-        lastMessage: LastMessage.fromJson(json['lastMessage']));
+        userRecipient: json['userRecipient'] != null
+            ? UserRecipient.fromJson(json['userRecipient'])
+            : UserRecipient(
+                idRecipient: "",
+                name: "",
+                avatar: "",
+                imageCover: "",
+                sex: false,
+                onlineStatus: false),
+        lastMessage: json['lastMessage'] != null
+            ? LastMessage.fromJson(json['lastMessage'])
+            : LastMessage(
+                idMessage: "",
+                idSender: "",
+                idRecipient: "",
+                content: "",
+                type: "",
+                timestamp: DateTime.now().toString(),
+                status: ""),
+        isGroup: json['group'] ?? false,
+        groupName: json['groupName'] ?? "");
   }
 }
 
@@ -100,6 +123,7 @@ class GetAllRoomCubit extends Cubit<GetAllRoomState> {
       );
 
       if (response.statusCode == 200) {
+        print("Response: ${response.data["data"]}");
         emit(GetAllRoomSuccessState(
           (response.data["data"] as List)
               .map((e) => RoomsUser.fromJson(e))
