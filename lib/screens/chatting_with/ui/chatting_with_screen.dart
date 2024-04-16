@@ -2,9 +2,7 @@ import 'dart:convert';
 
 import 'package:app_zalo/constants/index.dart';
 import 'package:app_zalo/env.dart';
-import 'package:app_zalo/models/chat/info_mess_reply.dart';
 import 'package:app_zalo/models/chat/infor_user_chat.dart';
-import 'package:app_zalo/routes/routes.dart';
 import 'package:app_zalo/screens/chatting_with/bloc/get_all_message_cubit.dart';
 import 'package:app_zalo/screens/chatting_with/bloc/get_all_message_state.dart';
 import 'package:app_zalo/screens/chatting_with/bloc/send_message_cubit.dart';
@@ -58,9 +56,7 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
       url: '${Env.url}/ws',
       onConnect: (StompFrame frame) {
         widget.inforUserChat.isGroup == true
-            ?
-            //  "/user/$idUser/queue/messages"
-            client.subscribe(
+            ? client.subscribe(
                 destination:
                     "/user/${widget.inforUserChat.idGroup}/queue/messages",
                 callback: (StompFrame frame) {
@@ -103,6 +99,7 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                   });
                   print("Supriseber on ${frame.body}");
                 });
+
         print('onConnect     tHANHHCOONGG');
       },
       beforeConnect: () async {
@@ -116,8 +113,8 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
     BlocProvider.of<GetAllMessageCubit>(context).GetAllMessageenticate(
         idUser,
         widget.inforUserChat.idUserRecipient,
-        widget.inforUserChat.isGroup,
-        widget.inforUserChat.idGroup);
+        widget.inforUserChat.isGroup!,
+        widget.inforUserChat.idGroup!);
   }
 
   @override
@@ -228,8 +225,8 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                                             idUser,
                                             widget
                                                 .inforUserChat.idUserRecipient,
-                                            widget.inforUserChat.isGroup,
-                                            widget.inforUserChat.idGroup);
+                                            widget.inforUserChat.isGroup!,
+                                            widget.inforUserChat.idGroup!);
                                   },
                                 );
                               } else {
@@ -409,7 +406,7 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                                                   replyTo:
                                                       state.idMessageReply!,
                                                   idMessage: widget
-                                                      .inforUserChat.idGroup,
+                                                      .inforUserChat.idGroup!, // cũ .inforUserChat.idGroup
                                                   idChat: "",
                                                   idSender: idUser,
                                                   idReceiver: widget
@@ -454,7 +451,7 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                                                   fileName: "",
                                                   replyTo: "",
                                                   idMessage: widget
-                                                      .inforUserChat.idGroup,
+                                                      .inforUserChat.idGroup!, // cũ .inforUserChat.idGroup
                                                   idChat: "",
                                                   idSender: idUser,
                                                   idReceiver: widget
