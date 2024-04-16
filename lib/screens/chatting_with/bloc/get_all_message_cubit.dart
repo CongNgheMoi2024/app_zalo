@@ -12,8 +12,8 @@ class MessageOfList {
   final String timestamp;
   final String content;
   final String type;
-  final String? fileName;
-  final String? replyTo;
+  final String fileName;
+  final String replyTo;
   final String? status;
 
   MessageOfList({
@@ -24,8 +24,8 @@ class MessageOfList {
     required this.timestamp,
     required this.content,
     required this.type,
-    this.fileName,
-    this.replyTo,
+    required this.fileName,
+    required this.replyTo,
     this.status,
   });
 

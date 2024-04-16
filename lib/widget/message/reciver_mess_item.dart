@@ -1,4 +1,5 @@
 import 'package:app_zalo/constants/index.dart';
+import 'package:app_zalo/screens/chatting_with/bloc/get_all_message_cubit.dart';
 import 'package:app_zalo/screens/forward/bloc/forward_message_cubit.dart';
 import 'package:app_zalo/screens/forward/ui/forward_message_screen.dart';
 import 'package:app_zalo/screens/home_chat/bloc/get_all_rooms_cubit.dart';
@@ -11,6 +12,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../screens/chatting_with/bloc/send_message_cubit.dart';
+import '../show_message_by_type/show_reply.dart';
 
 // ignore: must_be_immutable
 class ReciverMessItem extends StatefulWidget {
@@ -20,6 +22,7 @@ class ReciverMessItem extends StatefulWidget {
   bool? sex;
   bool? showAvatar;
   String? type;
+  MessageOfList? infoMessReply;
   String? idMessage;
   String? idReceiver;
   String? fileName;
@@ -35,6 +38,7 @@ class ReciverMessItem extends StatefulWidget {
       this.sex,
       this.showAvatar,
       this.type,
+      this.infoMessReply,
       this.idMessage,
       this.idReceiver,
       this.fileName,
@@ -355,7 +359,22 @@ class _ReciverMessItemState extends State<ReciverMessItem> {
                             bottomLeft: Radius.circular(5.sp),
                             bottomRight: Radius.circular(5.sp)),
                       ),
-                      child: widget.type == "IMAGE"
+                      child:widget.infoMessReply != null
+                                ? Column(
+                                children: [
+                                  getWidgetByType(
+                                      widget.userNameReply!,
+                                      widget.infoMessReply!.type,
+                                      widget.infoMessReply!.fileName,
+                                      widget.infoMessReply!.content),
+                                  Text(
+                                    widget.message!,
+                                    style: text16.primary.regular,
+                                    softWrap: true,
+                                  )
+                                ],
+                                  )
+                                : widget.type == "IMAGE"
                           ? ExtendedImageCustom(url: widget.message!)
                           : widget.type == "VIDEO"
                               ? InkWell(

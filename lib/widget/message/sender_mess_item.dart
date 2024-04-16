@@ -1,10 +1,13 @@
 import 'package:app_zalo/constants/index.dart';
+import 'package:app_zalo/models/chat/info_mess_reply.dart';
+import 'package:app_zalo/screens/chatting_with/bloc/get_all_message_cubit.dart';
 import 'package:app_zalo/screens/forward/bloc/forward_message_cubit.dart';
 import 'package:app_zalo/screens/forward/ui/forward_message_screen.dart';
 import 'package:app_zalo/screens/home_chat/bloc/get_all_rooms_cubit.dart';
 import 'package:app_zalo/widget/show_message_by_type/bloc/download_cubit.dart';
 import 'package:app_zalo/widget/show_message_by_type/extended_image.dart';
 import 'package:app_zalo/widget/show_message_by_type/show_file.dart';
+import 'package:app_zalo/widget/show_message_by_type/show_reply.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,9 +21,8 @@ class SenderMessItem extends StatefulWidget {
   String? time;
   String? type;
   String? fileName;
-  String? contentMessReply;
-  String? idMessReply;
-  String? userNameReply;
+  String? nameUserReply;
+  MessageOfList? infoMessReply;
   String? idMessage;
   String? idReceiver;
   String? status;
@@ -33,9 +35,8 @@ class SenderMessItem extends StatefulWidget {
       this.time,
       this.type,
       this.fileName,
-      this.contentMessReply,
-      this.idMessReply,
-      this.userNameReply,
+      this.infoMessReply,
+      this.nameUserReply,
       this.idMessage,
       this.idReceiver,
       this.status,
@@ -337,78 +338,98 @@ class _SenderMessItemState extends State<SenderMessItem> {
                                 bottomLeft: Radius.circular(20.sp),
                               ),
                             ),
-                            child: widget.type == "IMAGE"
-                                ? ExtendedImageCustom(url: widget.content!)
-                                : widget.type == "VIDEO"
-                                    ? InkWell(
-                                        onTap: () {
-                                          setState(() {
-                                            if (_videoPalyerController
-                                                .value.isPlaying) {
-                                              _videoPalyerController.pause();
-                                            } else {
-                                              _videoPalyerController.play();
-                                            }
-                                          });
-                                        },
-                                        child: FutureBuilder(
-                                          future: _initializeVideoPlayerFuture,
-                                          builder: (context, snapshot) {
-                                            if (snapshot.connectionState ==
-                                                ConnectionState.done) {
-                                              return AspectRatio(
-                                                aspectRatio:
-                                                    _videoPalyerController
-                                                        .value.aspectRatio,
-                                                child: VideoPlayer(
-                                                    _videoPalyerController),
-                                              );
-                                            } else {
-                                              return const CircularProgressIndicator();
-                                            }
-                                          },
-                                        ),
-                                      )
-                                    : widget.type == "FILE"
-                                        ? FileView(
-                                            url: widget.content!,
-                                            fileName: widget.fileName!,
+                            child: widget.infoMessReply != null
+                                ? Column(
+                                children: [
+                                  getWidgetByType(
+                                      widget.nameUserReply!,
+                                      widget.infoMessReply!.type,
+                                      widget.infoMessReply!.fileName,
+                                      widget.infoMessReply!.content),
+                                  Text(
+                                    widget.content!,
+                                    style: text16.primary.regular,
+                                    softWrap: true,
+                                  )
+                                ],
+                                  )
+                                : widget.type == "IMAGE"
+                                    ? ExtendedImageCustom(url: widget.content!)
+                                    : widget.type == "VIDEO"
+                                        ? InkWell(
+                                            onTap: () {
+                                              setState(() {
+                                                if (_videoPalyerController
+                                                    .value.isPlaying) {
+                                                  _videoPalyerController
+                                                      .pause();
+                                                } else {
+                                                  _videoPalyerController.play();
+                                                }
+                                              });
+                                            },
+                                            child: FutureBuilder(
+                                              future:
+                                                  _initializeVideoPlayerFuture,
+                                              builder: (context, snapshot) {
+                                                if (snapshot.connectionState ==
+                                                    ConnectionState.done) {
+                                                  return AspectRatio(
+                                                    aspectRatio:
+                                                        _videoPalyerController
+                                                            .value.aspectRatio,
+                                                    child: VideoPlayer(
+                                                        _videoPalyerController),
+                                                  );
+                                                } else {
+                                                  return const CircularProgressIndicator();
+                                                }
+                                              },
+                                            ),
                                           )
-                                        : widget.type == "AUDIO"
-                                            ? InkWell(
-                                                onTap: () {
-                                                  if (isPlaying) {
-                                                    audioPlayer.pause();
-                                                    setState(() {
-                                                      isPlaying = false;
-                                                    });
-                                                  } else {
-                                                    audioPlayer.play(UrlSource(
-                                                        widget.content!));
-                                                    setState(() {
-                                                      isPlaying = true;
-                                                    });
-                                                  }
-                                                },
-                                                child: isPlaying == false
-                                                    ? Text(
-                                                        "Pause Audio Audio.mp3",
-                                                        style: text16
-                                                            .regular.error,
-                                                      )
-                                                    : Text(
-                                                        "Play Audio Audio.mp3",
-                                                        style: text16.regular
-                                                            .copyWith(
-                                                                color:
-                                                                    lightBlue),
-                                                      ),
+                                        : widget.type == "FILE"
+                                            ? FileView(
+                                                url: widget.content!,
+                                                fileName: widget.fileName!,
                                               )
-                                            : Text(
-                                                widget.content!,
-                                                softWrap: true,
-                                                style: text16.primary.regular,
-                                              )),
+                                            : widget.type == "AUDIO"
+                                                ? InkWell(
+                                                    onTap: () {
+                                                      if (isPlaying) {
+                                                        audioPlayer.pause();
+                                                        setState(() {
+                                                          isPlaying = false;
+                                                        });
+                                                      } else {
+                                                        audioPlayer.play(
+                                                            UrlSource(widget
+                                                                .content!));
+                                                        setState(() {
+                                                          isPlaying = true;
+                                                        });
+                                                      }
+                                                    },
+                                                    child: isPlaying == false
+                                                        ? Text(
+                                                            "Pause Audio Audio.mp3",
+                                                            style: text16
+                                                                .regular.error,
+                                                          )
+                                                        : Text(
+                                                            "Play Audio Audio.mp3",
+                                                            style: text16
+                                                                .regular
+                                                                .copyWith(
+                                                                    color:
+                                                                        lightBlue),
+                                                          ),
+                                                  )
+                                                : Text(
+                                                    widget.content!,
+                                                    softWrap: true,
+                                                    style:
+                                                        text16.primary.regular,
+                                                  )),
                       ),
                     ),
             ],

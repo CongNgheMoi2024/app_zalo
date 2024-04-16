@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:app_zalo/constants/index.dart';
 import 'package:app_zalo/env.dart';
+import 'package:app_zalo/models/chat/info_mess_reply.dart';
 import 'package:app_zalo/models/chat/infor_user_chat.dart';
 import 'package:app_zalo/routes/routes.dart';
 import 'package:app_zalo/screens/chatting_with/bloc/get_all_message_cubit.dart';
@@ -17,6 +18,7 @@ import 'package:app_zalo/widget/header/header_of_chatting.dart';
 import 'package:app_zalo/widget/media_options_box/media_options_box.dart';
 import 'package:app_zalo/widget/message/reciver_mess_item.dart';
 import 'package:app_zalo/widget/message/sender_mess_item.dart';
+import 'package:app_zalo/widget/show_message_by_type/show_reply.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -184,18 +186,15 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                                   time: e.timestamp,
                                   type: e.type,
                                   fileName: e.fileName,
-                                  idMessReply: e.replyTo,
-                                  contentMessReply: e.replyTo == ""
-                                      ? ""
-                                      : listMessage
-                                          .firstWhere((element) =>
-                                              element.idMessage == e.replyTo)
-                                          .content,
-                                  userNameReply: widget
-                                      .inforUserChat.name, //LỖI VỚI CHAT GROUP
+                                  infoMessReply: e.replyTo == ""
+                                      ? null
+                                      : listMessage.firstWhere(
+                                        (element) =>element is MessageOfList && element.idMessage ==e.replyTo,
+
+                                        ),
+                                  nameUserReply:"line 194 chatting with screen", //LỖI VỚI CHAT GROUP
                                   idMessage: e.idMessage,
-                                  idReceiver:
-                                      widget.inforUserChat.idUserRecipient,
+                                  idReceiver: widget.inforUserChat.idUserRecipient,
                                   status: e.status,
                                   onDelete: () async {
                                     try {
@@ -246,8 +245,13 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                                   type: e.type,
                                   fileName: e.fileName,
                                   replyTo: e.replyTo,
-                                  userNameReply: widget
-                                      .inforUserChat.name, //LỖI VỚI CHAT GROUP
+                                  infoMessReply: e.replyTo == ""
+                                      ? null
+                                      : listMessage.firstWhere(
+                                        (element) =>element is MessageOfList && element.idMessage ==e.replyTo,
+
+                                        ),
+                                  userNameReply: "Line 253 chatting with screen", //LỖI VỚI CHAT GROUP
                                   idMessage: e.idMessage,
                                   idReceiver:
                                       widget.inforUserChat.idUserRecipient,
@@ -288,31 +292,17 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
               ],
             ),
             bottomNavigationBar:
-            IconButton(onPressed:(){setState(() {
-                                                listMessage.add(MessageOfList(
-                                                    idMessage: widget
-                                                        .inforUserChat.idGroup,
-                                                    idChat: "",
-                                                    idSender: idUser,
-                                                    idReceiver: widget
-                                                        .inforUserChat
-                                                        .idUserRecipient,
-                                                    timestamp: DateFormat(
-                                                            'yyyy-MM-ddTHH:mm:ss.SSSZ')
-                                                        .format(DateTime.now()),
-                                                    content: "testtttt",
-                                                    type: ""));
-                                              });} , icon: Icon(Icons.add)),
-            /*  BlocBuilder<SendMessageCubit, SendMessageState>(
+                BlocBuilder<SendMessageCubit, SendMessageState>(
               builder: (context, state) {
                 // ignore: unused_local_variable
                 bool isReply = state is ReplySendMessageState;
                 return AnimatedContainer(
                   duration: const Duration(milliseconds: 0),
-                  height: showOptions
-                      ? 255.sp + MediaQuery.of(context).viewInsets.bottom
-                      : isReply
-                          ? 145.sp + MediaQuery.of(context).viewInsets.bottom
+                  height: showOptions && isReply
+                      ? 345.sp + MediaQuery.of(context).viewInsets.bottom
+                      : showOptions
+                          ? 255.sp + MediaQuery.of(context).viewInsets.bottom: isReply?
+                          145.sp + MediaQuery.of(context).viewInsets.bottom
                           : 50.sp + MediaQuery.of(context).viewInsets.bottom,
                   color: whiteColor,
                   child: Column(
@@ -327,22 +317,7 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                               child: Row(
                                 children: [
                                   Expanded(
-                                    child: Column(
-                                      children: [
-                                        Text(
-                                          state.nameReply!,
-                                          style: text18.regular.black,
-                                        ),
-                                        Text(
-                                          state.contentMessRep!,
-                                          style: text14.regular.copyWith(
-                                              color: Colors.black
-                                                  .withOpacity(0.5)),
-                                          overflow: TextOverflow.ellipsis,
-                                          maxLines: 3,
-                                        ),
-                                      ],
-                                    ),
+                                    child: getWidgetByType(state.nameReply!, state.typeMessRep!, state.fileName!, state.contentMessRep!),
                                   ),
                                   IconButton(
                                       onPressed: () {
@@ -353,6 +328,7 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                                       icon: const Icon(
                                         Icons.close,
                                         size: 30,
+                                        color: Colors.grey,
                                       ))
                                 ],
                               ),
@@ -424,6 +400,31 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                                               "replyTo": state.idMessageReply,
                                             }),
                                           );
+                                          if (widget.inforUserChat
+                                                  .isGroup = // Chỉ cập nhât list message khi chat room là group
+                                              true) {
+                                            setState(() {
+                                              listMessage.add(MessageOfList(
+                                                  fileName: "",
+                                                  replyTo:
+                                                      state.idMessageReply!,
+                                                  idMessage: widget
+                                                      .inforUserChat.idGroup,
+                                                  idChat: "",
+                                                  idSender: idUser,
+                                                  idReceiver: widget
+                                                      .inforUserChat
+                                                      .idUserRecipient,
+                                                  timestamp: DateFormat(
+                                                          'yyyy-MM-ddTHH:mm:ss.SSSZ')
+                                                      .format(DateTime.now()),
+                                                  content: message,
+                                                  type: ""));
+                                            });
+                                          }
+                                          context
+                                              .read<SendMessageCubit>()
+                                              .defaultState();
                                         } else {
                                           client.send(
                                             destination:
@@ -445,14 +446,13 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                                                   .format(DateTime.now()),
                                             }),
                                           );
-                                        }
-
-                                        controllerInputMessage.clear();
-                                        try {
-                                          if (widget.inforUserChat.isGroup =
+                                          if (widget.inforUserChat
+                                                  .isGroup = // Chỉ cập nhât list message khi chat room là group
                                               true) {
                                             setState(() {
                                               listMessage.add(MessageOfList(
+                                                  fileName: "",
+                                                  replyTo: "",
                                                   idMessage: widget
                                                       .inforUserChat.idGroup,
                                                   idChat: "",
@@ -467,9 +467,9 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                                                   type: ""));
                                             });
                                           }
-                                        } catch (e) {
-                                          print("ERROR=======" + e.toString());
                                         }
+
+                                        controllerInputMessage.clear();
                                       }
                                     },
                                     child: Padding(
@@ -537,6 +537,7 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                               for (var element in data) {
                                 setState(() {
                                   listMessage.add(MessageOfList(
+                                      replyTo: "",
                                       idMessage: "",
                                       idChat: "",
                                       fileName: element["fileName"],
@@ -558,8 +559,7 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                   ),
                 );
               },
-            ) */
-            ),
+            )),
       ),
     );
   }
