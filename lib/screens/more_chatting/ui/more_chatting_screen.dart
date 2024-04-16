@@ -1,6 +1,9 @@
 import 'package:app_zalo/constants/index.dart';
 import 'package:app_zalo/models/chat/infor_user_chat.dart';
 import 'package:app_zalo/routes/routes.dart';
+import 'package:app_zalo/screens/fast_contact/bloc/fast_contact_cubit.dart';
+import 'package:app_zalo/screens/fast_contact/bloc/get_friends_cubit.dart';
+import 'package:app_zalo/screens/member_group/ui/member_group_screen.dart';
 import 'package:app_zalo/screens/more_chatting/bloc/delete_room_cubit.dart';
 import 'package:app_zalo/screens/more_chatting/bloc/delete_room_state.dart';
 import 'package:app_zalo/widget/header/header_trans.dart';
@@ -116,10 +119,63 @@ class _MoreChattingScreenState extends State<MoreChattingScreen> {
                     ),
                   ],
                 )),
+            SizedBox(
+              height: 20.sp,
+            ),
+            InkWell(
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => BlocProvider<FastContactCubit>(
+                            create: (BuildContext context) =>
+                                FastContactCubit(),
+                            child: MemberGroupScreen(
+                              members: widget.inforUserChat!.members,
+                            ))));
+              },
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(left: 10.sp),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 15.sp,
+                    ),
+                    child: Icon(
+                      Icons.group_outlined,
+                      size: 30.sp,
+                      color: primaryColor,
+                    ),
+                  ),
+                  Expanded(
+                    child: Container(
+                        margin: EdgeInsets.only(top: 10.sp),
+                        padding: EdgeInsets.symmetric(
+                          vertical: 15.sp,
+                          horizontal: 10.sp,
+                        ),
+                        decoration: BoxDecoration(
+                          border: Border(
+                            top: BorderSide(
+                                color: primaryColor.withOpacity(0.2),
+                                width: 1.sp),
+                            bottom: BorderSide(
+                                color: primaryColor.withOpacity(0.2),
+                                width: 1.sp),
+                          ),
+                        ),
+                        child: Text(
+                            "${widget.inforUserChat!.members.length} Thành viên",
+                            style: text17.primary.regular)),
+                  ),
+                ],
+              ),
+            ),
             BlocBuilder<DeleteRoomCubit, DeleteRoomState>(
                 builder: (context, stateFastContact) {
               if (stateFastContact is LoadingDeleteRoomState) {
-                return Center(
+                return const Center(
                   child: CircularProgressIndicator(),
                 );
               } else if (stateFastContact is DeleteRoomSuccessState) {
@@ -127,7 +183,7 @@ class _MoreChattingScreenState extends State<MoreChattingScreen> {
                   Navigator.pushReplacementNamed(
                       context, RouterName.dashboardScreen);
                 });
-                return Center();
+                return const Center();
               } else {
                 return InkWell(
                   onTap: () {

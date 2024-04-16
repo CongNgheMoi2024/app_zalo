@@ -91,7 +91,7 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
                               BlocBuilder<FastContactCubit, FastContactState>(
                                   builder: (context, stateFastContact) {
                             if (stateFastContact is LoadingFastContactState) {
-                              return Center(
+                              return const Center(
                                 child: CircularProgressIndicator(),
                               );
                             } else if (stateFastContact
@@ -179,10 +179,8 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
                                 },
                               ).toList());
                             }
-                            return Container(
-                              child: Center(
-                                child: Text("Không có dữ liệu"),
-                              ),
+                            return const Center(
+                              child: Text("Không có dữ liệu"),
                             );
                           }),
                         ),
@@ -210,6 +208,13 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
                           children: [
                             ButtonBottomNavigated(
                               title: "Tạo nhóm",
+                              isValidate: textNameGroupController
+                                      .text.isNotEmpty &&
+                                  textNameGroupController.text.isNotEmpty &&
+                                  listChecked
+                                          .where((element) => element == true)
+                                          .length >=
+                                      2,
                               onPressed: () {
                                 for (int i = 0; i < listIdFriends.length; i++) {
                                   if (listChecked.length > i &&
@@ -222,7 +227,11 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
                                     .read<CreateGroupCubit>()
                                     .createGroup(textNameGroupController.text,
                                         selectedIds)
-                                    .then((value) => selectedIds.clear());
+                                    .then((value) => {
+                                          selectedIds.clear(),
+                                          listChecked.clear(),
+                                          listIdFriends.clear()
+                                        });
                               },
                             ),
                             state is ErrorCreateGroupState

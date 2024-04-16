@@ -11,6 +11,7 @@ class RoomsUser {
   final bool isGroup;
   final String groupName;
   List<String>? members = [];
+  String? adminId;
 
   RoomsUser({
     required this.idRoom,
@@ -19,6 +20,7 @@ class RoomsUser {
     required this.isGroup,
     required this.groupName,
     this.members,
+    this.adminId,
   });
   factory RoomsUser.fromJson(Map<String, dynamic> json) {
     return RoomsUser(
@@ -46,7 +48,8 @@ class RoomsUser {
         groupName: json['groupName'] ?? "",
         members: json['members'] != null
             ? (json['members'] as List).map((e) => e.toString()).toList()
-            : []);
+            : [],
+        adminId: json['adminId'] ?? "");
   }
 }
 

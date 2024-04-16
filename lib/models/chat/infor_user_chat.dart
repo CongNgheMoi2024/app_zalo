@@ -8,6 +8,7 @@ class InforUserChat {
   String? idGroup;
   String? nameGroup;
   List<String> members = [];
+  String? idAdmin;
   InforUserChat(
       {required this.idUserRecipient,
       required this.name,
@@ -17,5 +18,6 @@ class InforUserChat {
       this.isGroup,
       this.idGroup,
       this.nameGroup,
-      required this.members});
+      required this.members,
+      this.idAdmin});
 }
