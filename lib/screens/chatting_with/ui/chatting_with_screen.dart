@@ -60,9 +60,7 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
       url: '${Env.url}/ws',
       onConnect: (StompFrame frame) {
         widget.inforUserChat.isGroup == true
-            ?
-            //  "/user/$idUser/queue/messages"
-            client.subscribe(
+            ? client.subscribe(
                 destination:
                     "/user/${widget.inforUserChat.idGroup}/queue/messages",
                 callback: (StompFrame frame) {
@@ -99,6 +97,7 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                   });
                   print("Supriseber on ${frame.body}");
                 });
+
         print('onConnect     tHANHHCOONGG');
       },
       beforeConnect: () async {
@@ -112,8 +111,8 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
     BlocProvider.of<GetAllMessageCubit>(context).GetAllMessageenticate(
         idUser,
         widget.inforUserChat.idUserRecipient,
-        widget.inforUserChat.isGroup,
-        widget.inforUserChat.idGroup);
+        widget.inforUserChat.isGroup!,
+        widget.inforUserChat.idGroup!);
   }
 
   @override
@@ -216,8 +215,8 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                                             idUser,
                                             widget
                                                 .inforUserChat.idUserRecipient,
-                                            widget.inforUserChat.isGroup,
-                                            widget.inforUserChat.idGroup);
+                                            widget.inforUserChat.isGroup!,
+                                            widget.inforUserChat.idGroup!);
                                   },
                                 );
                               } else {
@@ -325,6 +324,8 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                         MediaQuery.of(context).viewInsets.bottom > 10
                             ? InkWell(
                                 onTap: () {
+                                  print(
+                                      "Send message ${widget.inforUserChat.isGroup}");
                                   String message = controllerInputMessage.text;
                                   if (message.isNotEmpty) {
                                     // ignore: unrelated_type_equality_checks
@@ -340,18 +341,15 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                                         "recipientId": widget
                                             .inforUserChat.idUserRecipient,
                                         "content": message,
-                                        "timestamp": DateFormat(
-                                                'yyyy-MM-ddTHH:mm:ss.SSSZ')
-                                            .format(DateTime.now()),
                                       }),
                                     );
 
                                     controllerInputMessage.clear();
-                                    if (widget.inforUserChat.isGroup = false) {
+                                    if (widget.inforUserChat.isGroup != true) {
                                       setState(() {
                                         listMessage.add(MessageOfList(
                                             idMessage:
-                                                widget.inforUserChat.idGroup,
+                                                widget.inforUserChat.idGroup!,
                                             idChat: "",
                                             idSender: idUser,
                                             idReceiver: widget
