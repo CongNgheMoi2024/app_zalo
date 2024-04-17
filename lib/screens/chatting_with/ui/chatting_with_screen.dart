@@ -409,17 +409,14 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                                               "replyTo": state.idMessageReply,
                                             }),
                                           );
-                                          if (widget.inforUserChat
-                                                  .isGroup = // Chỉ cập nhât list message khi chat room là group
-                                              true) {
+                                          if (!widget.inforUserChat.isGroup!) {
                                             setState(() {
                                               listMessage.add(MessageOfList(
                                                   fileName: "",
                                                   replyTo:
                                                       state.idMessageReply!,
                                                   idMessage: widget
-                                                      .inforUserChat
-                                                      .idGroup!, // cũ .inforUserChat.idGroup
+                                                      .inforUserChat.idGroup!,
                                                   idChat: "",
                                                   idSender: idUser,
                                                   idReceiver: widget
@@ -456,9 +453,7 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                                                   .format(DateTime.now()),
                                             }),
                                           );
-                                          if (widget.inforUserChat
-                                                  .isGroup = // Chỉ cập nhât list message khi chat room là group
-                                              true) {
+                                          if (!widget.inforUserChat.isGroup!) {
                                             setState(() {
                                               listMessage.add(MessageOfList(
                                                   fileName: "",
