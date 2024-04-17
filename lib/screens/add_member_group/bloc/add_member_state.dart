@@ -11,5 +11,6 @@ class ErrorAddMemberState extends AddMemberState {
 }
 
 class AddMemberSuccessState extends AddMemberState {
-  AddMemberSuccessState();
+  List<String>? members;
+  AddMemberSuccessState(this.members);
 }

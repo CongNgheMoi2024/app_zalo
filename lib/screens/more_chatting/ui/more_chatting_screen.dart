@@ -16,8 +16,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class MoreChattingScreen extends StatefulWidget {
   InforUserChat? inforUserChat;
   Function? deactivate;
+  Function? sendAddMember;
 
-  MoreChattingScreen({super.key, this.inforUserChat, this.deactivate});
+  MoreChattingScreen(
+      {super.key, this.inforUserChat, this.deactivate, this.sendAddMember});
 
   @override
   State<MoreChattingScreen> createState() => _MoreChattingScreenState();
@@ -127,6 +129,9 @@ class _MoreChattingScreenState extends State<MoreChattingScreen> {
                                           ),
                                         ],
                                         child: AddMemberGroupScreen(
+                                          sendAddMember: widget.sendAddMember!,
+                                          idGroup:
+                                              widget.inforUserChat!.idGroup!,
                                           members:
                                               widget.inforUserChat!.members,
                                         ))));
