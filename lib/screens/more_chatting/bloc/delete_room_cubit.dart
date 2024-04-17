@@ -8,26 +8,28 @@ class DeleteRoomCubit extends Cubit<DeleteRoomState> {
   DeleteRoomCubit() : super(InitialDeleteRoomState());
 
   // ignore: non_constant_identifier_names
-  Future<void> DeleteRoomenticate(String idRoom) async {
-    emit(LoadingDeleteRoomState());
+  Future<void> deleteGroup(String idGroup) async {
+    // emit(LoadingDeleteRoomState());
     String accessToken = HiveStorage().token;
 
     try {
       Dio dio = Dio();
-      String apiUrl = "${Env.url}/api/v1/delete-room/$idRoom";
+      String apiUrl = "${Env.url}/api/v1/delete-room/$idGroup";
 
       Response response = await dio.delete(
         apiUrl,
         options: Options(headers: {"Authorization": "Bearer $accessToken"}),
       );
+
+      print("Response delete room $response");
       if (response.statusCode == 200) {
-        print("XOOOOOOOOOOOOOOOOAAAA thanh cong");
         emit(DeleteRoomSuccessState());
       } else {
-        emit(ErrorDeleteRoomState("DeleteRoom failed.}"));
+        print("Erroooooor ${response.data['message']}");
+        emit(ErrorDeleteRoomState("DeleteRoom failed. "));
       }
     } catch (e) {
-      print("XOAA $e");
+      print("Error delete room $e");
       emit(ErrorDeleteRoomState(e.toString()));
     }
   }

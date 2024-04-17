@@ -55,6 +55,8 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
         config: StompConfig.sockJS(
       url: '${Env.url}/ws',
       onConnect: (StompFrame frame) {
+        print('IDDDDDDĐ group ${widget.inforUserChat.idGroup}');
+
         widget.inforUserChat.isGroup == true
             ? client.subscribe(
                 destination:
@@ -152,6 +154,9 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                                 create: (BuildContext context) =>
                                     DeleteRoomCubit(),
                                 child: MoreChattingScreen(
+                                  deactivate: () {
+                                    client.deactivate();
+                                  },
                                   inforUserChat: widget.inforUserChat,
                                 ))));
                   },
@@ -177,7 +182,19 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                             children: listMessage.asMap().entries.map((entry) {
                               final index = entry.key;
                               final e = entry.value;
-                              if (e.idSender == idUser) {
+                              if (e.type == "ADD_MEMBER") {
+                                return Container(
+                                  padding: EdgeInsets.symmetric(vertical: 5.sp),
+                                  child: Center(
+                                    child: Text(
+                                      e.content,
+                                      style: text18.regular.copyWith(
+                                        color: primaryColor.withOpacity(0.7),
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              } else if (e.idSender == idUser) {
                                 return SenderMessItem(
                                   content: e.content,
                                   time: e.timestamp,

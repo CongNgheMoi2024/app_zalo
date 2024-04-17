@@ -1,6 +1,7 @@
 import 'package:app_zalo/constants/index.dart';
 import 'package:app_zalo/screens/fast_contact/bloc/fast_contact_cubit.dart';
 import 'package:app_zalo/screens/fast_contact/bloc/fast_contact_state.dart';
+import 'package:app_zalo/widget/button/button_bottom_navigated.dart';
 import 'package:app_zalo/widget/dismiss_keyboard_widget.dart';
 import 'package:app_zalo/widget/header/header_trans.dart';
 import 'package:app_zalo/widget/text_input/text_input_widget.dart';
@@ -171,6 +172,20 @@ class _AddMemberGroupScreenState extends State<AddMemberGroupScreen> {
             ),
           ),
         ],
+      ),
+      bottomNavigationBar: ButtonBottomNavigated(
+        title: "Tạo nhóm",
+        onPressed: () {
+          for (int i = 0; i < listIdFriends.length; i++) {
+            if (listChecked.length > i && listChecked[i]) {
+              selectedIds.add(listIdFriends[i]);
+            }
+          }
+          print("Selected Ids: $selectedIds");
+          selectedIds.clear();
+          listChecked.clear();
+          listIdFriends.clear();
+        },
       ),
       // bottomNavigationBar: Container(
       //     height: 100.sp,

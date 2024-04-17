@@ -3,7 +3,6 @@ import 'package:app_zalo/models/chat/infor_user_chat.dart';
 import 'package:app_zalo/routes/routes.dart';
 import 'package:app_zalo/screens/add_member_group/ui/add_member_group_screen.dart';
 import 'package:app_zalo/screens/fast_contact/bloc/fast_contact_cubit.dart';
-import 'package:app_zalo/screens/fast_contact/bloc/get_friends_cubit.dart';
 import 'package:app_zalo/screens/member_group/ui/member_group_screen.dart';
 import 'package:app_zalo/screens/more_chatting/bloc/delete_room_cubit.dart';
 import 'package:app_zalo/screens/more_chatting/bloc/delete_room_state.dart';
@@ -11,10 +10,12 @@ import 'package:app_zalo/widget/header/header_trans.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+// ignore: must_be_immutable
 class MoreChattingScreen extends StatefulWidget {
   InforUserChat? inforUserChat;
+  Function? deactivate;
 
-  MoreChattingScreen({super.key, this.inforUserChat});
+  MoreChattingScreen({super.key, this.inforUserChat, this.deactivate});
 
   @override
   State<MoreChattingScreen> createState() => _MoreChattingScreenState();
@@ -196,23 +197,28 @@ class _MoreChattingScreenState extends State<MoreChattingScreen> {
               ),
             ),
             BlocBuilder<DeleteRoomCubit, DeleteRoomState>(
-                builder: (context, stateFastContact) {
-              if (stateFastContact is LoadingDeleteRoomState) {
+                builder: (context, stateDeleteRoom) {
+              if (stateDeleteRoom is LoadingDeleteRoomState) {
                 return const Center(
                   child: CircularProgressIndicator(),
                 );
-              } else if (stateFastContact is DeleteRoomSuccessState) {
+              } else if (stateDeleteRoom is DeleteRoomSuccessState) {
                 Future.delayed(Duration.zero, () {
                   Navigator.pushReplacementNamed(
                       context, RouterName.dashboardScreen);
                 });
-                return const Center();
+                return Container(
+                  child: Text("Xóa nhóm thành công"),
+                );
+              } else if (stateDeleteRoom is ErrorDeleteRoomState) {
+                return Text("Xóa nhóm thất bại", style: text17.error.regular);
               } else {
                 return InkWell(
                   onTap: () {
+                    widget.deactivate!();
                     context
                         .read<DeleteRoomCubit>()
-                        .DeleteRoomenticate(widget.inforUserChat!.idGroup!);
+                        .deleteGroup(widget.inforUserChat!.idGroup ?? "");
                   },
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
