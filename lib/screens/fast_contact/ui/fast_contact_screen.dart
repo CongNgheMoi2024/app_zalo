@@ -82,10 +82,9 @@ class _FastContactScreenState extends State<FastContactScreen> {
                         width: width,
                         child: Row(
                           children: [
-                            CircleAvatar(
+                            const CircleAvatar(
                               radius: 20,
-                              backgroundImage: const AssetImage(Png.imgUserGirl)
-                                  as ImageProvider,
+                              backgroundImage: AssetImage(Png.imgUserGirl),
                             ),
                             SizedBox.fromSize(
                               size: Size.fromWidth(30.sp),

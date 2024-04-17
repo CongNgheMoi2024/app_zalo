@@ -1,11 +1,10 @@
 import 'package:app_zalo/constants/index.dart';
 import 'package:app_zalo/screens/add_friend/bloc/add_friend_cubit.dart';
 import 'package:app_zalo/screens/add_friend/bloc/add_friend_state.dart';
-import 'package:app_zalo/screens/fast_contact/bloc/get_friends_state.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+// ignore: must_be_immutable
 class AddFriendScreen extends StatefulWidget {
   String? idFriend;
   String? avatarFriend;
@@ -26,7 +25,6 @@ class _AddFriendScreenState extends State<AddFriendScreen> {
         child: Scaffold(
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
-        
         children: [
           SizedBox(
             width: width,

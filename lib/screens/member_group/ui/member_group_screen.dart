@@ -1,8 +1,6 @@
 import 'package:app_zalo/constants/index.dart';
 import 'package:app_zalo/screens/fast_contact/bloc/fast_contact_cubit.dart';
 import 'package:app_zalo/screens/fast_contact/bloc/fast_contact_state.dart';
-import 'package:app_zalo/screens/fast_contact/bloc/get_friends_cubit.dart';
-import 'package:app_zalo/screens/fast_contact/bloc/get_friends_state.dart';
 import 'package:app_zalo/widget/header/header_trans.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

@@ -1,6 +1,7 @@
 import 'package:app_zalo/constants/index.dart';
 import 'package:app_zalo/models/chat/infor_user_chat.dart';
 import 'package:app_zalo/routes/routes.dart';
+import 'package:app_zalo/screens/add_member_group/ui/add_member_group_screen.dart';
 import 'package:app_zalo/screens/fast_contact/bloc/fast_contact_cubit.dart';
 import 'package:app_zalo/screens/fast_contact/bloc/get_friends_cubit.dart';
 import 'package:app_zalo/screens/member_group/ui/member_group_screen.dart';
@@ -106,16 +107,38 @@ class _MoreChattingScreenState extends State<MoreChattingScreen> {
                                 style: text16.primary.regular))
                       ],
                     ),
-                    Column(
-                      children: [
-                        Icon(Icons.add_reaction_outlined, size: 30.sp),
-                        Container(
-                            margin: EdgeInsets.only(top: 5.sp),
-                            width: width * 0.2,
-                            child: Text("Thêm thành viên",
-                                textAlign: TextAlign.center,
-                                style: text16.primary.regular))
-                      ],
+                    InkWell(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => MultiBlocProvider(
+                                        providers: [
+                                          BlocProvider<FastContactCubit>(
+                                            create: (BuildContext context) =>
+                                                FastContactCubit(),
+                                          ),
+                                          // BlocProvider<ForwardMessageCubit>(
+                                          //   create: (BuildContext context) =>
+                                          //       ForwardMessageCubit(),
+                                          // ),
+                                        ],
+                                        child: AddMemberGroupScreen(
+                                          members:
+                                              widget.inforUserChat!.members,
+                                        ))));
+                      },
+                      child: Column(
+                        children: [
+                          Icon(Icons.add_reaction_outlined, size: 30.sp),
+                          Container(
+                              margin: EdgeInsets.only(top: 5.sp),
+                              width: width * 0.2,
+                              child: Text("Thêm thành viên",
+                                  textAlign: TextAlign.center,
+                                  style: text16.primary.regular))
+                        ],
+                      ),
                     ),
                   ],
                 )),

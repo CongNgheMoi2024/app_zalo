@@ -24,7 +24,6 @@ class DeleteRoomCubit extends Cubit<DeleteRoomState> {
         print("XOOOOOOOOOOOOOOOOAAAA thanh cong");
         emit(DeleteRoomSuccessState());
       } else {
-        print(" that bai");
         emit(ErrorDeleteRoomState("DeleteRoom failed.}"));
       }
     } catch (e) {
