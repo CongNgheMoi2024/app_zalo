@@ -6,7 +6,6 @@ import 'package:app_zalo/screens/search/bloc/search_state.dart';
 import 'package:app_zalo/utils/regex.dart';
 import 'package:app_zalo/widget/dismiss_keyboard_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SearchScreen extends StatefulWidget {

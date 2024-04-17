@@ -186,12 +186,15 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                                   infoMessReply: e.replyTo == ""
                                       ? null
                                       : listMessage.firstWhere(
-                                        (element) =>element is MessageOfList && element.idMessage ==e.replyTo,
-
+                                          (element) =>
+                                              element is MessageOfList &&
+                                              element.idMessage == e.replyTo,
                                         ),
-                                  nameUserReply:"line 194 chatting with screen", //LỖI VỚI CHAT GROUP
+                                  nameUserReply:
+                                      "line 194 chatting with screen", //LỖI VỚI CHAT GROUP
                                   idMessage: e.idMessage,
-                                  idReceiver: widget.inforUserChat.idUserRecipient,
+                                  idReceiver:
+                                      widget.inforUserChat.idUserRecipient,
                                   status: e.status,
                                   onDelete: () async {
                                     try {
@@ -245,10 +248,12 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                                   infoMessReply: e.replyTo == ""
                                       ? null
                                       : listMessage.firstWhere(
-                                        (element) =>element is MessageOfList && element.idMessage ==e.replyTo,
-
+                                          (element) =>
+                                              element is MessageOfList &&
+                                              element.idMessage == e.replyTo,
                                         ),
-                                  userNameReply: "Line 253 chatting with screen", //LỖI VỚI CHAT GROUP
+                                  userNameReply:
+                                      "Line 253 chatting with screen", //LỖI VỚI CHAT GROUP
                                   idMessage: e.idMessage,
                                   idReceiver:
                                       widget.inforUserChat.idUserRecipient,
@@ -298,9 +303,12 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                   height: showOptions && isReply
                       ? 345.sp + MediaQuery.of(context).viewInsets.bottom
                       : showOptions
-                          ? 255.sp + MediaQuery.of(context).viewInsets.bottom: isReply?
-                          145.sp + MediaQuery.of(context).viewInsets.bottom
-                          : 50.sp + MediaQuery.of(context).viewInsets.bottom,
+                          ? 255.sp + MediaQuery.of(context).viewInsets.bottom
+                          : isReply
+                              ? 145.sp +
+                                  MediaQuery.of(context).viewInsets.bottom
+                              : 50.sp +
+                                  MediaQuery.of(context).viewInsets.bottom,
                   color: whiteColor,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -314,7 +322,11 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                               child: Row(
                                 children: [
                                   Expanded(
-                                    child: getWidgetByType(state.nameReply!, state.typeMessRep!, state.fileName!, state.contentMessRep!),
+                                    child: getWidgetByType(
+                                        state.nameReply!,
+                                        state.typeMessRep!,
+                                        state.fileName!,
+                                        state.contentMessRep!),
                                   ),
                                   IconButton(
                                       onPressed: () {
@@ -397,16 +409,14 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                                               "replyTo": state.idMessageReply,
                                             }),
                                           );
-                                          if (widget.inforUserChat
-                                                  .isGroup = // Chỉ cập nhât list message khi chat room là group
-                                              true) {
+                                          if (!widget.inforUserChat.isGroup!) {
                                             setState(() {
                                               listMessage.add(MessageOfList(
                                                   fileName: "",
                                                   replyTo:
                                                       state.idMessageReply!,
                                                   idMessage: widget
-                                                      .inforUserChat.idGroup!, // cũ .inforUserChat.idGroup
+                                                      .inforUserChat.idGroup!,
                                                   idChat: "",
                                                   idSender: idUser,
                                                   idReceiver: widget

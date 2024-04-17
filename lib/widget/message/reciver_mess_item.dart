@@ -157,11 +157,16 @@ class _ReciverMessItemState extends State<ReciverMessItem> {
                   border: Border.all(
                       color: boxMessShareColor.withOpacity(0.4), width: 1.sp)),
               child:
-                Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                 InkWell(
-                  onTap: () {   
-                    context.read<SendMessageCubit>().replyMessage(widget.userNameReply!, widget.message!, widget.type!,widget.fileName!,widget.idMessage!);   
-                    Navigator.pop(context);        
+                  onTap: () {
+                    context.read<SendMessageCubit>().replyMessage(
+                        widget.userNameReply!,
+                        widget.message!,
+                        widget.type!,
+                        widget.fileName!,
+                        widget.idMessage!);
+                    Navigator.pop(context);
                   },
                   child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 30.sp),
@@ -262,6 +267,7 @@ class _ReciverMessItemState extends State<ReciverMessItem> {
   void initState() {
     super.initState();
     if (widget.type == "VIDEO") {
+      // ignore: deprecated_member_use
       _videoPalyerController = VideoPlayerController.network(widget.message!);
       _initializeVideoPlayerFuture = _videoPalyerController.initialize();
     }
@@ -359,61 +365,62 @@ class _ReciverMessItemState extends State<ReciverMessItem> {
                             bottomLeft: Radius.circular(5.sp),
                             bottomRight: Radius.circular(5.sp)),
                       ),
-                      child:widget.infoMessReply != null
-                                ? Column(
-                                children: [
-                                  getWidgetByType(
-                                      widget.userNameReply!,
-                                      widget.infoMessReply!.type,
-                                      widget.infoMessReply!.fileName,
-                                      widget.infoMessReply!.content),
-                                  Text(
-                                    widget.message!,
-                                    style: text16.primary.regular,
-                                    softWrap: true,
-                                  )
-                                ],
-                                  )
-                                : widget.type == "IMAGE"
-                          ? ExtendedImageCustom(url: widget.message!)
-                          : widget.type == "VIDEO"
-                              ? InkWell(
-                                  onTap: () {
-                                    setState(() {
-                                      if (_videoPalyerController
-                                          .value.isPlaying) {
-                                        _videoPalyerController.pause();
-                                      } else {
-                                        _videoPalyerController.play();
-                                      }
-                                    });
-                                  },
-                                  child: FutureBuilder(
-                                    future: _initializeVideoPlayerFuture,
-                                    builder: (context, snapshot) {
-                                      if (snapshot.connectionState ==
-                                          ConnectionState.done) {
-                                        return AspectRatio(
-                                          aspectRatio: _videoPalyerController
-                                              .value.aspectRatio,
-                                          child: VideoPlayer(
-                                              _videoPalyerController),
-                                        );
-                                      } else {
-                                        return const CircularProgressIndicator();
-                                      }
-                                    },
-                                  ),
+                      child: widget.infoMessReply != null
+                          ? Column(
+                              children: [
+                                getWidgetByType(
+                                    widget.userNameReply!,
+                                    widget.infoMessReply!.type,
+                                    widget.infoMessReply!.fileName,
+                                    widget.infoMessReply!.content),
+                                Text(
+                                  widget.message!,
+                                  style: text16.primary.regular,
+                                  softWrap: true,
                                 )
-                              : widget.type == "FILE"
-                                  ? FileView(
-                                      url: widget.message!,
-                                      fileName: widget.fileName!,
+                              ],
+                            )
+                          : widget.type == "IMAGE"
+                              ? ExtendedImageCustom(url: widget.message!)
+                              : widget.type == "VIDEO"
+                                  ? InkWell(
+                                      onTap: () {
+                                        setState(() {
+                                          if (_videoPalyerController
+                                              .value.isPlaying) {
+                                            _videoPalyerController.pause();
+                                          } else {
+                                            _videoPalyerController.play();
+                                          }
+                                        });
+                                      },
+                                      child: FutureBuilder(
+                                        future: _initializeVideoPlayerFuture,
+                                        builder: (context, snapshot) {
+                                          if (snapshot.connectionState ==
+                                              ConnectionState.done) {
+                                            return AspectRatio(
+                                              aspectRatio:
+                                                  _videoPalyerController
+                                                      .value.aspectRatio,
+                                              child: VideoPlayer(
+                                                  _videoPalyerController),
+                                            );
+                                          } else {
+                                            return const CircularProgressIndicator();
+                                          }
+                                        },
+                                      ),
                                     )
-                                  : Text(
-                                      widget.message!,
-                                      style: text16.primary.regular,
-                                    )),
+                                  : widget.type == "FILE"
+                                      ? FileView(
+                                          url: widget.message!,
+                                          fileName: widget.fileName!,
+                                        )
+                                      : Text(
+                                          widget.message!,
+                                          style: text16.primary.regular,
+                                        )),
                 ),
               ),
             ],

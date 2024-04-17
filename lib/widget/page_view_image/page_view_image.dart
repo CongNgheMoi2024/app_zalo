@@ -11,7 +11,7 @@ class ImagePageView extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: Text("Image Page View"),
+          title: const Text("Image Page View"),
           backgroundColor: primaryColor,
         ),
         body: Container(

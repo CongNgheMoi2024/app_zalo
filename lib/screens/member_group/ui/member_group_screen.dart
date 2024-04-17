@@ -2,6 +2,8 @@ import 'package:app_zalo/constants/index.dart';
 import 'package:app_zalo/screens/member_group/bloc/get_members_cubit.dart';
 import 'package:app_zalo/screens/member_group/bloc/get_members_state.dart';
 import 'package:app_zalo/storages/hive_storage.dart';
+import 'package:app_zalo/screens/fast_contact/bloc/fast_contact_cubit.dart';
+import 'package:app_zalo/screens/fast_contact/bloc/fast_contact_state.dart';
 import 'package:app_zalo/widget/header/header_trans.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

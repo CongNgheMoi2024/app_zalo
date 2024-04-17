@@ -3,10 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 
-enum DownloadState{initial,loading,success,error}
+enum DownloadState { initial, loading, success, error }
 
-class DownloadCubit extends Cubit<DownloadState>{
-  DownloadCubit(): super(DownloadState.initial);
+class DownloadCubit extends Cubit<DownloadState> {
+  DownloadCubit() : super(DownloadState.initial);
   Future<void> downloadFileAndOpen(String url) async {
     emit(DownloadState.loading);
     try {
@@ -27,20 +27,17 @@ class DownloadCubit extends Cubit<DownloadState>{
         filePath,
         options: Options(responseType: ResponseType.bytes),
       );
-      if(response.statusCode == 200){
+      if (response.statusCode == 200) {
         emit(DownloadState.success);
         OpenFile.open(filePath);
-      }
-      else{
+      } else {
         emit(DownloadState.error);
       }
-      // Mở tệp bằng ứng dụng khác
-    } catch (e) {
-      // Xử lý lỗi nếu có
-      print('Đã gặp lỗi: $e');
-    }
+      // ignore: empty_catches
+    } catch (e) {}
   }
-  void resetState(){
+
+  void resetState() {
     emit(DownloadState.initial);
   }
 }

@@ -6,7 +6,6 @@ class AcceptFriend {
   String idUser = HiveStorage().idUser;
   String accessToken = HiveStorage().token;
   Future<bool> acceptFriend(String idFriend) async {
-    print("DDDDDDDDDDDD $idFriend  ");
     try {
       Dio dio = Dio();
       String apiUrl =
@@ -17,10 +16,8 @@ class AcceptFriend {
         options: Options(headers: {"Authorization": "Bearer $accessToken"}),
       );
       if (response.statusCode == 200) {
-        print("DDDDDDDDDDDD ${response.data['message']}");
         return true;
       } else {
-        print("DDD333DDD ${response.data['message']}");
         return false;
       }
     } catch (e) {
