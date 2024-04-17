@@ -63,14 +63,14 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                   setState(() {
                     Map<String, dynamic> data = jsonDecode(frame.body ?? "");
                     listMessage.add(MessageOfList(
-                      idMessage: data["id"],
-                      idChat: data["chatId"],
-                      idSender: data["senderId"],
-                      idReceiver: data["recipientId"] ?? "",
+                      idMessage: data["id"]??"",//thêm vào
+                      idChat: data["chatId"]??"",// thêm vào
+                      idSender: data["senderId"]??"",// thêm vào
+                      idReceiver: data["recipientId"] ?? "",// thêm vào
                       timestamp: DateFormat('HH:mm dd/MM').format(
                           DateTime.fromMillisecondsSinceEpoch(
                               data["timestamp"])),
-                      content: data["content"],
+                      content: data["content"]??"",// thêm vào
                       type: data["type"] ?? "TEXT",
                       replyTo: data["replyTo"] ?? "",
                       fileName: data["fileName"] ?? "",
@@ -443,28 +443,30 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                                                   .format(DateTime.now()),
                                             }),
                                           );
-                                          if (widget.inforUserChat
-                                                  .isGroup = // Chỉ cập nhât list message khi chat room là group
-                                              true) {
-                                            setState(() {
-                                              listMessage.add(MessageOfList(
-                                                  fileName: "",
-                                                  replyTo: "",
-                                                  idMessage: widget
-                                                      .inforUserChat.idGroup!, // cũ .inforUserChat.idGroup
-                                                  idChat: "",
-                                                  idSender: idUser,
-                                                  idReceiver: widget
-                                                      .inforUserChat
-                                                      .idUserRecipient,
-                                                  timestamp: DateFormat(
-                                                          'yyyy-MM-ddTHH:mm:ss.SSSZ')
-                                                      .format(DateTime.now()),
-                                                  content: message,
-                                                  type: ""));
-                                            });
-                                          }
+                                          // if (widget.inforUserChat
+                                          //         .isGroup = // Chỉ cập nhât list message khi chat room là group
+                                          //     true) {
+                                          //   setState(() {
+                                          //     listMessage.add(MessageOfList(
+                                          //         fileName: "",
+                                          //         replyTo: "",
+                                          //         idMessage: widget
+                                          //             .inforUserChat.idGroup!, // cũ .inforUserChat.idGroup
+                                          //         idChat: "",
+                                          //         idSender: idUser,
+                                          //         idReceiver: widget
+                                          //             .inforUserChat
+                                          //             .idUserRecipient,
+                                          //         timestamp: DateFormat(
+                                          //                 'yyyy-MM-ddTHH:mm:ss.SSSZ')
+                                          //             .format(DateTime.now()),
+                                          //         content: message,
+                                          //         type: ""));
+                                          //   });
+                                          // }
                                         }
+
+
 
                                         controllerInputMessage.clear();
                                       }
