@@ -4,6 +4,7 @@ import 'package:app_zalo/routes/routes.dart';
 import 'package:app_zalo/screens/add_member_group/ui/add_member_group_screen.dart';
 import 'package:app_zalo/screens/fast_contact/bloc/fast_contact_cubit.dart';
 import 'package:app_zalo/screens/fast_contact/bloc/get_friends_cubit.dart';
+import 'package:app_zalo/screens/member_group/bloc/get_members_cubit.dart';
 import 'package:app_zalo/screens/member_group/ui/member_group_screen.dart';
 import 'package:app_zalo/screens/more_chatting/bloc/delete_room_cubit.dart';
 import 'package:app_zalo/screens/more_chatting/bloc/delete_room_state.dart';
@@ -13,7 +14,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MoreChattingScreen extends StatefulWidget {
   InforUserChat? inforUserChat;
-
   MoreChattingScreen({super.key, this.inforUserChat});
 
   @override
@@ -150,11 +150,11 @@ class _MoreChattingScreenState extends State<MoreChattingScreen> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => BlocProvider<FastContactCubit>(
+                        builder: (context) => BlocProvider<GetMembersCubit>(
                             create: (BuildContext context) =>
-                                FastContactCubit(),
+                                GetMembersCubit(),
                             child: MemberGroupScreen(
-                              members: widget.inforUserChat!.members,
+                             idGroup: widget.inforUserChat!.idGroup,
                             ))));
               },
               child: Row(
