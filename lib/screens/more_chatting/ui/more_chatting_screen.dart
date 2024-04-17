@@ -153,11 +153,17 @@ class _MoreChattingScreenState extends State<MoreChattingScreen> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => BlocProvider<GetMembersCubit>(
-                            create: (BuildContext context) => GetMembersCubit(),
-                            child: MemberGroupScreen(
-                              idGroup: widget.inforUserChat!.idGroup,
-                            ))));
+                        builder: (context) => MultiBlocProvider(
+                                providers: [
+                                  BlocProvider<GetMembersCubit>(
+                                    create: (BuildContext context) =>
+                                        GetMembersCubit(),
+                                  ),
+                              
+                                ],
+                                child: MemberGroupScreen(
+                                  idGroup: widget.inforUserChat!.idGroup,
+                                ))));
               },
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,

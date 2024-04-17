@@ -63,4 +63,7 @@ class GetMembersCubit extends Cubit<GetMembersState> {
       emit(ErrorGetMembersState(e.toString()));
     }
   }
+  void reset(){
+    emit(InitialGetMembersState());
+  }
 }
