@@ -30,7 +30,7 @@ class MessageOfList {
   });
 
   factory MessageOfList.fromJson(Map<String, dynamic> json) {
-    DateTime dateTime = DateTime.parse(json['timestamp'] ?? "");
+    DateTime dateTime = DateTime.parse( json['timestamp']??"");
 
     String formattedTimestamp =
         "${dateTime.hour}:${dateTime.minute} ${dateTime.day}/${dateTime.month}";
@@ -47,6 +47,7 @@ class MessageOfList {
       replyTo: json['replyTo'] ?? "",
       status: json['status'] ?? "",
     );
+
   }
 }
 
