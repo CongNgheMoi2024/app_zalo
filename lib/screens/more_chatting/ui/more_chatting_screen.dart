@@ -1,6 +1,7 @@
 import 'package:app_zalo/constants/index.dart';
 import 'package:app_zalo/models/chat/infor_user_chat.dart';
 import 'package:app_zalo/routes/routes.dart';
+import 'package:app_zalo/screens/add_member_group/bloc/add_member_cubit.dart';
 import 'package:app_zalo/screens/add_member_group/ui/add_member_group_screen.dart';
 import 'package:app_zalo/screens/fast_contact/bloc/fast_contact_cubit.dart';
 import 'package:app_zalo/screens/member_group/bloc/get_members_cubit.dart';
@@ -120,10 +121,10 @@ class _MoreChattingScreenState extends State<MoreChattingScreen> {
                                             create: (BuildContext context) =>
                                                 FastContactCubit(),
                                           ),
-                                          // BlocProvider<ForwardMessageCubit>(
-                                          //   create: (BuildContext context) =>
-                                          //       ForwardMessageCubit(),
-                                          // ),
+                                          BlocProvider<AddMemberCubit>(
+                                            create: (BuildContext context) =>
+                                                AddMemberCubit(),
+                                          ),
                                         ],
                                         child: AddMemberGroupScreen(
                                           members:
@@ -207,9 +208,7 @@ class _MoreChattingScreenState extends State<MoreChattingScreen> {
                   Navigator.pushReplacementNamed(
                       context, RouterName.dashboardScreen);
                 });
-                return Container(
-                  child: Text("Xóa nhóm thành công"),
-                );
+                return const Text("Xóa nhóm thành công");
               } else if (stateDeleteRoom is ErrorDeleteRoomState) {
                 return Text("Xóa nhóm thất bại", style: text17.error.regular);
               } else {

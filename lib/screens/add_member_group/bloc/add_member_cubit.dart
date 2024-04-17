@@ -7,19 +7,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class AddMemberCubit extends Cubit<AddMemberState> {
   AddMemberCubit() : super(InitialAddMemberState());
 
-  Future<void> addMembersToGroup() async {
+  Future<void> addMembersToGroup(String idGroup, List<String> members) async {
     String accessToken = HiveStorage().token;
-    String idUser = HiveStorage().idUser;
     emit(LoadingAddMemberState());
 
     try {
       Dio dio = Dio();
-      String apiUrl = "${Env.url}/api/v1/rooms/user/$idUser";
+      String apiUrl = "${Env.url}/api/v1/rooms/$idGroup/add-members";
 
-      Response response = await dio.get(
-        apiUrl,
-        options: Options(headers: {"Authorization": "Bearer $accessToken"}),
-      );
+      Response response = await dio.put(apiUrl,
+          options: Options(headers: {"Authorization": "Bearer $accessToken"}),
+          data: members);
 
       if (response.statusCode == 200) {
       } else {
