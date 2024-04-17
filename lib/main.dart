@@ -1,7 +1,9 @@
 import 'package:app_zalo/routes/route_generate.dart';
 import 'package:app_zalo/routes/routes.dart';
+import 'package:app_zalo/screens/chatting_with/bloc/send_message_cubit.dart';
 import 'package:app_zalo/storages/key_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/adapters.dart';
 
 void main() async {
@@ -15,15 +17,20 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'ZAloo',
-      theme: ThemeData(
-        useMaterial3: false,
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) => SendMessageCubit()),
+      ],
+      child: MaterialApp(
+        title: 'ZAloo',
+        theme: ThemeData(
+          useMaterial3: false,
+        ),
+        debugShowCheckedModeBanner: false,
+        onGenerateRoute: routes(),
+        initialRoute: RouterName.initScreen,
+        navigatorObservers: [MyNavigatorObserver()],
       ),
-      debugShowCheckedModeBanner: false,
-      onGenerateRoute: routes(),
-      initialRoute: RouterName.initScreen,
-      navigatorObservers: [MyNavigatorObserver()],
     );
   }
 }

@@ -26,6 +26,7 @@ class _AddFriendScreenState extends State<AddFriendScreen> {
         child: Scaffold(
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
+        
         children: [
           SizedBox(
             width: width,

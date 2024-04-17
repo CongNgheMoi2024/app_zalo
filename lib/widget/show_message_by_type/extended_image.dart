@@ -29,10 +29,10 @@ class _ExtendedImageCustomState extends State<ExtendedImageCustom> {
             );
             break;
 
-        ///if you don't want override completed widget
-        ///please return null or state.completedWidget
-        //return null;
-        //return state.completedWidget;
+          ///if you don't want override completed widget
+          ///please return null or state.completedWidget
+          //return null;
+          //return state.completedWidget;
           case LoadState.completed:
             return ExtendedRawImage(
               image: state.extendedImageInfo?.image,
@@ -45,7 +45,7 @@ class _ExtendedImageCustomState extends State<ExtendedImageCustom> {
               child: Stack(
                 fit: StackFit.expand,
                 children: <Widget>[
-                 ImageAssets.pngAsset(Png.imgFail),
+                  ImageAssets.pngAsset(Png.imgFail),
                   Positioned(
                     bottom: 0.0,
                     left: 0.0,

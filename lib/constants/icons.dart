@@ -25,7 +25,9 @@ class Png {
   static const String imgFail = 'assets/images/fail.png';
   static const String icDelete = 'assets/images/icDelete.png';
   static const String icRecall = 'assets/images/icRecall.png';
+  static const String icReply = 'assets/images/icReply.png';
   static const String icAvatarGroup = 'assets/images/icAvatarGroup.png';
+  static const String icVideo = "assets/images/iconVideo.png";
 }
 
 class CommonGif {
