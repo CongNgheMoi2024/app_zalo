@@ -14,14 +14,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class AddMemberGroupScreen extends StatefulWidget {
   String? idGroup;
   List<String>? members;
-  AddMemberGroupScreen({super.key, this.members, this.idGroup});
+  Function? sendAddMember;
+  AddMemberGroupScreen(
+      {super.key, this.members, this.idGroup, this.sendAddMember});
 
   @override
   State<AddMemberGroupScreen> createState() => _AddMemberGroupScreenState();
 }
 
 class _AddMemberGroupScreenState extends State<AddMemberGroupScreen> {
-  TextEditingController textNameGroupController = TextEditingController();
   String? filter = '';
   @override
   void initState() {
@@ -199,6 +200,8 @@ class _AddMemberGroupScreenState extends State<AddMemberGroupScreen> {
                     child: BlocBuilder<AddMemberCubit, AddMemberState>(
                         builder: (context, state) {
                       if (state is AddMemberSuccessState) {
+                        widget.sendAddMember!(state.members);
+
                         Future.delayed(Duration.zero, () {
                           Navigator.pop(context);
                         });
@@ -212,13 +215,7 @@ class _AddMemberGroupScreenState extends State<AddMemberGroupScreen> {
                           children: [
                             ButtonBottomNavigated(
                               title: "Tạo nhóm",
-                              isValidate: textNameGroupController
-                                      .text.isNotEmpty &&
-                                  textNameGroupController.text.isNotEmpty &&
-                                  listChecked
-                                          .where((element) => element == true)
-                                          .length >=
-                                      2,
+                              isValidate: listChecked.contains(true),
                               onPressed: () {
                                 for (int i = 0; i < listIdFriends.length; i++) {
                                   if (listChecked.length > i &&

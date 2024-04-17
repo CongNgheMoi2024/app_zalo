@@ -156,6 +156,13 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                                     client.deactivate();
                                   },
                                   inforUserChat: widget.inforUserChat,
+                                  sendAddMember: () {
+                                    // client.send(
+                                    //     destination: "/app/add-member",
+                                    //     body: jsonEncode({
+                                    //       "id": widget.inforUserChat.idGroup,
+                                    //     }));
+                                  },
                                 ))));
                   },
                   isGroup: widget.inforUserChat.isGroup,
@@ -490,8 +497,6 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                                             });
                                           }
                                         }
-
-
 
                                         controllerInputMessage.clear();
                                       }
