@@ -14,6 +14,7 @@ import 'package:app_zalo/utils/send_file.dart';
 import 'package:app_zalo/widget/dismiss_keyboard_widget.dart';
 import 'package:app_zalo/widget/header/header_of_chatting.dart';
 import 'package:app_zalo/widget/media_options_box/media_options_box.dart';
+import 'package:app_zalo/widget/message/notification_item.dart';
 import 'package:app_zalo/widget/message/reciver_mess_item.dart';
 import 'package:app_zalo/widget/message/sender_mess_item.dart';
 import 'package:app_zalo/widget/show_message_by_type/show_reply.dart';
@@ -70,7 +71,7 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                       idChat: data["chatId"]??"",// thêm vào
                       idSender: data["senderId"]??"",// thêm vào
                       idReceiver: data["recipientId"] ?? "",// thêm vào
-                      timestamp: DateFormat('HH:mm dd/MM').format(DateTime.fromMillisecondsSinceEpoch(data["timestamp"])),
+                      timestamp: DateFormat('HH:mm dd/MM').format(data["timestamp"]??DateTime.now()),// thêm vào
                       content: data["content"]??"",// thêm vào
                       type: data["type"] ?? "TEXT",
                       replyTo: data["replyTo"] ?? "",
@@ -187,18 +188,8 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                             children: listMessage.asMap().entries.map((entry) {
                               final index = entry.key;
                               final e = entry.value;
-                              if (["ADD_MEMBER","ADD_SUB_ADMIN"," REMOVE_SUB_ADMIN","CHANGE_ADMIN"].contains(e.type)) {
-                                return Container(
-                                  padding: EdgeInsets.symmetric(vertical: 5.sp),
-                                  child: Center(
-                                    child: Text(
-                                      e.content,
-                                      style: text18.regular.copyWith(
-                                        color: primaryColor.withOpacity(0.7),
-                                      ),
-                                    ),
-                                  ),
-                                );
+                              if (["ADD_MEMBER","ADD_SUB_ADMIN","REMOVE_SUB_ADMIN","CHANGE_ADMIN"].contains(e.type)) {
+                                return NotificationItem(userName: e.content, type:e.type);
                               } else if (e.idSender == idUser) {
                                 return SenderMessItem(
                                   content: e.content,
