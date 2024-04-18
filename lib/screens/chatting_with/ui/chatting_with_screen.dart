@@ -306,9 +306,12 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                                   },
                                 );
                               } else {
-                                isConsecutive =
-                                    prevIndex != null && prevIndex == index - 1;
-                                prevIndex = index;
+                                if (index > 0) {
+                                  isConsecutive =
+                                      listMessage[index - 1].idSender ==
+                                          e.idSender;
+                                }
+
                                 return ReciverMessItem(
                                   name: widget.inforUserChat.isGroup! &&
                                           e.user != null
