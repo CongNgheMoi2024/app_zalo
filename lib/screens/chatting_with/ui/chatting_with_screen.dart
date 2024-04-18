@@ -69,13 +69,14 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                   setState(() {
                     Map<String, dynamic> data = jsonDecode(frame.body ?? "");
                     listMessage.add(MessageOfList(
-                      idMessage: data["id"] ?? "", //thêm vào
-                      idChat: data["chatId"] ?? "", // thêm vào
-                      idSender: data["senderId"] ?? "", // thêm vào
-                      idReceiver: data["recipientId"] ?? "", // thêm vào
-                     timestamp: DateFormat('HH:mm dd/MM').format(
-                          data["timestamp"] ?? DateTime.now()), // thêm vào
-                      content: data["content"] ?? "", // thêm vào
+                      idMessage: data["id"] ?? "",
+                      idChat: data["chatId"] ?? "",
+                      idSender: data["senderId"] ?? "",
+                      idReceiver: data["recipientId"] ?? "",
+                      timestamp: DateFormat('HH:mm dd/MM').format(
+                          DateTime.fromMillisecondsSinceEpoch(
+                              data["timestamp"])),
+                      content: data["content"] ?? "",
                       type: data["type"] ?? "TEXT",
                       replyTo: data["replyTo"] ?? "",
                       fileName: data["fileName"] ?? "",
@@ -230,8 +231,7 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                                 "REMOVE_SUB_ADMIN",
                                 "CHANGE_ADMIN"
                               ].contains(e.type)) {
-                                return NotificationItem(
-                                    userName: e.content);
+                                return NotificationItem(userName: e.content);
                               } else if (e.idSender == idUser) {
                                 return SenderMessItem(
                                   content: e.content,
@@ -621,22 +621,14 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                         child: MediaOptions(
                           visible: showOptions,
                           onFileSelected: (files) async {
-                            String receiptId =
-                                widget.inforUserChat.isGroup! == true
-                                    ? widget.inforUserChat.idGroup!
-                                    : widget.inforUserChat.idUserRecipient;
                             List<dynamic> data = await _sendFile.sendFile(
                                 idUser,
-                                receiptId,
+                                widget.inforUserChat.idUserRecipient,
                                 widget.inforUserChat.idGroup!,
                                 files,
                                 widget.inforUserChat.isGroup!);
-                            if (data.isEmpty) {
-                              const AlertDialog(
-                                title: Text("Thông báo"),
-                                content: Text("Đã xảy ra lỗi!"),
-                              );
-                            } else {
+
+                            if (widget.inforUserChat.isGroup != true) {
                               for (var element in data) {
                                 setState(() {
                                   listMessage.add(MessageOfList(
@@ -654,6 +646,12 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                                       type: element["type"].toString()));
                                 });
                               }
+                            }
+                            if (data.isEmpty) {
+                              const AlertDialog(
+                                title: Text("Thông báo"),
+                                content: Text("Đã xảy ra lỗi!"),
+                              );
                             }
                           },
                         ),
