@@ -591,7 +591,11 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                                     ? widget.inforUserChat.idGroup!
                                     : widget.inforUserChat.idUserRecipient;
                             List<dynamic> data = await _sendFile.sendFile(
-                                idUser, receiptId, files);
+                                idUser,
+                                receiptId,
+                                widget.inforUserChat.idGroup!,
+                                files,
+                                widget.inforUserChat.isGroup!);
                             if (data.isEmpty) {
                               const AlertDialog(
                                 title: Text("Thông báo"),
@@ -599,7 +603,6 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                               );
                             } else {
                               for (var element in data) {
-                                print(element);
                                 setState(() {
                                   listMessage.add(MessageOfList(
                                       replyTo: "",
