@@ -81,6 +81,9 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                       type: data["type"] ?? "TEXT",
                       replyTo: data["replyTo"] ?? "",
                       fileName: data["fileName"] ?? "",
+                      user: data["user"] != null
+                          ? UserM.fromJson(data["user"])
+                          : null,
                     ));
                   });
                 })
