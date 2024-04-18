@@ -310,6 +310,10 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                                     prevIndex != null && prevIndex == index - 1;
                                 prevIndex = index;
                                 return ReciverMessItem(
+                                  name: widget.inforUserChat.isGroup! &&
+                                          e.user != null
+                                      ? e.user.name
+                                      : widget.inforUserChat.name,
                                   avatarReceiver:
                                       widget.inforUserChat.isGroup! &&
                                               e.user != null
