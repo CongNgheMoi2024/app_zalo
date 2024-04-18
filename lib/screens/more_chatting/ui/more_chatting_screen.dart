@@ -8,6 +8,8 @@ import 'package:app_zalo/screens/member_group/bloc/get_members_cubit.dart';
 import 'package:app_zalo/screens/member_group/ui/member_group_screen.dart';
 import 'package:app_zalo/screens/more_chatting/bloc/delete_room_cubit.dart';
 import 'package:app_zalo/screens/more_chatting/bloc/delete_room_state.dart';
+import 'package:app_zalo/screens/more_chatting/bloc/leave_group_cubit.dart';
+import 'package:app_zalo/screens/more_chatting/bloc/leave_group_state.dart';
 import 'package:app_zalo/widget/header/header_trans.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -194,7 +196,78 @@ class _MoreChattingScreenState extends State<MoreChattingScreen> {
                 ],
               ),
             ),
-            BlocBuilder<DeleteRoomCubit, DeleteRoomState>(
+            BlocBuilder<LeaveGroupCubit,LeaveGroupState>(builder: (context,state){
+              if(state is LeaveGroupLoading){
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );}
+                else if(state is LeaveGroupSuccess){
+                  Future.delayed(Duration.zero,(){
+                    Navigator.pushReplacementNamed(context, RouterName.dashboardScreen);
+                  });
+                  return Container();}
+
+                  else if(state is LeaveGroupFailure){
+                    return AlertDialog(
+                      title: Text("Thông báo"),
+                      content: Text(state.error),
+                      actions: [
+                        TextButton(
+                          onPressed: (){
+                            context.read<LeaveGroupCubit>().resetState();
+                            // Navigator.pop(context);
+                          },
+                          child: Text("OK"),
+                        )
+                      ],
+                    );}
+
+              return InkWell(
+              onTap: () {
+                  context.read<LeaveGroupCubit>().resetState();
+                  context.read<LeaveGroupCubit>().leaveGroup(widget.inforUserChat!.idGroup ?? "");
+              },
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(left: 10.sp),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 15.sp,
+                    ),
+                    child: Icon(
+                      Icons.exit_to_app,
+                      size: 30.sp,
+                      color: errorColor,
+                    ),
+                  ),
+                  Expanded(
+                    child: Container(
+                        margin: EdgeInsets.only(top: 10.sp),
+                        padding: EdgeInsets.symmetric(
+                          vertical: 15.sp,
+                          horizontal: 10.sp,
+                        ),
+                        decoration: BoxDecoration(
+                          border: Border(
+                            top: BorderSide(
+                                color: primaryColor.withOpacity(0.2),
+                                width: 1.sp),
+                            bottom: BorderSide(
+                                color: primaryColor.withOpacity(0.2),
+                                width: 1.sp),
+                          ),
+                        ),
+                        child: Text(
+                            " Rời nhóm",
+                            style: text17.error.regular)),
+                  ),
+                ],
+              ),
+            );
+            }),
+            BlocBuilder
+            <DeleteRoomCubit, DeleteRoomState>(
                 builder: (context, stateDeleteRoom) {
               if (stateDeleteRoom is LoadingDeleteRoomState) {
                 return const Center(
