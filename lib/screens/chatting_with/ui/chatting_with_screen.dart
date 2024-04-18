@@ -68,9 +68,8 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                       idChat: data["chatId"] ?? "", // thêm vào
                       idSender: data["senderId"] ?? "", // thêm vào
                       idReceiver: data["recipientId"] ?? "", // thêm vào
-                      timestamp: DateFormat('HH:mm dd/MM').format(
-                          DateTime.fromMillisecondsSinceEpoch(
-                              data["timestamp"])),
+                      timestamp: DateFormat('HH:mm dd/MM')
+                          .format(data["timestamp"] ?? DateTime.now()),
                       content: data["content"] ?? "", // thêm vào
                       type: data["type"] ?? "TEXT",
                       replyTo: data["replyTo"] ?? "",
