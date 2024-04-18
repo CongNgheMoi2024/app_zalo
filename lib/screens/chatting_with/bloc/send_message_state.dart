@@ -8,6 +8,6 @@ class ReplySendMessageState extends SendMessageState {
    String? typeMessRep;
    String? fileName;
    String? idMessageReply;
-
+  
   ReplySendMessageState( this.nameReply, this.contentMessRep, this.typeMessRep, this.fileName, this.idMessageReply);
 }

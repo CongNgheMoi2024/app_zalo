@@ -102,8 +102,10 @@ class _MemberGroupScreenState extends State<MemberGroupScreen> {
                             bottom: 0.sp, // Đặt icon ở góc dưới
                             right: 0.sp, // Đặt icon ở bên phải
                             child: Container(
-                              width: 20.sp,
-                              height: 20.sp,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10.sp),
+                                color: Colors.grey
+                              ),
                               margin: EdgeInsets.only(
                                   left: 10.sp), // Khoảng cách bên trái
                               child: Icon(Icons.key,size:20.sp,color: entry.role == RoleGroup.admin? keyGoldColor : keySilverColor,) ,
@@ -112,8 +114,7 @@ class _MemberGroupScreenState extends State<MemberGroupScreen> {
                       ]),
                       Container(
                         margin: EdgeInsets.only(left: 20.sp),
-                        child: Text(
-                          entry.name,
+                        child: Text(entry.id == user.id ? "Bạn" : entry.name,
                           style: text15.primary.regular,
                         ),
                       ),
@@ -187,7 +188,7 @@ class _MemberGroupScreenState extends State<MemberGroupScreen> {
                 ),
                 Container(
                   margin: EdgeInsets.only(left: 20.sp),
-                  child: Text(
+                  child: Text( 
                     member.name,
                     style: text15.primary.regular,
                   ),
@@ -211,8 +212,31 @@ class _MemberGroupScreenState extends State<MemberGroupScreen> {
             ListTile(
               title: const Text("Bổ nhiệm làm trưởng nhóm"),
               onTap: () async {
-                finishAction(await transferAdmin(widget.idGroup!, member.id));
-                Navigator.pop(context);
+                showDialog(
+                  context: context
+                  ,
+                  builder:(context)=> AlertDialog(
+                    title: const Text("Xác nhận"),
+                    content: const Text(
+                        "Bạn có chắc chắn muốn bổ nhiệm người này làm trưởng nhóm không?"),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: const Text("Hủy"),
+                      ),
+                      TextButton(
+                        onPressed: () async {
+                          finishAction(await transferAdmin(widget.idGroup!, member.id));
+                          Navigator.of(context).pop();
+                          Navigator.pop(context);
+                        },
+                        child: const Text("Đồng ý"),
+                      )
+                    ],
+                  ),
+                );             
               },
             ),
           if (userRole == RoleGroup.admin && member.role == RoleGroup.member)
