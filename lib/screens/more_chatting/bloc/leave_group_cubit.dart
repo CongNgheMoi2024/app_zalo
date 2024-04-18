@@ -34,7 +34,9 @@ class LeaveGroupCubit extends Cubit<LeaveGroupState>{
     } else if (response.statusCode == 400 && response.data['error'] == "Admin can't leave group") {
         // Xử lý trường hợp đặc biệt
         emit(LeaveGroupFailure(error: "Không thể rời nhóm khi đang là nhóm trưởng"));
-    } else {
+    } else if(response.statusCode==400 && response.data['error']== "Group must have at least 3 members"){
+      emit(LeaveGroupFailure(error: "Không thể rời nhóm khi nhóm chỉ còn 3 thành viên"));
+    }else {
         // Xử lý các mã trạng thái 400 khác
         emit(LeaveGroupFailure(error: "Đã xảy ra lỗi trong yêu cầu, vui lòng thử lại sau."));
     }
