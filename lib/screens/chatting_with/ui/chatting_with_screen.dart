@@ -161,11 +161,24 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                                   },
                                   inforUserChat: widget.inforUserChat,
                                   sendAddMember: () {
-                                    // client.send(
-                                    //     destination: "/app/add-member",
-                                    //     body: jsonEncode({
-                                    //       "id": widget.inforUserChat.idGroup,
-                                    //     }));
+                                    print(
+                                        "LLLLLLLLLLLLLLLLLLLLLLLLLLLLL ${HiveStorage().listMembers}");
+                                    HiveStorage()
+                                        .listMembers
+                                        .forEach((element) {
+                                      client.send(
+                                        destination: "/app/group/add-member",
+                                        body: jsonEncode({
+                                          "chatId":
+                                              widget.inforUserChat.idGroup,
+                                          "senderId": idUser,
+                                          "recipientId": "",
+                                          "content": element, // BE handle
+                                          "timestamp": DateTime.now()
+                                              .millisecondsSinceEpoch,
+                                        }),
+                                      );
+                                    });
                                   },
                                 ))));
                   },

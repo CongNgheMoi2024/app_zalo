@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:app_zalo/constants/index.dart';
 import 'package:app_zalo/screens/add_member_group/bloc/add_member_cubit.dart';
 import 'package:app_zalo/screens/add_member_group/bloc/add_member_state.dart';
 import 'package:app_zalo/screens/fast_contact/bloc/fast_contact_cubit.dart';
 import 'package:app_zalo/screens/fast_contact/bloc/fast_contact_state.dart';
+import 'package:app_zalo/storages/hive_storage.dart';
 import 'package:app_zalo/widget/button/button_bottom_navigated.dart';
 import 'package:app_zalo/widget/dismiss_keyboard_widget.dart';
 import 'package:app_zalo/widget/header/header_trans.dart';
@@ -15,15 +18,17 @@ class AddMemberGroupScreen extends StatefulWidget {
   String? idGroup;
   List<String>? members;
   Function? sendAddMember;
+
   AddMemberGroupScreen(
       {super.key, this.members, this.idGroup, this.sendAddMember});
 
   @override
-  State<AddMemberGroupScreen> createState() => _AddMemberGroupScreenState();
+  State<AddMemberGroupScreen> createState() => AddMemberGroupScreenState();
 }
 
-class _AddMemberGroupScreenState extends State<AddMemberGroupScreen> {
+class AddMemberGroupScreenState extends State<AddMemberGroupScreen> {
   String? filter = '';
+
   @override
   void initState() {
     super.initState();
@@ -36,7 +41,6 @@ class _AddMemberGroupScreenState extends State<AddMemberGroupScreen> {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
-    print("List id friends: ${widget.members}");
     return DismissKeyboard(
         child: SafeArea(
             child: Scaffold(
@@ -200,9 +204,10 @@ class _AddMemberGroupScreenState extends State<AddMemberGroupScreen> {
                     child: BlocBuilder<AddMemberCubit, AddMemberState>(
                         builder: (context, state) {
                       if (state is AddMemberSuccessState) {
-                        widget.sendAddMember!(state.members);
-
+                        widget.sendAddMember!();
                         Future.delayed(Duration.zero, () {
+                          selectedIds.clear();
+                          listIdFriends.clear();
                           Navigator.pop(context);
                         });
                         return const SizedBox();
@@ -214,7 +219,7 @@ class _AddMemberGroupScreenState extends State<AddMemberGroupScreen> {
                         return Column(
                           children: [
                             ButtonBottomNavigated(
-                              title: "Tạo nhóm",
+                              title: "Thêm",
                               isValidate: listChecked.contains(true),
                               onPressed: () {
                                 for (int i = 0; i < listIdFriends.length; i++) {
@@ -223,16 +228,12 @@ class _AddMemberGroupScreenState extends State<AddMemberGroupScreen> {
                                     selectedIds.add(listIdFriends[i]);
                                   }
                                 }
-
+                                HiveStorage().updateListMembers(selectedIds);
                                 context
                                     .read<AddMemberCubit>()
                                     .addMembersToGroup(
                                         widget.idGroup!, selectedIds)
-                                    .then((value) => {
-                                          selectedIds.clear(),
-                                          listChecked.clear(),
-                                          listIdFriends.clear()
-                                        });
+                                    .then((value) => {});
                               },
                             ),
                             state is ErrorAddMemberState
