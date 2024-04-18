@@ -27,7 +27,8 @@ class ReciverMessItem extends StatefulWidget {
   String? idReceiver;
   String? fileName;
   String? replyTo;
-  String? userNameReply;
+  String? userMessReply;
+  String? userSendMess;
   Function? onDelete;
 
   ReciverMessItem(
@@ -42,7 +43,8 @@ class ReciverMessItem extends StatefulWidget {
       this.idMessage,
       this.idReceiver,
       this.fileName,
-      this.userNameReply,
+      this.userMessReply,
+      this.userSendMess,
       this.replyTo,
       this.onDelete});
 
@@ -161,7 +163,7 @@ class _ReciverMessItemState extends State<ReciverMessItem> {
                 InkWell(
                   onTap: () {
                     context.read<SendMessageCubit>().replyMessage(
-                        widget.userNameReply!,
+                        widget.userSendMess!,
                         widget.message!,
                         widget.type!,
                         widget.fileName!,
@@ -369,7 +371,7 @@ class _ReciverMessItemState extends State<ReciverMessItem> {
                           ? Column(
                               children: [
                                 getWidgetByType(
-                                    widget.userNameReply!,
+                                    widget.userMessReply!,
                                     widget.infoMessReply!.type,
                                     widget.infoMessReply!.fileName,
                                     widget.infoMessReply!.content),

@@ -198,10 +198,31 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                           );
                         } else if (state is GetAllMessageSuccessState) {
                           listMessage = state.data;
+                          members = state.members;
                           return Wrap(
                             children: listMessage.asMap().entries.map((entry) {
+                              print(entry.value.replyTo);
                               final index = entry.key;
                               final e = entry.value;
+                              String idSenderReplyTo = e.replyTo == ""
+                                  ? ""
+                                  : listMessage
+                                      .firstWhere(
+                                          (element) =>
+                                              element.idMessage == e.replyTo,
+                                          orElse: () => MessageOfList(
+                                              idMessage: "",
+                                              idChat: "",
+                                              idSender: "",
+                                              idReceiver: "",
+                                              timestamp: "",
+                                              content: "",
+                                              type: "",
+                                              fileName: "",
+                                              replyTo: "",
+                                              status: ""))
+                                      .idSender;
+                              print("members ${members.length}");
                               if ([
                                 "REMOVE_MEMBER",
                                 "LEAVE_GROUP",
@@ -225,15 +246,18 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                                               element is MessageOfList &&
                                               element.idMessage == e.replyTo,
                                         ),
-                                  nameUserReply: state.members
-                                      .firstWhere(
-                                          (element) => element.id == e.idSender,
-                                          orElse: () => Member(
-                                              id: "",
-                                              name: "Tên không xác định",
-                                              avatar: "",
-                                              role: RoleGroup.member))
-                                      .name,
+                                  nameUserReply: e.replyTo == ""
+                                      ? ""
+                                      : members
+                                          .firstWhere(
+                                              (element) =>
+                                                  element.id == idSenderReplyTo,
+                                              orElse: () => Member(
+                                                  id: "",
+                                                  name: "Tên không xác định",
+                                                  avatar: "",
+                                                  role: RoleGroup.member))
+                                          .name,
                                   idMessage: e.idMessage,
                                   idReceiver:
                                       widget.inforUserChat.idUserRecipient,
@@ -294,7 +318,19 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                                               element is MessageOfList &&
                                               element.idMessage == e.replyTo,
                                         ),
-                                  userNameReply: state.members
+                                  userMessReply: e.replyTo == ""
+                                      ? ""
+                                      : members
+                                          .firstWhere(
+                                              (element) =>
+                                                  element.id == idSenderReplyTo,
+                                              orElse: () => Member(
+                                                  id: "",
+                                                  name: "Tên không xác định",
+                                                  avatar: "",
+                                                  role: RoleGroup.member))
+                                          .name,
+                                  userSendMess: state.members
                                       .firstWhere(
                                           (element) => element.id == e.idSender,
                                           orElse: () => Member(
