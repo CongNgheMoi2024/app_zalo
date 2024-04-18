@@ -74,7 +74,8 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                       idSender: data["senderId"] ?? "", // thêm vào
                       idReceiver: data["recipientId"] ?? "", // thêm vào
                       timestamp: DateFormat('HH:mm dd/MM').format(
-                          data["timestamp"] ?? DateTime.now()), // thêm vào
+                          DateTime.fromMillisecondsSinceEpoch(
+                              data["timestamp"])), // thêm vào
                       content: data["content"] ?? "", // thêm vào
                       type: data["type"] ?? "TEXT",
                       replyTo: data["replyTo"] ?? "",
@@ -161,11 +162,8 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                                   },
                                   inforUserChat: widget.inforUserChat,
                                   sendAddMember: () {
-                                    print(
-                                        "LLLLLLLLLLLLLLLLLLLLLLLLLLLLL ${HiveStorage().listMembers}");
-                                    HiveStorage()
-                                        .listMembers
-                                        .forEach((element) {
+                                    for (var element
+                                        in HiveStorage().listMembers) {
                                       client.send(
                                         destination: "/app/group/add-member",
                                         body: jsonEncode({
@@ -178,7 +176,7 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                                               .millisecondsSinceEpoch,
                                         }),
                                       );
-                                    });
+                                    }
                                   },
                                 ))));
                   },
@@ -547,9 +545,7 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                                                   .format(DateTime.now()),
                                             }),
                                           );
-                                          if (widget.inforUserChat
-                                                  .isGroup = // Chỉ cập nhât list message khi chat room là group
-                                              true) {
+                                          if (!widget.inforUserChat.isGroup!) {
                                             setState(() {
                                               listMessage.add(MessageOfList(
                                                   fileName: "",
