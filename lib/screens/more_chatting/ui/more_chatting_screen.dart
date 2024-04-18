@@ -117,11 +117,24 @@ class _MoreChattingScreenState extends State<MoreChattingScreen> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => AddMemberGroupScreen(
-                                      sendAddMember: widget.sendAddMember!,
-                                      idGroup: widget.inforUserChat!.idGroup!,
-                                      members: widget.inforUserChat!.members,
-                                    )));
+                                builder: (context) => MultiBlocProvider(
+                                        providers: [
+                                          BlocProvider<FastContactCubit>(
+                                            create: (BuildContext context) =>
+                                                FastContactCubit(),
+                                          ),
+                                          BlocProvider<AddMemberCubit>(
+                                            create: (BuildContext context) =>
+                                                AddMemberCubit(),
+                                          ),
+                                        ],
+                                        child: AddMemberGroupScreen(
+                                          sendAddMember: widget.sendAddMember!,
+                                          idGroup:
+                                              widget.inforUserChat!.idGroup!,
+                                          members:
+                                              widget.inforUserChat!.members,
+                                        ))));
                       },
                       child: Column(
                         children: [

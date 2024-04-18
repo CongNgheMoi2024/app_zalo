@@ -23,10 +23,10 @@ class AddMemberGroupScreen extends StatefulWidget {
       {super.key, this.members, this.idGroup, this.sendAddMember});
 
   @override
-  State<AddMemberGroupScreen> createState() => AddMemberGroupScreenState();
+  State<AddMemberGroupScreen> createState() => _AddMemberGroupScreenState();
 }
 
-class AddMemberGroupScreenState extends State<AddMemberGroupScreen> {
+class _AddMemberGroupScreenState extends State<AddMemberGroupScreen> {
   String? filter = '';
 
   @override

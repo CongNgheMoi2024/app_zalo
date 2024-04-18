@@ -1,27 +1,52 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'dart:convert';
+
 import 'package:app_zalo/constants/index.dart';
+import 'package:app_zalo/env.dart';
+import 'package:app_zalo/models/chat/infor_user_chat.dart';
+import 'package:app_zalo/screens/chatting_with/bloc/get_all_message_cubit.dart';
+import 'package:app_zalo/screens/chatting_with/ui/chatting_with_screen.dart';
 import 'package:app_zalo/screens/member_group/bloc/get_members_cubit.dart';
 import 'package:app_zalo/screens/member_group/bloc/get_members_state.dart';
 import 'package:app_zalo/screens/member_group/bloc/manage_member.dart';
 import 'package:app_zalo/storages/hive_storage.dart';
 import 'package:app_zalo/widget/header/header_trans.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:stomp_dart_client/stomp.dart';
+import 'package:stomp_dart_client/stomp_config.dart';
+import 'package:stomp_dart_client/stomp_frame.dart';
 
 // ignore: must_be_immutable
 class MemberGroupScreen extends StatefulWidget {
   List<String>? members;
   String? idGroup;
+
   MemberGroupScreen({super.key, required this.idGroup});
   @override
   State<MemberGroupScreen> createState() => _MemberGroupScreenState();
 }
 
 class _MemberGroupScreenState extends State<MemberGroupScreen> {
+  late StompClient client;
+  String? nameYour;
   @override
   void initState() {
     super.initState();
+    client = StompClient(
+        config: StompConfig.sockJS(
+            url: '${Env.url}/ws',
+            onConnect: (StompFrame frame) {
+              client.subscribe(
+                  destination: "/user/${widget.idGroup}/queue/messages",
+                  callback: (StompFrame frame) {
+                    print("Subscribe chat nhóm  ${frame.body}");
+                  });
+            }));
+
+    client.activate();
     context.read<GetMembersCubit>().getMembers(widget.idGroup!);
   }
 
@@ -49,8 +74,10 @@ class _MemberGroupScreenState extends State<MemberGroupScreen> {
           user = state.data
               .firstWhere((element) => element.id == HiveStorage().idUser);
           List<Member> members = state.data;
+
           return Wrap(
               children: members.map((entry) {
+            entry.id == user.id ? nameYour = entry.name : nameYour = "";
             return Padding(
               padding: EdgeInsets.all(5.sp),
               child: ListTile(
@@ -103,18 +130,24 @@ class _MemberGroupScreenState extends State<MemberGroupScreen> {
                             right: 0.sp, // Đặt icon ở bên phải
                             child: Container(
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10.sp),
-                                color: Colors.grey
-                              ),
+                                  borderRadius: BorderRadius.circular(10.sp),
+                                  color: Colors.grey),
                               margin: EdgeInsets.only(
                                   left: 10.sp), // Khoảng cách bên trái
-                              child: Icon(Icons.key,size:20.sp,color: entry.role == RoleGroup.admin? keyGoldColor : keySilverColor,) ,
+                              child: Icon(
+                                Icons.key,
+                                size: 20.sp,
+                                color: entry.role == RoleGroup.admin
+                                    ? keyGoldColor
+                                    : keySilverColor,
+                              ),
                             ),
                           ),
                       ]),
                       Container(
                         margin: EdgeInsets.only(left: 20.sp),
-                        child: Text(entry.id == user.id ? "Bạn" : entry.name,
+                        child: Text(
+                          entry.id == user.id ? "Bạn" : entry.name,
                           style: text15.primary.regular,
                         ),
                       ),
@@ -188,7 +221,7 @@ class _MemberGroupScreenState extends State<MemberGroupScreen> {
                 ),
                 Container(
                   margin: EdgeInsets.only(left: 20.sp),
-                  child: Text( 
+                  child: Text(
                     member.name,
                     style: text15.primary.regular,
                   ),
@@ -213,9 +246,8 @@ class _MemberGroupScreenState extends State<MemberGroupScreen> {
               title: const Text("Bổ nhiệm làm trưởng nhóm"),
               onTap: () async {
                 showDialog(
-                  context: context
-                  ,
-                  builder:(context)=> AlertDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
                     title: const Text("Xác nhận"),
                     content: const Text(
                         "Bạn có chắc chắn muốn bổ nhiệm người này làm trưởng nhóm không?"),
@@ -228,7 +260,8 @@ class _MemberGroupScreenState extends State<MemberGroupScreen> {
                       ),
                       TextButton(
                         onPressed: () async {
-                          finishAction(await transferAdmin(widget.idGroup!, member.id));
+                          finishAction(
+                              await transferAdmin(widget.idGroup!, member.id));
                           Navigator.of(context).pop();
                           Navigator.pop(context);
                         },
@@ -236,7 +269,7 @@ class _MemberGroupScreenState extends State<MemberGroupScreen> {
                       )
                     ],
                   ),
-                );             
+                );
               },
             ),
           if (userRole == RoleGroup.admin && member.role == RoleGroup.member)
@@ -256,9 +289,53 @@ class _MemberGroupScreenState extends State<MemberGroupScreen> {
               },
             ),
           if (userRole.index < member.role.index)
-            ListTile(title: const Text("Xóa khỏi nhóm"), onTap: () {})
+            ListTile(
+                title: const Text("Xóa khỏi nhóm"),
+                onTap: () {
+                  client.send(
+                    destination: "/app/group/remove-member",
+                    body: jsonEncode({
+                      "chatId": widget.idGroup!,
+                      "senderId": HiveStorage().idUser,
+                      "recipientId": member.id,
+                      "content": "$nameYour đã xóa ${member.name} khỏi nhóm",
+                      "timestamp":
+                          DateTime.now().millisecondsSinceEpoch.toString(),
+                    }),
+                  );
+
+                  removeUser(member.id, widget.idGroup!).then((value) {
+                    finishAction(value);
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                  });
+                })
         ],
       )),
     );
+  }
+}
+
+Future<bool> removeUser(String idUser, String idRoom) async {
+  String accessToken = HiveStorage().token;
+  try {
+    Dio dio = Dio();
+    String apiUrl = "${Env.url}/api/v1/rooms/$idRoom/remove-member/$idUser";
+
+    Response response = await dio.put(
+      apiUrl,
+      options: Options(headers: {
+        "Authorization": "Bearer $accessToken",
+        "Content-Type": "application/json"
+      }),
+    );
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
+  } catch (e) {
+    return false;
   }
 }
