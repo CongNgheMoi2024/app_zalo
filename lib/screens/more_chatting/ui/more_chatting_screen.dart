@@ -164,7 +164,6 @@ class _MoreChattingScreenState extends State<MoreChattingScreen> {
                                     create: (BuildContext context) =>
                                         GetMembersCubit(),
                                   ),
-                              
                                 ],
                                 child: MemberGroupScreen(
                                   idGroup: widget.inforUserChat!.idGroup,

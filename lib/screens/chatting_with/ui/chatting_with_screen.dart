@@ -55,8 +55,6 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
         config: StompConfig.sockJS(
       url: '${Env.url}/ws',
       onConnect: (StompFrame frame) {
-        print('IDDDDDDĐ group ${widget.inforUserChat.idGroup}');
-
         widget.inforUserChat.isGroup == true
             ? client.subscribe(
                 destination:
@@ -66,12 +64,14 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                   setState(() {
                     Map<String, dynamic> data = jsonDecode(frame.body ?? "");
                     listMessage.add(MessageOfList(
-                      idMessage: data["id"]??"",//thêm vào
-                      idChat: data["chatId"]??"",// thêm vào
-                      idSender: data["senderId"]??"",// thêm vào
-                      idReceiver: data["recipientId"] ?? "",// thêm vào
-                      timestamp: DateFormat('HH:mm dd/MM').format(DateTime.fromMillisecondsSinceEpoch(data["timestamp"])),
-                      content: data["content"]??"",// thêm vào
+                      idMessage: data["id"] ?? "", //thêm vào
+                      idChat: data["chatId"] ?? "", // thêm vào
+                      idSender: data["senderId"] ?? "", // thêm vào
+                      idReceiver: data["recipientId"] ?? "", // thêm vào
+                      timestamp: DateFormat('HH:mm dd/MM').format(
+                          DateTime.fromMillisecondsSinceEpoch(
+                              data["timestamp"])),
+                      content: data["content"] ?? "", // thêm vào
                       type: data["type"] ?? "TEXT",
                       replyTo: data["replyTo"] ?? "",
                       fileName: data["fileName"] ?? "",
@@ -157,11 +157,24 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                                   },
                                   inforUserChat: widget.inforUserChat,
                                   sendAddMember: () {
-                                    // client.send(
-                                    //     destination: "/app/add-member",
-                                    //     body: jsonEncode({
-                                    //       "id": widget.inforUserChat.idGroup,
-                                    //     }));
+                                    print(
+                                        "LLLLLLLLLLLLLLLLLLLLLLLLLLLLL ${HiveStorage().listMembers}");
+                                    HiveStorage()
+                                        .listMembers
+                                        .forEach((element) {
+                                      client.send(
+                                        destination: "/app/group/add-member",
+                                        body: jsonEncode({
+                                          "chatId":
+                                              widget.inforUserChat.idGroup,
+                                          "senderId": idUser,
+                                          "recipientId": "",
+                                          "content": element, // BE handle
+                                          "timestamp": DateTime.now()
+                                              .millisecondsSinceEpoch,
+                                        }),
+                                      );
+                                    });
                                   },
                                 ))));
                   },
@@ -187,7 +200,12 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                             children: listMessage.asMap().entries.map((entry) {
                               final index = entry.key;
                               final e = entry.value;
-                              if (["ADD_MEMBER","ADD_SUB_ADMIN"," REMOVE_SUB_ADMIN","CHANGE_ADMIN"].contains(e.type)) {
+                              if ([
+                                "ADD_MEMBER",
+                                "ADD_SUB_ADMIN",
+                                " REMOVE_SUB_ADMIN",
+                                "CHANGE_ADMIN"
+                              ].contains(e.type)) {
                                 return Container(
                                   padding: EdgeInsets.symmetric(vertical: 5.sp),
                                   child: Center(
@@ -483,7 +501,8 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                                                   fileName: "",
                                                   replyTo: "",
                                                   idMessage: widget
-                                                      .inforUserChat.idGroup!, // cũ .inforUserChat.idGroup
+                                                      .inforUserChat
+                                                      .idGroup!, // cũ .inforUserChat.idGroup
                                                   idChat: "",
                                                   idSender: idUser,
                                                   idReceiver: widget
