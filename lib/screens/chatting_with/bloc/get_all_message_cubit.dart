@@ -6,6 +6,23 @@ import 'package:app_zalo/storages/storage.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+class UserM {
+  final String id;
+  final String name;
+  final String avatar;
+  final String? sex;
+
+  UserM({required this.id, required this.name, required this.avatar, this.sex});
+
+  factory UserM.fromJson(Map<String, dynamic> json) {
+    return UserM(
+      id: json['id'] ?? "",
+      name: json['name'] ?? "",
+      avatar: json['avatar'] ?? "",
+    );
+  }
+}
+
 class MessageOfList {
   final String idMessage;
   final String idChat;
@@ -17,6 +34,7 @@ class MessageOfList {
   final String fileName;
   final String replyTo;
   final String? status;
+  final UserM? user;
 
   MessageOfList({
     required this.idMessage,
@@ -29,10 +47,11 @@ class MessageOfList {
     required this.fileName,
     required this.replyTo,
     this.status,
+    this.user,
   });
 
   factory MessageOfList.fromJson(Map<String, dynamic> json) {
-    DateTime dateTime = DateTime.parse( json['timestamp']??"");
+    DateTime dateTime = DateTime.parse(json['timestamp'] ?? "");
 
     String formattedTimestamp =
         "${dateTime.hour}:${dateTime.minute} ${dateTime.day}/${dateTime.month}";
@@ -48,8 +67,8 @@ class MessageOfList {
       fileName: json['fileName'] ?? "",
       replyTo: json['replyTo'] ?? "",
       status: json['status'] ?? "",
+      user: json['user'] != null ? UserM.fromJson(json['user']) : null,
     );
-
   }
 }
 
@@ -63,7 +82,6 @@ class GetAllMessageCubit extends Cubit<GetAllMessageState> {
     String accToken = HiveStorage().token;
 
     try {
-      print("IDSENDER $idSender, $idReceiver, $isGroup, $idGroup");
       Dio dio = Dio();
       String apiUrl = isGroup
           ? "${Env.url}/api/v1/group-messages/$idSender/$idGroup"
@@ -79,7 +97,7 @@ class GetAllMessageCubit extends Cubit<GetAllMessageState> {
         List<MessageOfList> data = (response.data["data"] as List)
             .map((e) => MessageOfList.fromJson(e))
             .toList();
-        emit(GetAllMessageSuccessState(data,members));
+        emit(GetAllMessageSuccessState(data, members));
       } else {
         emit(ErrorGetAllMessageState("GetAllMessage failed. "));
       }
