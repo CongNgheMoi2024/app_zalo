@@ -209,6 +209,7 @@ class _AddMemberGroupScreenState extends State<AddMemberGroupScreen> {
                           selectedIds.clear();
                           listIdFriends.clear();
                           Navigator.pop(context);
+                          Navigator.pop(context);
                         });
                         return const SizedBox();
                       } else if (state is LoadingAddMemberState) {
