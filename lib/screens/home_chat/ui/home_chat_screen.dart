@@ -8,6 +8,7 @@ import 'package:app_zalo/screens/home_chat/bloc/get_all_rooms_state.dart';
 import 'package:app_zalo/screens/member_group/bloc/get_members_cubit.dart';
 import 'package:app_zalo/storages/hive_storage.dart';
 import 'package:app_zalo/widget/dismiss_keyboard_widget.dart';
+import 'package:app_zalo/widget/touchable_opacity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:stomp_dart_client/stomp.dart';
@@ -34,11 +35,11 @@ class _HomeChatScreenState extends State<HomeChatScreen> {
     BlocProvider.of<GetAllRoomCubit>(context).getAllRoomsUser();
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    return InkWell(
+    return DismissKeyboard(child: InkWell(
       onTap: () {
-        BlocProvider.of<GetAllRoomCubit>(context).getAllRoomsUser();
+      BlocProvider.of<GetAllRoomCubit>(context).getAllRoomsUser();
       },
-      child: DismissKeyboard(child: Scaffold(body: SafeArea(child:
+      child: Scaffold(body: SafeArea(child:
           BlocBuilder<GetAllRoomCubit, GetAllRoomState>(
               builder: (context, state) {
         return SizedBox(
@@ -265,7 +266,7 @@ class _HomeChatScreenState extends State<HomeChatScreen> {
             ],
           ),
         );
-      })))),
-    );
+      }))),
+    ));
   }
 }
