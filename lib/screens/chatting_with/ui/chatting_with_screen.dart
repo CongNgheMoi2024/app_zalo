@@ -321,7 +321,9 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                                       widget.inforUserChat.isGroup! &&
                                               e.user != null
                                           ? e.user.avatar
-                                          : widget.inforUserChat.avatar,
+                                          : e.user != null
+                                              ? e.user.avatar
+                                              : widget.inforUserChat.avatar,
                                   message: e.content,
                                   time: e.timestamp,
                                   sex: widget.inforUserChat.sex,
