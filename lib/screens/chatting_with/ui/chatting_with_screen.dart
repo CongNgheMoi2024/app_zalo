@@ -7,6 +7,7 @@ import 'package:app_zalo/screens/chatting_with/bloc/get_all_message_cubit.dart';
 import 'package:app_zalo/screens/chatting_with/bloc/get_all_message_state.dart';
 import 'package:app_zalo/screens/chatting_with/bloc/send_message_cubit.dart';
 import 'package:app_zalo/screens/chatting_with/bloc/send_message_state.dart';
+import 'package:app_zalo/screens/member_group/bloc/get_members_cubit.dart';
 import 'package:app_zalo/screens/more_chatting/bloc/delete_room_cubit.dart';
 import 'package:app_zalo/screens/more_chatting/ui/more_chatting_screen.dart';
 import 'package:app_zalo/storages/storage.dart';
@@ -43,7 +44,7 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
   TextEditingController controllerInputMessage = TextEditingController();
   final SendFile _sendFile = SendFile();
   List<dynamic> listMessage = [];
-
+  List<Member> members =[];
   late StompClient client;
 
   void toggleOptions() => setState(() {
@@ -52,27 +53,29 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
   @override
   void initState() {
     super.initState();
+    context.read<SendMessageCubit>().defaultState();
     client = StompClient(
         config: StompConfig.sockJS(
       url: '${Env.url}/ws',
       onConnect: (StompFrame frame) {
-        print('IDDDDDDĐ group ${widget.inforUserChat.idGroup}');
+        print('ID GROUP = ${widget.inforUserChat.idGroup}');
 
         widget.inforUserChat.isGroup == true
             ? client.subscribe(
                 destination:
                     "/user/${widget.inforUserChat.idGroup}/queue/messages",
                 callback: (StompFrame frame) {
-                  print("Supriseber on ${frame.body}");
+                  print("Subscribe chat nhóm  ${frame.body}");
                   setState(() {
                     Map<String, dynamic> data = jsonDecode(frame.body ?? "");
                     listMessage.add(MessageOfList(
-                      idMessage: data["id"]??"",//thêm vào
-                      idChat: data["chatId"]??"",// thêm vào
-                      idSender: data["senderId"]??"",// thêm vào
-                      idReceiver: data["recipientId"] ?? "",// thêm vào
-                      timestamp: DateFormat('HH:mm dd/MM').format(data["timestamp"]??DateTime.now()),// thêm vào
-                      content: data["content"]??"",// thêm vào
+                      idMessage: data["id"] ?? "", //thêm vào
+                      idChat: data["chatId"] ?? "", // thêm vào
+                      idSender: data["senderId"] ?? "", // thêm vào
+                      idReceiver: data["recipientId"] ?? "", // thêm vào
+                      timestamp: DateFormat('HH:mm dd/MM').format(
+                          data["timestamp"] ?? DateTime.now()), // thêm vào
+                      content: data["content"] ?? "", // thêm vào
                       type: data["type"] ?? "TEXT",
                       replyTo: data["replyTo"] ?? "",
                       fileName: data["fileName"] ?? "",
@@ -82,7 +85,7 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
             : client.subscribe(
                 destination: "/user/$idUser/queue/messages",
                 callback: (StompFrame frame) {
-                  print("Supriseber on chat don ${frame.body}");
+                  print("Subscribe chat đơn ${frame.body}");
                   setState(() {
                     Map<String, dynamic> data = jsonDecode(frame.body ?? "");
                     listMessage.add(MessageOfList(
@@ -101,14 +104,14 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                   });
                 });
 
-        print('onConnect     tHANHHCOONGG');
+        print('Connect websocket thành công');
       },
       beforeConnect: () async {
         await Future.delayed(const Duration(milliseconds: 200));
       },
       onWebSocketError: (dynamic error) =>
           // ignore: avoid_print
-          print("LoiKaiWkAIIIIIIIIIIII${error.toString()}"),
+          print("Lỗi websocket ${error.toString()}"),
     ));
     client.activate();
     BlocProvider.of<GetAllMessageCubit>(context).GetAllMessageenticate(
@@ -188,8 +191,16 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                             children: listMessage.asMap().entries.map((entry) {
                               final index = entry.key;
                               final e = entry.value;
-                              if (["ADD_MEMBER","ADD_SUB_ADMIN","REMOVE_SUB_ADMIN","CHANGE_ADMIN"].contains(e.type)) {
-                                return NotificationItem(userName: e.content, type:e.type);
+                              if ([
+                                "REMOVE_MEMBER",
+                                "LEAVE_GROUP",
+                                "ADD_MEMBER",
+                                "ADD_SUB_ADMIN",
+                                "REMOVE_SUB_ADMIN",
+                                "CHANGE_ADMIN"
+                              ].contains(e.type)) {
+                                return NotificationItem(
+                                    userName: e.content, type: e.type);
                               } else if (e.idSender == idUser) {
                                 return SenderMessItem(
                                   content: e.content,
@@ -374,7 +385,7 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                                   right: 5.sp,
                                 ),
                                 child: TextField(
-                                  autofocus: true,
+                                  autofocus: false,
                                   focusNode: focusTextField,
                                   controller: controllerInputMessage,
                                   decoration: InputDecoration(
@@ -410,19 +421,26 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                                       if (message.isNotEmpty) {
                                         if (isReply) {
                                           client.send(
-                                            destination: "/app/chat",
+                                            destination:
+                                                widget.inforUserChat.isGroup ==
+                                                        true
+                                                    ? "/app/chat/group"
+                                                    : "/app/chat",
                                             body: jsonEncode({
-                                              "content": message,
+                                              "chatId":
+                                                  widget.inforUserChat.idGroup,
                                               "senderId": idUser,
                                               "recipientId": widget
                                                   .inforUserChat
                                                   .idUserRecipient,
-                                              "timestamp": DateTime.now()
-                                                  .millisecondsSinceEpoch,
+                                              "content": message,
+                                              "timestamp": DateFormat(
+                                                      'yyyy-MM-ddTHH:mm:ss.SSSZ')
+                                                  .format(DateTime.now()),
                                               "replyTo": state.idMessageReply,
                                             }),
                                           );
-                                          if (!widget.inforUserChat.isGroup!) {
+                                          if (widget.inforUserChat.isGroup!) {
                                             setState(() {
                                               listMessage.add(MessageOfList(
                                                   fileName: "",
@@ -474,7 +492,8 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                                                   fileName: "",
                                                   replyTo: "",
                                                   idMessage: widget
-                                                      .inforUserChat.idGroup!, // cũ .inforUserChat.idGroup
+                                                      .inforUserChat
+                                                      .idGroup!, // cũ .inforUserChat.idGroup
                                                   idChat: "",
                                                   idSender: idUser,
                                                   idReceiver: widget
@@ -544,10 +563,12 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                         child: MediaOptions(
                           visible: showOptions,
                           onFileSelected: (files) async {
+                            String receiptId =
+                                widget.inforUserChat.isGroup! == true
+                                    ? widget.inforUserChat.idGroup!
+                                    : widget.inforUserChat.idUserRecipient;
                             List<dynamic> data = await _sendFile.sendFile(
-                                idUser,
-                                widget.inforUserChat.idUserRecipient,
-                                files);
+                                idUser, receiptId, files);
                             if (data.isEmpty) {
                               const AlertDialog(
                                 title: Text("Thông báo"),
@@ -555,6 +576,7 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                               );
                             } else {
                               for (var element in data) {
+                                print(element);
                                 setState(() {
                                   listMessage.add(MessageOfList(
                                       replyTo: "",

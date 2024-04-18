@@ -4,6 +4,7 @@ import 'package:app_zalo/screens/chatting_with/bloc/get_all_message_cubit.dart';
 import 'package:app_zalo/screens/chatting_with/ui/chatting_with_screen.dart';
 import 'package:app_zalo/screens/home_chat/bloc/get_all_rooms_cubit.dart';
 import 'package:app_zalo/screens/home_chat/bloc/get_all_rooms_state.dart';
+import 'package:app_zalo/screens/member_group/bloc/get_members_cubit.dart';
 import 'package:app_zalo/storages/hive_storage.dart';
 import 'package:app_zalo/widget/dismiss_keyboard_widget.dart';
 import 'package:flutter/material.dart';
@@ -82,11 +83,13 @@ class _HomeChatScreenState extends State<HomeChatScreen> {
                                           Navigator.push(
                                               context,
                                               MaterialPageRoute(
-                                                  builder: (context) => BlocProvider<
-                                                          GetAllMessageCubit>(
-                                                      create: (BuildContext
-                                                              context) =>
-                                                          GetAllMessageCubit(),
+                                                  builder: (context) => MultiBlocProvider(providers:[
+                                                    BlocProvider(
+                                                      create: (context) => GetAllMessageCubit(),
+                                                    ),
+                                                    BlocProvider(create:(context) => GetMembersCubit())
+                                                  ], 
+                                
                                                       child: ChattingWithScreen(
                                                         inforUserChat:
                                                             InforUserChat(

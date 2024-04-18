@@ -10,6 +10,7 @@ class NotificationItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String notification = "";
+
     switch (type) {
       case "REMOVE_MEMBER":
         notification = " bị xoá khỏi nhóm";

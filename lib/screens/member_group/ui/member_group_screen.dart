@@ -102,8 +102,10 @@ class _MemberGroupScreenState extends State<MemberGroupScreen> {
                             bottom: 0.sp, // Đặt icon ở góc dưới
                             right: 0.sp, // Đặt icon ở bên phải
                             child: Container(
-                              width: 20.sp,
-                              height: 20.sp,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10.sp),
+                                color: Colors.grey
+                              ),
                               margin: EdgeInsets.only(
                                   left: 10.sp), // Khoảng cách bên trái
                               child: Icon(Icons.key,size:20.sp,color: entry.role == RoleGroup.admin? keyGoldColor : keySilverColor,) ,

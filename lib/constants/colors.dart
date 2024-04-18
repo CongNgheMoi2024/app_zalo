@@ -13,12 +13,10 @@ const greyIcTop = Color.fromARGB(255, 83, 83, 83);
 const grey03 = Color.fromARGB(255, 217, 217, 217);
 
 const blackColor = Color(0xff000000);
-
 const lightBlue = Color.fromARGB(255, 0, 88, 220);
-
 const greenColor = Color.fromARGB(255, 0, 255, 0);
 const greenDC = Color.fromARGB(255, 0, 184, 0);
 const whiteColor = Color(0xffffffff);
-const keyGoldColor = Color.fromARGB(255, 210, 203, 13);
-const keySilverColor =Color.fromARGB(208, 186, 196, 210);
+const keyGoldColor = Color.fromARGB(255, 253, 241, 0);
+const keySilverColor =Color.fromARGB(205, 255, 255, 255);
 const boxMessShareColor = Color(0xff51edff);
