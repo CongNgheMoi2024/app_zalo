@@ -293,23 +293,40 @@ class _MemberGroupScreenState extends State<MemberGroupScreen> {
             ListTile(
                 title: const Text("Xóa khỏi nhóm"),
                 onTap: () {
-                  client.send(
-                    destination: "/app/group/remove-member",
-                    body: jsonEncode({
-                      "chatId": widget.idGroup!,
-                      "senderId": HiveStorage().idUser,
-                      "recipientId": member.id,
-                      "content": "$nameYour đã xóa ${member.name} khỏi nhóm",
-                      "timestamp":
-                          DateTime.now().millisecondsSinceEpoch.toString(),
-                    }),
-                  );
-
                   removeUser(member.id, widget.idGroup!).then((value) {
-                    finishAction(value);
-                    Navigator.pop(context);
-                    Navigator.pop(context);
-                    Navigator.pop(context);
+                    if (value == true) {
+                      client.send(
+                        destination: "/app/group/remove-member",
+                        body: jsonEncode({
+                          "chatId": widget.idGroup!,
+                          "senderId": HiveStorage().idUser,
+                          "recipientId": member.id,
+                          "content":
+                              "$nameYour đã xóa ${member.name} khỏi nhóm",
+                          "timestamp":
+                              DateTime.now().millisecondsSinceEpoch.toString(),
+                        }),
+                      );
+                      Navigator.pop(context);
+                      Navigator.pop(context);
+                      Navigator.pop(context);
+                    } else {
+                      showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                                title: const Text("Lỗi"),
+                                content: const Text(
+                                    "Nếu có ít hơn 3 người thì không thể xóa thành viên khỏi nhóm"),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: const Text("OK"),
+                                  )
+                                ],
+                              ));
+                    }
                   });
                 })
         ],
@@ -334,9 +351,11 @@ Future<bool> removeUser(String idUser, String idRoom) async {
     if (response.statusCode == 200) {
       return true;
     } else {
+      print("LOOOOOOOOOOOOOOOOOOOOIIIIIII");
       return false;
     }
   } catch (e) {
+    print("LOO ${e.toString()}");
     return false;
   }
 }
