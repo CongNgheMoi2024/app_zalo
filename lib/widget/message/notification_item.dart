@@ -3,34 +3,11 @@ import 'package:flutter/material.dart';
 
 class NotificationItem extends StatelessWidget {
   final String userName;
-  final String type;
   const NotificationItem(
-      {super.key, required this.userName, required this.type});
+      {super.key, required this.userName});
 
   @override
   Widget build(BuildContext context) {
-    String notification = "";
-
-    switch (type) {
-      case "REMOVE_MEMBER":
-        notification = " bị xoá khỏi nhóm";
-        break;
-      case "ADD_MEMBER":
-        notification = " được thêm vào nhóm";
-        break;
-      case "LEAVE_GROUP":
-        notification = " đã rời nhóm";
-        break;
-      case "ADD_SUB_ADMIN":
-        notification = " được làm phó nhóm";
-        break;
-      case "REMOVE_SUB_ADMIN":
-        notification = " bị thu hồi phó nhóm";
-        break;
-      case "CHANGE_ADMIN":
-        notification = " lên làm trưởng nhóm ";
-        break;
-    }
     return Container(
       color: Colors.transparent,
       margin: EdgeInsets.symmetric(vertical: 5.sp),
@@ -47,10 +24,6 @@ class NotificationItem extends StatelessWidget {
                   text: userName,
                   style: text12.black.medium
                 ),
-                TextSpan(
-                    text: notification,
-                    style: text12.black
-                )
               ]
             ),
           ),

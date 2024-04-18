@@ -73,9 +73,8 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                       idChat: data["chatId"] ?? "", // thêm vào
                       idSender: data["senderId"] ?? "", // thêm vào
                       idReceiver: data["recipientId"] ?? "", // thêm vào
-                      timestamp: DateFormat('HH:mm dd/MM').format(
-                          DateTime.fromMillisecondsSinceEpoch(
-                              data["timestamp"])), // thêm vào
+                     timestamp: DateFormat('HH:mm dd/MM').format(
+                          data["timestamp"] ?? DateTime.now()), // thêm vào
                       content: data["content"] ?? "", // thêm vào
                       type: data["type"] ?? "TEXT",
                       replyTo: data["replyTo"] ?? "",
@@ -232,7 +231,7 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                                 "CHANGE_ADMIN"
                               ].contains(e.type)) {
                                 return NotificationItem(
-                                    userName: e.content, type: e.type);
+                                    userName: e.content);
                               } else if (e.idSender == idUser) {
                                 return SenderMessItem(
                                   content: e.content,
