@@ -154,37 +154,39 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => MultiBlocProvider(providers:[
-                              BlocProvider<DeleteRoomCubit>(
-                                create: (BuildContext context) =>
-                                    DeleteRoomCubit()),
-                                    BlocProvider<LeaveGroupCubit>(
-                                create: (BuildContext context) =>
-                                    LeaveGroupCubit())
-                            ],
-                                child: MoreChattingScreen(
-                                  deactivate: () {
-                                    client.deactivate();
-                                  },
-                                  inforUserChat: widget.inforUserChat,
-                                  sendAddMember: () {
-                                    for (var element
-                                        in HiveStorage().listMembers) {
-                                      client.send(
-                                        destination: "/app/group/add-member",
-                                        body: jsonEncode({
-                                          "chatId":
-                                              widget.inforUserChat.idGroup,
-                                          "senderId": idUser,
-                                          "recipientId": "",
-                                          "content": element, // BE handle
-                                          "timestamp": DateTime.now()
-                                              .millisecondsSinceEpoch,
-                                        }),
-                                      );
-                                    }
-                                  },
-                                ))));
+                            builder: (context) => MultiBlocProvider(
+                                    providers: [
+                                      BlocProvider<DeleteRoomCubit>(
+                                          create: (BuildContext context) =>
+                                              DeleteRoomCubit()),
+                                      BlocProvider<LeaveGroupCubit>(
+                                          create: (BuildContext context) =>
+                                              LeaveGroupCubit())
+                                    ],
+                                    child: MoreChattingScreen(
+                                      deactivate: () {
+                                        client.deactivate();
+                                      },
+                                      inforUserChat: widget.inforUserChat,
+                                      sendAddMember: () {
+                                        for (var element
+                                            in HiveStorage().listMembers) {
+                                          client.send(
+                                            destination:
+                                                "/app/group/add-member",
+                                            body: jsonEncode({
+                                              "chatId":
+                                                  widget.inforUserChat.idGroup,
+                                              "senderId": idUser,
+                                              "recipientId": "",
+                                              "content": element, // BE handle
+                                              "timestamp": DateTime.now()
+                                                  .millisecondsSinceEpoch,
+                                            }),
+                                          );
+                                        }
+                                      },
+                                    ))));
                   },
                   isGroup: widget.inforUserChat.isGroup,
                 ),
@@ -307,9 +309,11 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                                     prevIndex != null && prevIndex == index - 1;
                                 prevIndex = index;
                                 return ReciverMessItem(
-                                  avatarReceiver: widget.inforUserChat.isGroup!
-                                      ? e.user.avatar
-                                      : widget.inforUserChat.avatar,
+                                  avatarReceiver:
+                                      widget.inforUserChat.isGroup! &&
+                                              e.user != null
+                                          ? e.user.avatar
+                                          : widget.inforUserChat.avatar,
                                   message: e.content,
                                   time: e.timestamp,
                                   sex: widget.inforUserChat.sex,
