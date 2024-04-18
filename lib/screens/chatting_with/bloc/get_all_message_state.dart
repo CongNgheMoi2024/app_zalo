@@ -1,4 +1,5 @@
 import 'package:app_zalo/screens/chatting_with/bloc/get_all_message_cubit.dart';
+import 'package:app_zalo/screens/member_group/bloc/get_members_cubit.dart';
 
 abstract class GetAllMessageState {}
 
@@ -14,5 +15,6 @@ class ErrorGetAllMessageState extends GetAllMessageState {
 
 class GetAllMessageSuccessState extends GetAllMessageState {
   List<MessageOfList> data;
-  GetAllMessageSuccessState(this.data);
+  List<Member> members;
+  GetAllMessageSuccessState(this.data,this.members);
 }

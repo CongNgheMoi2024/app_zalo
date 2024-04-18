@@ -1,5 +1,7 @@
 import 'package:app_zalo/env.dart';
 import 'package:app_zalo/screens/chatting_with/bloc/get_all_message_state.dart';
+import 'package:app_zalo/screens/member_group/bloc/get_members_cubit.dart';
+import 'package:app_zalo/screens/member_group/bloc/manage_member.dart';
 import 'package:app_zalo/storages/storage.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -72,11 +74,12 @@ class GetAllMessageCubit extends Cubit<GetAllMessageState> {
             "Content-Type": "application/json",
             "Authorization": "Bearer $accToken",
           }));
+      List<Member> members = await getMembers(idGroup);
       if (response.statusCode == 200) {
         List<MessageOfList> data = (response.data["data"] as List)
             .map((e) => MessageOfList.fromJson(e))
             .toList();
-        emit(GetAllMessageSuccessState(data));
+        emit(GetAllMessageSuccessState(data,members));
       } else {
         emit(ErrorGetAllMessageState("GetAllMessage failed. "));
       }

@@ -227,8 +227,7 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                                               element is MessageOfList &&
                                               element.idMessage == e.replyTo,
                                         ),
-                                  nameUserReply:
-                                      "line 194 chatting with screen", //LỖI VỚI CHAT GROUP
+                                  nameUserReply: state.members.firstWhere((element) => element.id == e.idSender,orElse:()=>Member(id:"", name:"Tên không xác định", avatar:"", role: RoleGroup.member)).name,
                                   idMessage: e.idMessage,
                                   idReceiver:
                                       widget.inforUserChat.idUserRecipient,
@@ -289,8 +288,7 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                                               element is MessageOfList &&
                                               element.idMessage == e.replyTo,
                                         ),
-                                  userNameReply:
-                                      "Line 253 chatting with screen", //LỖI VỚI CHAT GROUP
+                                  userNameReply: state.members.firstWhere((element) => element.id == e.idSender,orElse:()=>Member(id:"", name:"Tên không xác định", avatar:"", role: RoleGroup.member)).name,
                                   idMessage: e.idMessage,
                                   idReceiver:
                                       widget.inforUserChat.idUserRecipient,
