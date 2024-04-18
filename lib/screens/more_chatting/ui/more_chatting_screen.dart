@@ -118,12 +118,10 @@ class _MoreChattingScreenState extends State<MoreChattingScreen> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) => AddMemberGroupScreen(
-                                  sendAddMember: widget.sendAddMember!,
-                                  idGroup:
-                                      widget.inforUserChat!.idGroup!,
-                                  members:
-                                      widget.inforUserChat!.members,
-                                )));
+                                      sendAddMember: widget.sendAddMember!,
+                                      idGroup: widget.inforUserChat!.idGroup!,
+                                      members: widget.inforUserChat!.members,
+                                    )));
                       },
                       child: Column(
                         children: [

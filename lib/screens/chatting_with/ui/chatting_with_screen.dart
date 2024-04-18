@@ -44,7 +44,7 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
   TextEditingController controllerInputMessage = TextEditingController();
   final SendFile _sendFile = SendFile();
   List<dynamic> listMessage = [];
-  List<Member> members =[];
+  List<Member> members = [];
   late StompClient client;
 
   void toggleOptions() => setState(() {
@@ -74,7 +74,8 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                       idSender: data["senderId"] ?? "", // thêm vào
                       idReceiver: data["recipientId"] ?? "", // thêm vào
                       timestamp: DateFormat('HH:mm dd/MM').format(
-                          data["timestamp"] ?? DateTime.now()), // thêm vào
+                          DateTime.fromMillisecondsSinceEpoch(
+                              data["timestamp"])), // thêm vào
                       content: data["content"] ?? "", // thêm vào
                       type: data["type"] ?? "TEXT",
                       replyTo: data["replyTo"] ?? "",
@@ -161,11 +162,8 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                                   },
                                   inforUserChat: widget.inforUserChat,
                                   sendAddMember: () {
-                                    print(
-                                        "LLLLLLLLLLLLLLLLLLLLLLLLLLLLL ${HiveStorage().listMembers}");
-                                    HiveStorage()
-                                        .listMembers
-                                        .forEach((element) {
+                                    for (var element
+                                        in HiveStorage().listMembers) {
                                       client.send(
                                         destination: "/app/group/add-member",
                                         body: jsonEncode({
@@ -178,7 +176,7 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                                               .millisecondsSinceEpoch,
                                         }),
                                       );
-                                    });
+                                    }
                                   },
                                 ))));
                   },
@@ -227,7 +225,15 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                                               element is MessageOfList &&
                                               element.idMessage == e.replyTo,
                                         ),
-                                  nameUserReply: state.members.firstWhere((element) => element.id == e.idSender,orElse:()=>Member(id:"", name:"Tên không xác định", avatar:"", role: RoleGroup.member)).name,
+                                  nameUserReply: state.members
+                                      .firstWhere(
+                                          (element) => element.id == e.idSender,
+                                          orElse: () => Member(
+                                              id: "",
+                                              name: "Tên không xác định",
+                                              avatar: "",
+                                              role: RoleGroup.member))
+                                      .name,
                                   idMessage: e.idMessage,
                                   idReceiver:
                                       widget.inforUserChat.idUserRecipient,
@@ -288,7 +294,15 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                                               element is MessageOfList &&
                                               element.idMessage == e.replyTo,
                                         ),
-                                  userNameReply: state.members.firstWhere((element) => element.id == e.idSender,orElse:()=>Member(id:"", name:"Tên không xác định", avatar:"", role: RoleGroup.member)).name,
+                                  userNameReply: state.members
+                                      .firstWhere(
+                                          (element) => element.id == e.idSender,
+                                          orElse: () => Member(
+                                              id: "",
+                                              name: "Tên không xác định",
+                                              avatar: "",
+                                              role: RoleGroup.member))
+                                      .name,
                                   idMessage: e.idMessage,
                                   idReceiver:
                                       widget.inforUserChat.idUserRecipient,
@@ -495,9 +509,7 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                                                   .format(DateTime.now()),
                                             }),
                                           );
-                                          if (widget.inforUserChat
-                                                  .isGroup = // Chỉ cập nhât list message khi chat room là group
-                                              true) {
+                                          if (!widget.inforUserChat.isGroup!) {
                                             setState(() {
                                               listMessage.add(MessageOfList(
                                                   fileName: "",
