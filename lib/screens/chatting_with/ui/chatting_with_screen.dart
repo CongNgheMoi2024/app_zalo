@@ -164,6 +164,7 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                                               LeaveGroupCubit())
                                     ],
                                     child: MoreChattingScreen(
+                                      nameGroup: widget.inforUserChat.nameGroup,
                                       deactivate: () {
                                         client.deactivate();
                                       },
