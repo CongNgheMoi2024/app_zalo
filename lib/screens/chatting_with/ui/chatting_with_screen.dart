@@ -9,6 +9,7 @@ import 'package:app_zalo/screens/chatting_with/bloc/send_message_cubit.dart';
 import 'package:app_zalo/screens/chatting_with/bloc/send_message_state.dart';
 import 'package:app_zalo/screens/member_group/bloc/get_members_cubit.dart';
 import 'package:app_zalo/screens/more_chatting/bloc/delete_room_cubit.dart';
+import 'package:app_zalo/screens/more_chatting/bloc/leave_group_cubit.dart';
 import 'package:app_zalo/screens/more_chatting/ui/more_chatting_screen.dart';
 import 'package:app_zalo/storages/storage.dart';
 import 'package:app_zalo/utils/send_file.dart';
@@ -152,9 +153,14 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => BlocProvider<DeleteRoomCubit>(
+                            builder: (context) => MultiBlocProvider(providers:[
+                              BlocProvider<DeleteRoomCubit>(
                                 create: (BuildContext context) =>
-                                    DeleteRoomCubit(),
+                                    DeleteRoomCubit()),
+                                    BlocProvider<LeaveGroupCubit>(
+                                create: (BuildContext context) =>
+                                    LeaveGroupCubit())
+                            ],
                                 child: MoreChattingScreen(
                                   deactivate: () {
                                     client.deactivate();
