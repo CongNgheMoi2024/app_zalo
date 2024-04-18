@@ -22,6 +22,7 @@ class SenderMessItem extends StatefulWidget {
   String? type;
   String? fileName;
   String? nameUserReply;
+
   MessageOfList? infoMessReply;
   String? idMessage;
   String? idReceiver;
@@ -340,18 +341,18 @@ class _SenderMessItemState extends State<SenderMessItem> {
                             ),
                             child: widget.infoMessReply != null
                                 ? Column(
-                                children: [
-                                  getWidgetByType(
-                                      widget.nameUserReply!,
-                                      widget.infoMessReply!.type,
-                                      widget.infoMessReply!.fileName,
-                                      widget.infoMessReply!.content),
-                                  Text(
-                                    widget.content!,
-                                    style: text16.primary.regular,
-                                    softWrap: true,
-                                  )
-                                ],
+                                    children: [
+                                      getWidgetByType(
+                                          widget.nameUserReply!,
+                                          widget.infoMessReply!.type,
+                                          widget.infoMessReply!.fileName,
+                                          widget.infoMessReply!.content),
+                                      Text(
+                                        widget.content!,
+                                        style: text16.primary.regular,
+                                        softWrap: true,
+                                      )
+                                    ],
                                   )
                                 : widget.type == "IMAGE"
                                     ? ExtendedImageCustom(url: widget.content!)

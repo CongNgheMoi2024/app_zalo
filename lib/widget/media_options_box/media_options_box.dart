@@ -1,10 +1,8 @@
 import 'dart:io';
 
 import 'package:app_zalo/constants/index.dart';
-import 'package:app_zalo/screens/chatting_with/bloc/send_message_cubit.dart';
 import 'package:app_zalo/utils/pick_file/pick_file.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MediaOptions extends StatefulWidget {
   final bool visible;
