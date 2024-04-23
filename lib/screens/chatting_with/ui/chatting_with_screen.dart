@@ -164,7 +164,10 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                                               DeleteRoomCubit()),
                                       BlocProvider<LeaveGroupCubit>(
                                           create: (BuildContext context) =>
-                                              LeaveGroupCubit())
+                                              LeaveGroupCubit()),
+                                      BlocProvider<GetMembersCubit>(
+                                          create: (BuildContext context) =>
+                                              GetMembersCubit()),
                                     ],
                                     child: MoreChattingScreen(
                                       nameGroup: widget.inforUserChat.nameGroup,
@@ -233,7 +236,7 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                                               replyTo: "",
                                               status: ""))
                                       .idSender;
-                              print("members ${members.length}");
+
                               if ([
                                 "REMOVE_MEMBER",
                                 "LEAVE_GROUP",

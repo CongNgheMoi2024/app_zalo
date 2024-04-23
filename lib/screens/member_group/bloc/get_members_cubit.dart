@@ -1,10 +1,8 @@
-import 'dart:convert';
-
 import 'package:app_zalo/env.dart';
+import 'package:app_zalo/storages/hive_storage.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../storages/hive_storage.dart';
 import 'get_members_state.dart';
 
 enum RoleGroup { admin, subadmin, member }
@@ -36,8 +34,9 @@ class GetMembersCubit extends Cubit<GetMembersState> {
       if (response.statusCode == 200) {
         String idAdmin = response.data['data']['admin']['id'];
         List<dynamic> subadminsData = response.data['data']['subAdmins'];
-        List<String> subAdmins = subadminsData.map((e) => e['id'].toString()).toList();
-            
+        List<String> subAdmins =
+            subadminsData.map((e) => e['id'].toString()).toList();
+
         List<dynamic> membersData = response.data['data']['members'];
         List<Member> members = membersData.map((member) {
           RoleGroup role;
@@ -54,7 +53,6 @@ class GetMembersCubit extends Cubit<GetMembersState> {
               avatar: member['avatar'] ?? "",
               role: role);
         }).toList();
-        // sắp xếp theo role
         members.sort((a, b) => a.role.index.compareTo(b.role.index));
         emit(SuccessGetMembersState(members));
       }
@@ -63,7 +61,8 @@ class GetMembersCubit extends Cubit<GetMembersState> {
       emit(ErrorGetMembersState(e.toString()));
     }
   }
-  void reset(){
+
+  void reset() {
     emit(InitialGetMembersState());
   }
 }

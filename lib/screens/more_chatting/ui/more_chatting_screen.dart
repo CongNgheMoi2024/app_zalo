@@ -5,14 +5,17 @@ import 'package:app_zalo/screens/add_member_group/bloc/add_member_cubit.dart';
 import 'package:app_zalo/screens/add_member_group/ui/add_member_group_screen.dart';
 import 'package:app_zalo/screens/fast_contact/bloc/fast_contact_cubit.dart';
 import 'package:app_zalo/screens/member_group/bloc/get_members_cubit.dart';
+import 'package:app_zalo/screens/member_group/bloc/get_members_state.dart';
 import 'package:app_zalo/screens/member_group/ui/member_group_screen.dart';
 import 'package:app_zalo/screens/more_chatting/bloc/delete_room_cubit.dart';
 import 'package:app_zalo/screens/more_chatting/bloc/delete_room_state.dart';
 import 'package:app_zalo/screens/more_chatting/bloc/leave_group_cubit.dart';
 import 'package:app_zalo/screens/more_chatting/bloc/leave_group_state.dart';
+import 'package:app_zalo/storages/hive_storage.dart';
 import 'package:app_zalo/widget/header/header_trans.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive/hive.dart';
 
 // ignore: must_be_immutable
 class MoreChattingScreen extends StatefulWidget {
@@ -33,6 +36,12 @@ class MoreChattingScreen extends StatefulWidget {
 }
 
 class _MoreChattingScreenState extends State<MoreChattingScreen> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<GetMembersCubit>().getMembers(widget.inforUserChat!.idGroup!);
+  }
+
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
@@ -98,26 +107,81 @@ class _MoreChattingScreenState extends State<MoreChattingScreen> {
                 ],
               ),
             ),
-            Container(
-                margin: EdgeInsets.only(top: 10.sp),
-                padding: EdgeInsets.symmetric(
-                  vertical: 20.sp,
-                  horizontal: 10.sp,
-                ),
-                width: width,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+            BlocBuilder<GetMembersCubit, GetMembersState>(
+                builder: (context, state) {
+              if (state is LoadingGetMembersState) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              } else if (state is SuccessGetMembersState) {
+                return Column(
                   children: [
-                    Column(
-                      children: [
-                        Icon(Icons.find_in_page_outlined, size: 30.sp),
-                        Container(
-                            margin: EdgeInsets.only(top: 5.sp),
-                            width: width * 0.2,
-                            child: Text("Tìm kiếm tin nhắn",
-                                textAlign: TextAlign.center,
-                                style: text16.primary.regular))
-                      ],
+                    Container(
+                        margin: EdgeInsets.only(top: 10.sp),
+                        padding: EdgeInsets.symmetric(
+                          vertical: 20.sp,
+                          horizontal: 10.sp,
+                        ),
+                        width: width,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Column(
+                              children: [
+                                Icon(Icons.find_in_page_outlined, size: 30.sp),
+                                Container(
+                                    margin: EdgeInsets.only(top: 5.sp),
+                                    width: width * 0.2,
+                                    child: Text("Tìm kiếm tin nhắn",
+                                        textAlign: TextAlign.center,
+                                        style: text16.primary.regular))
+                              ],
+                            ),
+                            InkWell(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => MultiBlocProvider(
+                                                providers: [
+                                                  BlocProvider<
+                                                      FastContactCubit>(
+                                                    create: (BuildContext
+                                                            context) =>
+                                                        FastContactCubit(),
+                                                  ),
+                                                  BlocProvider<AddMemberCubit>(
+                                                    create: (BuildContext
+                                                            context) =>
+                                                        AddMemberCubit(),
+                                                  ),
+                                                ],
+                                                child: AddMemberGroupScreen(
+                                                  sendAddMember:
+                                                      widget.sendAddMember!,
+                                                  idGroup: widget
+                                                      .inforUserChat!.idGroup!,
+                                                  members: widget
+                                                      .inforUserChat!.members,
+                                                ))));
+                              },
+                              child: Column(
+                                children: [
+                                  Icon(Icons.add_reaction_outlined,
+                                      size: 30.sp),
+                                  Container(
+                                      margin: EdgeInsets.only(top: 5.sp),
+                                      width: width * 0.2,
+                                      child: Text("Thêm thành viên",
+                                          textAlign: TextAlign.center,
+                                          style: text16.primary.regular))
+                                ],
+                              ),
+                            ),
+                          ],
+                        )),
+                    SizedBox(
+                      height: 20.sp,
                     ),
                     InkWell(
                       onTap: () {
@@ -126,94 +190,62 @@ class _MoreChattingScreenState extends State<MoreChattingScreen> {
                             MaterialPageRoute(
                                 builder: (context) => MultiBlocProvider(
                                         providers: [
-                                          BlocProvider<FastContactCubit>(
+                                          BlocProvider<GetMembersCubit>(
                                             create: (BuildContext context) =>
-                                                FastContactCubit(),
-                                          ),
-                                          BlocProvider<AddMemberCubit>(
-                                            create: (BuildContext context) =>
-                                                AddMemberCubit(),
+                                                GetMembersCubit(),
                                           ),
                                         ],
-                                        child: AddMemberGroupScreen(
-                                          sendAddMember: widget.sendAddMember!,
+                                        child: MemberGroupScreen(
                                           idGroup:
-                                              widget.inforUserChat!.idGroup!,
-                                          members:
-                                              widget.inforUserChat!.members,
+                                              widget.inforUserChat!.idGroup,
                                         ))));
                       },
-                      child: Column(
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Icon(Icons.add_reaction_outlined, size: 30.sp),
                           Container(
-                              margin: EdgeInsets.only(top: 5.sp),
-                              width: width * 0.2,
-                              child: Text("Thêm thành viên",
-                                  textAlign: TextAlign.center,
-                                  style: text16.primary.regular))
+                            margin: EdgeInsets.only(left: 10.sp),
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 15.sp,
+                            ),
+                            child: Icon(
+                              Icons.group_outlined,
+                              size: 30.sp,
+                              color: primaryColor,
+                            ),
+                          ),
+                          Expanded(
+                            child: Container(
+                                margin: EdgeInsets.only(top: 10.sp),
+                                padding: EdgeInsets.symmetric(
+                                  vertical: 15.sp,
+                                  horizontal: 10.sp,
+                                ),
+                                decoration: BoxDecoration(
+                                  border: Border(
+                                    top: BorderSide(
+                                        color: primaryColor.withOpacity(0.2),
+                                        width: 1.sp),
+                                    bottom: BorderSide(
+                                        color: primaryColor.withOpacity(0.2),
+                                        width: 1.sp),
+                                  ),
+                                ),
+                                child: Text("${state.data.length} Thành viên",
+                                    style: text17.primary.regular)),
+                          ),
                         ],
                       ),
                     ),
                   ],
-                )),
-            SizedBox(
-              height: 20.sp,
-            ),
-            InkWell(
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => MultiBlocProvider(
-                                providers: [
-                                  BlocProvider<GetMembersCubit>(
-                                    create: (BuildContext context) =>
-                                        GetMembersCubit(),
-                                  ),
-                                ],
-                                child: MemberGroupScreen(
-                                  idGroup: widget.inforUserChat!.idGroup,
-                                ))));
-              },
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(left: 10.sp),
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 15.sp,
-                    ),
-                    child: Icon(
-                      Icons.group_outlined,
-                      size: 30.sp,
-                      color: primaryColor,
-                    ),
-                  ),
-                  Expanded(
-                    child: Container(
-                        margin: EdgeInsets.only(top: 10.sp),
-                        padding: EdgeInsets.symmetric(
-                          vertical: 15.sp,
-                          horizontal: 10.sp,
-                        ),
-                        decoration: BoxDecoration(
-                          border: Border(
-                            top: BorderSide(
-                                color: primaryColor.withOpacity(0.2),
-                                width: 1.sp),
-                            bottom: BorderSide(
-                                color: primaryColor.withOpacity(0.2),
-                                width: 1.sp),
-                          ),
-                        ),
-                        child: Text(
-                            "${widget.inforUserChat!.members.length} Thành viên",
-                            style: text17.primary.regular)),
-                  ),
-                ],
-              ),
-            ),
+                );
+              } else if (state is ErrorGetMembersState) {
+                return Text("Lỗi trong quá trình load dữ liệu",
+                    style: text17.error.regular);
+              } else {
+                return Container();
+              }
+            }),
             BlocBuilder<LeaveGroupCubit, LeaveGroupState>(
                 builder: (context, state) {
               if (state is LeaveGroupLoading) {
@@ -234,7 +266,6 @@ class _MoreChattingScreenState extends State<MoreChattingScreen> {
                     TextButton(
                       onPressed: () {
                         context.read<LeaveGroupCubit>().resetState();
-                        // Navigator.pop(context);
                       },
                       child: Text("OK"),
                     )
@@ -300,7 +331,10 @@ class _MoreChattingScreenState extends State<MoreChattingScreen> {
                 });
                 return const Text("Xóa nhóm thành công");
               } else if (stateDeleteRoom is ErrorDeleteRoomState) {
-                return Text("Xóa nhóm thất bại", style: text17.error.regular);
+                return Center(
+                  child: Text("Bạn không có quyền xóa nhóm",
+                      style: text17.error.regular),
+                );
               } else {
                 return InkWell(
                   onTap: () {

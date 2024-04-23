@@ -1,16 +1,10 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'dart:convert';
 
 import 'package:app_zalo/constants/index.dart';
 import 'package:app_zalo/env.dart';
-import 'package:app_zalo/models/chat/infor_user_chat.dart';
-import 'package:app_zalo/screens/chatting_with/bloc/get_all_message_cubit.dart';
-import 'package:app_zalo/screens/chatting_with/ui/chatting_with_screen.dart';
 import 'package:app_zalo/screens/member_group/bloc/get_members_cubit.dart';
 import 'package:app_zalo/screens/member_group/bloc/get_members_state.dart';
 import 'package:app_zalo/screens/member_group/bloc/manage_member.dart';
-import 'package:app_zalo/screens/more_chatting/bloc/leave_group_cubit.dart';
 import 'package:app_zalo/storages/hive_storage.dart';
 import 'package:app_zalo/widget/header/header_trans.dart';
 import 'package:dio/dio.dart';
@@ -22,7 +16,6 @@ import 'package:stomp_dart_client/stomp_frame.dart';
 
 // ignore: must_be_immutable
 class MemberGroupScreen extends StatefulWidget {
-  List<String>? members;
   String? idGroup;
 
   MemberGroupScreen({super.key, required this.idGroup});
@@ -127,14 +120,13 @@ class _MemberGroupScreenState extends State<MemberGroupScreen> {
                         ),
                         if (entry.role != RoleGroup.member)
                           Positioned(
-                            bottom: 0.sp, // Đặt icon ở góc dưới
-                            right: 0.sp, // Đặt icon ở bên phải
+                            bottom: 0.sp,
+                            right: 0.sp,
                             child: Container(
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10.sp),
                                   color: Colors.grey),
-                              margin: EdgeInsets.only(
-                                  left: 10.sp), // Khoảng cách bên trái
+                              margin: EdgeInsets.only(left: 10.sp),
                               child: Icon(
                                 Icons.key,
                                 size: 20.sp,
