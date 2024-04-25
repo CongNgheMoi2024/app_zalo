@@ -119,6 +119,17 @@ class _HeaderOfChattingState extends State<HeaderOfChatting> {
             ],
           ),
         ),
+        Padding(
+          padding: EdgeInsets.symmetric(
+            horizontal: 16.sp,
+            vertical: 12.sp,
+          ),
+          child: Icon(
+            Icons.call,
+            size: 31.sp,
+            color: greenColor.withOpacity(0.9),
+          ),
+        ),
         InkWell(
           onTap: widget.actionMenuMore == null
               ? () {}
