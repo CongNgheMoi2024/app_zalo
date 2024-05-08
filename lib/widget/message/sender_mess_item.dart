@@ -1,5 +1,4 @@
 import 'package:app_zalo/constants/index.dart';
-import 'package:app_zalo/models/chat/info_mess_reply.dart';
 import 'package:app_zalo/screens/chatting_with/bloc/get_all_message_cubit.dart';
 import 'package:app_zalo/screens/forward/bloc/forward_message_cubit.dart';
 import 'package:app_zalo/screens/forward/ui/forward_message_screen.dart';
@@ -250,6 +249,7 @@ class _SenderMessItemState extends State<SenderMessItem> {
   void initState() {
     super.initState();
     if (widget.type == "VIDEO") {
+      // ignore: deprecated_member_use
       _videoPalyerController = VideoPlayerController.network(widget.content!);
       _initializeVideoPlayerFuture = _videoPalyerController.initialize();
     } else if (widget.type == "AUDIO") {}

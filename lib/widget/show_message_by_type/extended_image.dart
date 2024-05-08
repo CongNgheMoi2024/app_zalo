@@ -27,7 +27,6 @@ class _ExtendedImageCustomState extends State<ExtendedImageCustom> {
               CommonGif.loading,
               fit: BoxFit.fill,
             );
-            break;
 
           ///if you don't want override completed widget
           ///please return null or state.completedWidget

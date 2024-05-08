@@ -18,7 +18,6 @@ class SendFile {
           ? apiUrl = "${Env.url}/api/v1/send-file-message-group"
           : apiUrl = "${Env.url}/api/v1/send-file-message";
 
-      print("apiUrl is $apiUrl");
       FormData formData = FormData();
       formData.fields.add(MapEntry("senderId", senderId));
       isGroup == true

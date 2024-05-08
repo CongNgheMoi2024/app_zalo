@@ -1,6 +1,4 @@
-# AppZalo
-
-AppZalo
+# app_zalo
 
 # flutter clean
 

@@ -10,9 +10,7 @@ import 'package:app_zalo/widget/header/header_trans.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:stomp_dart_client/stomp.dart';
-import 'package:stomp_dart_client/stomp_config.dart';
-import 'package:stomp_dart_client/stomp_frame.dart';
+import 'package:stomp_dart_client/stomp_dart_client.dart';
 
 // ignore: must_be_immutable
 class MemberGroupScreen extends StatefulWidget {
@@ -343,7 +341,6 @@ Future<bool> removeUser(String idUser, String idRoom) async {
     if (response.statusCode == 200) {
       return true;
     } else {
-      print("LOOOOOOOOOOOOOOOOOOOOIIIIIII");
       return false;
     }
   } catch (e) {
