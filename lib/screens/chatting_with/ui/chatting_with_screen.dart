@@ -24,9 +24,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:stomp_dart_client/stomp.dart';
-import 'package:stomp_dart_client/stomp_config.dart';
-import 'package:stomp_dart_client/stomp_frame.dart';
+import 'package:stomp_dart_client/stomp_dart_client.dart';
 
 // ignore: must_be_immutable
 class ChattingWithScreen extends StatefulWidget {
@@ -59,8 +57,6 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
         config: StompConfig.sockJS(
       url: '${Env.url}/ws',
       onConnect: (StompFrame frame) {
-        print('ID GROUP = ${widget.inforUserChat.idGroup}');
-
         widget.inforUserChat.isGroup == true
             ? client.subscribe(
                 destination:
@@ -90,7 +86,6 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
             : client.subscribe(
                 destination: "/user/$idUser/queue/messages",
                 callback: (StompFrame frame) {
-                  print("Subscribe chat đơn ${frame.body}");
                   setState(() {
                     Map<String, dynamic> data = jsonDecode(frame.body ?? "");
                     listMessage.add(MessageOfList(

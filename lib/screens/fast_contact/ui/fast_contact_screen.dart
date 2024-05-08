@@ -43,7 +43,7 @@ class _FastContactScreenState extends State<FastContactScreen> {
     BuildContext context,
   ) {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
+      const SnackBar(
         content: Text('Đã chấp nhận lời mời kết bạn'),
       ),
     );

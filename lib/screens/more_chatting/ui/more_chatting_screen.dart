@@ -11,7 +11,6 @@ import 'package:app_zalo/screens/more_chatting/bloc/delete_room_cubit.dart';
 import 'package:app_zalo/screens/more_chatting/bloc/delete_room_state.dart';
 import 'package:app_zalo/screens/more_chatting/bloc/leave_group_cubit.dart';
 import 'package:app_zalo/screens/more_chatting/bloc/leave_group_state.dart';
-import 'package:app_zalo/storages/hive_storage.dart';
 import 'package:app_zalo/widget/header/header_trans.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
