@@ -1,5 +1,6 @@
 import 'package:app_zalo/constants/index.dart';
 import 'package:app_zalo/routes/routes.dart';
+import 'package:app_zalo/screens/call_video/ui/call_video_screen.dart';
 import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
@@ -119,15 +120,23 @@ class _HeaderOfChattingState extends State<HeaderOfChatting> {
             ],
           ),
         ),
-        Padding(
-          padding: EdgeInsets.symmetric(
-            horizontal: 16.sp,
-            vertical: 12.sp,
-          ),
-          child: Icon(
-            Icons.call,
-            size: 31.sp,
-            color: greenColor.withOpacity(0.9),
+        InkWell(
+          onTap: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const CallVideoScreen()));
+          },
+          child: Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: 16.sp,
+              vertical: 12.sp,
+            ),
+            child: Icon(
+              Icons.call,
+              size: 31.sp,
+              color: greenColor.withOpacity(0.9),
+            ),
           ),
         ),
         InkWell(
