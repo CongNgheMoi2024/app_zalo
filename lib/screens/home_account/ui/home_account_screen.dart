@@ -36,9 +36,7 @@ class _HomeAccountScreenState extends State<HomeAccountScreen> {
         // ignore: use_build_context_synchronously
         Navigator.pushNamed(context, RouterName.uploadImageCoverScreen,
             arguments: {'imageFile': File(pickedFile1.path)});
-      } else {
-        print('No image selected.');
-      }
+      } else {}
     } catch (e) {
       print("Error: $e");
     }
@@ -100,7 +98,6 @@ class _HomeAccountScreenState extends State<HomeAccountScreen> {
 
   void showModalAvatar(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
     showModalBottomSheet(
         context: context,
         shape: RoundedRectangleBorder(

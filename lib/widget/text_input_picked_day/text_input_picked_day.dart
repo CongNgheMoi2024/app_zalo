@@ -1,4 +1,3 @@
-import 'package:app_zalo/constants/colors.dart';
 import 'package:app_zalo/constants/index.dart';
 import 'package:flutter/material.dart';
 

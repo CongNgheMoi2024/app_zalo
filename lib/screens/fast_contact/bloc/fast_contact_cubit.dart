@@ -4,6 +4,28 @@ import 'package:app_zalo/storages/hive_storage.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+class FriendsM {
+  final String id;
+  final String name;
+  final String phone;
+  final String avatar;
+
+  FriendsM(
+      {required this.id,
+      required this.name,
+      required this.phone,
+      required this.avatar});
+
+  factory FriendsM.fromJson(Map<String, dynamic> json) {
+    return FriendsM(
+      id: json['id'] ?? "",
+      name: json['name'] ?? "",
+      phone: json['phone'] ?? "",
+      avatar: json['avatar'] ?? "",
+    );
+  }
+}
+
 class FastContactCubit extends Cubit<FastContactState> {
   FastContactCubit() : super(InitialFastContactState());
   String accessToken = HiveStorage().token;
@@ -20,12 +42,13 @@ class FastContactCubit extends Cubit<FastContactState> {
         options: Options(headers: {"Authorization": "Bearer $accessToken"}),
       );
       if (response.statusCode == 200) {
-        emit(FastContactFriendsSuccessdState(response.data['data']));
+        emit(FastContactFriendsSuccessdState((response.data["data"] as List)
+            .map((e) => FriendsM.fromJson(e))
+            .toList()));
       } else {
         emit(ErrorFastContactState("FastContact failed.  "));
       }
     } catch (e) {
-      print("Loi FasssssTContact ${e.toString()}");
       emit(ErrorFastContactState(e.toString()));
     }
   }

@@ -5,12 +5,12 @@ import 'package:app_zalo/screens/forgot_password/bloc/otp_forgot_state.dart';
 import 'package:app_zalo/utils/regex.dart';
 import 'package:app_zalo/widget/button/button_bottom_navigated.dart';
 import 'package:app_zalo/widget/dismiss_keyboard_widget.dart';
-import 'package:app_zalo/widget/text_input/text_input_login.dart';
 import 'package:app_zalo/widget/text_input/text_input_password.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
+// ignore: must_be_immutable
 class OtpForgotPasswordScreen extends StatefulWidget {
   String? phone;
   OtpForgotPasswordScreen({super.key, this.phone});
@@ -163,7 +163,9 @@ class _OtpForgotPasswordScreenState extends State<OtpForgotPasswordScreen> {
                   return Container();
                 } else {
                   return state is LoadingOTPForgotPasswordState
-                      ? CircularProgressIndicator()
+                      ? const Center(
+                          child: CircularProgressIndicator(),
+                        )
                       : Column(
                           children: [
                             ButtonBottomNavigated(

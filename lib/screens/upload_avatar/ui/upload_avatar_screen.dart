@@ -21,6 +21,7 @@ class UploadAvatarScreen extends StatefulWidget {
 
 class _UploadAvatarScreenState extends State<UploadAvatarScreen> {
   int? selectedRadio;
+
   int sizeImage = 0;
   File? pathImage1;
   Future<void> _pickImage() async {
@@ -37,12 +38,9 @@ class _UploadAvatarScreenState extends State<UploadAvatarScreen> {
           pathImage1 = File(pickedFile1.path);
           sizeImage = pathImage1!.lengthSync();
         });
-      } else {
-        print('No image selected.');
-      }
-    } catch (e) {
-      print("Error: $e");
-    }
+      } else {}
+      // ignore: empty_catches
+    } catch (e) {}
   }
 
   @override

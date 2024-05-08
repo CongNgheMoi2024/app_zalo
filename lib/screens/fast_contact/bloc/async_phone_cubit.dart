@@ -15,7 +15,7 @@ class AsyncPhoneBookCubit extends Cubit<AsyncPhoneBookState> {
     String accessToken = HiveStorage().token;
     emit(LoadingAsyncPhoneBookState());
 
-    Map<String, dynamic> _contactToJson(Contact contact) {
+    Map<String, dynamic> contactToJson(Contact contact) {
       return {
         'phone': contact.phones!.first.value!,
         'name': contact.displayName,
@@ -23,12 +23,12 @@ class AsyncPhoneBookCubit extends Cubit<AsyncPhoneBookState> {
     }
 
     try {
-      _contactToJson(data[0]);
+      contactToJson(data[0]);
       Dio dio = Dio();
       String apiUrl = "${Env.url}/api/v1/phone-books";
 
       List<Map<String, dynamic>> jsonDataList =
-          data.map((contact) => _contactToJson(contact)).toList();
+          data.map((contact) => contactToJson(contact)).toList();
 
       // Encode the List<Map> to JSON
       String jsonData = jsonEncode(jsonDataList);
@@ -39,14 +39,11 @@ class AsyncPhoneBookCubit extends Cubit<AsyncPhoneBookState> {
         data: jsonData,
       );
       if (response.statusCode == 200) {
-        print("DDoong bO THANH CONG");
-
         emit(AsyncSuccessState("Đồng bộ thành công"));
       } else {
         emit(ErrorAsyncPhoneBookState("AsyncPhoneBook failed."));
       }
     } catch (e) {
-      print("DOng bo thATT BAI ${e.toString()}");
       emit(ErrorAsyncPhoneBookState(e.toString()));
     }
   }

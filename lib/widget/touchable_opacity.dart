@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class TouchableOpacity extends StatefulWidget {
+  // ignore: prefer_typing_uninitialized_variables
   final onTap;
   final Widget child;
 
@@ -8,6 +9,7 @@ class TouchableOpacity extends StatefulWidget {
       : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _TouchableOpacityState createState() => _TouchableOpacityState();
 }
 

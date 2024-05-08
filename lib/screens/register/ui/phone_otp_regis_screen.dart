@@ -2,8 +2,6 @@ import 'package:app_zalo/constants/index.dart';
 import 'package:app_zalo/routes/routes.dart';
 import 'package:app_zalo/screens/register/bloc/phone_otp_regis_cubit.dart';
 import 'package:app_zalo/screens/register/bloc/phone_otp_regis_state.dart';
-import 'package:app_zalo/screens/register/bloc/register_cubit.dart';
-import 'package:app_zalo/screens/register/ui/register_screen.dart';
 import 'package:app_zalo/screens/verify_register/bloc/verify_register_cubit.dart';
 import 'package:app_zalo/screens/verify_register/verify_register_screen.dart';
 import 'package:app_zalo/utils/regex.dart';

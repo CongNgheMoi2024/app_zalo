@@ -5,6 +5,7 @@ import 'package:contacts_service/contacts_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+// ignore: must_be_immutable
 class AsyncPhonebook extends StatefulWidget {
   List<Contact>? contacts = [];
   AsyncPhonebook({super.key, this.contacts});

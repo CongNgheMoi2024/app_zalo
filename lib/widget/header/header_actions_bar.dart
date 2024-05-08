@@ -1,7 +1,6 @@
 import 'package:app_zalo/constants/index.dart';
 import 'package:app_zalo/routes/routes.dart';
 import 'package:flutter/material.dart';
-import 'package:injectable/injectable.dart';
 
 class HeaderActionsBar extends StatefulWidget {
   final IconData? icon1;
@@ -27,7 +26,7 @@ class _HeaderActionsBarState extends State<HeaderActionsBar> {
           gradient: LinearGradient(
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
-        stops: [
+        stops: const [
           0.1,
           0.6,
           0.9,
@@ -65,6 +64,7 @@ class _HeaderActionsBarState extends State<HeaderActionsBar> {
                     },
                     child: Container(
                       alignment: Alignment.centerLeft,
+                      color: Colors.transparent,
                       child: Text(
                         'Tìm kiếm',
                         style: text18.regular.copyWith(

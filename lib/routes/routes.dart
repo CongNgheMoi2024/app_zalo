@@ -1,5 +1,4 @@
 import 'package:app_zalo/screens/boarding/boarding_screen.dart';
-import 'package:app_zalo/screens/chatting_with/ui/chatting_with_screen.dart';
 import 'package:app_zalo/screens/dashboard/ui/dashboard.dart';
 import 'package:app_zalo/screens/forgot_password/bloc/forgot_password_cubit.dart';
 import 'package:app_zalo/screens/forgot_password/ui/forgot_password_screen.dart';
@@ -24,16 +23,16 @@ RouteFactory routes() {
     var name = settings.name;
     switch (name) {
       case RouterName.initScreen:
-        screen = const DashboardScreen();
+        screen = const SplashScreen();
         break;
 
       case RouterName.dashboardScreen:
         screen = const DashboardScreen();
-
         break;
 
       case RouterName.onBoardingScreen:
         screen = const BoardingScreen();
+
         break;
 
       case RouterName.phoneOTPRegisterScreen:
@@ -41,7 +40,6 @@ RouteFactory routes() {
             create: (context) => PhoneOtpRegisCubit(),
             child: const PhoneOTPRegisterScreen());
         break;
-
       case RouterName.uploadAvatarScreen:
         screen = BlocProvider(
             create: (context) => UploadAvatarCubit(),
@@ -50,7 +48,7 @@ RouteFactory routes() {
 
       case RouterName.loginScreen:
         screen = BlocProvider(
-            create: (context) => LoginCubit(), child: LoginScreen());
+            create: (context) => LoginCubit(), child: const LoginScreen());
         break;
 
       case RouterName.uploadImageCoverScreen:
@@ -69,10 +67,8 @@ RouteFactory routes() {
         screen = BlocProvider(
             create: (context) => SearchCubit(), child: const SearchScreen());
 
-      case RouterName.chattingWithScreen:
-        screen = ChattingWithScreen();
         break;
-
+        
       default:
         screen = const SplashScreen();
         break;
@@ -84,7 +80,6 @@ RouteFactory routes() {
     );
   };
 }
-
 abstract class RouterName {
   static const String initScreen = '/';
   static const String dashboardScreen = '/dashboardScreen';
@@ -94,6 +89,6 @@ abstract class RouterName {
   static const String uploadAvatarScreen = '/uploadAvatarScreen';
   static const String forgotPasswordScreen = '/forgotPasswordScreen';
   static const String searchByPhoneScreen = '/searchByPhoneScreen';
-  static const String chattingWithScreen = '/chattingWithScreen';
   static const String phoneOTPRegisterScreen = '/phoneOTPRegisterScreen';
+  static const String chatScreen = '/chatScreen';
 }

@@ -1,6 +1,7 @@
 import 'package:app_zalo/constants/index.dart';
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class TextInputLogin extends StatefulWidget {
   String? title;
   Function? onChanged;
@@ -11,7 +12,7 @@ class TextInputLogin extends StatefulWidget {
 }
 
 class _TextInputLoginState extends State<TextInputLogin> {
-  TextEditingController _controller = TextEditingController();
+  final TextEditingController _controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Container(

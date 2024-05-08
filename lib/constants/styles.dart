@@ -106,5 +106,6 @@ extension TextStyleExt on TextStyle {
   TextStyle get error => copyWith(color: Colors.red);
   TextStyle get white => copyWith(color: whiteColor);
   TextStyle get grey => copyWith(color: Colors.grey);
-  TextStyle get bgColor => copyWith(color: Color.fromARGB(255, 45, 45, 45));
+  TextStyle get bgColor =>
+      copyWith(color: const Color.fromARGB(255, 45, 45, 45));
 }

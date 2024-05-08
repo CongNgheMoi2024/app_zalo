@@ -1,4 +1,6 @@
 import 'package:app_zalo/constants/index.dart';
+import 'package:app_zalo/screens/add_friend/bloc/add_friend_cubit.dart';
+import 'package:app_zalo/screens/add_friend/ui/add_friend_screen.dart';
 import 'package:app_zalo/screens/search/bloc/search_cubit.dart';
 import 'package:app_zalo/screens/search/bloc/search_state.dart';
 import 'package:app_zalo/utils/regex.dart';
@@ -119,10 +121,27 @@ class _SearchScreenState extends State<SearchScreen> {
                   ? state.data['avatar']
                   : "";
               return GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => BlocProvider<AddFriendCubit>(
+                              create: (BuildContext context) =>
+                                  AddFriendCubit(),
+                              child: AddFriendScreen(
+                                idFriend: state.data['id'],
+                                avatarFriend: imgUrl,
+                                nameFriend: state.data['name'],
+                              ))));
+                },
                 child: Container(
+                  margin: EdgeInsets.symmetric(vertical: 10.sp),
                   height: 50,
-                  color: whiteColor,
+                  decoration: const BoxDecoration(
+                    border: Border(
+                        bottom: BorderSide(color: whiteColor, width: 0.5),
+                        top: BorderSide(color: whiteColor, width: 0.5)),
+                  ),
                   padding: EdgeInsets.symmetric(horizontal: 20.sp),
                   child: Row(
                     children: [
@@ -138,7 +157,15 @@ class _SearchScreenState extends State<SearchScreen> {
                       SizedBox.fromSize(
                         size: Size.fromWidth(30.sp),
                       ),
-                      Text(state.data['name'])
+                      Expanded(child: Text(state.data['name'])),
+                      Container(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 15.sp, vertical: 7.sp),
+                        margin: EdgeInsets.only(right: 20.sp, left: 20.sp),
+                        child: Text(state.data['phone'],
+                            style: text16.regular
+                                .copyWith(color: lightBlue.withOpacity(0.5))),
+                      )
                     ],
                   ),
                 ),

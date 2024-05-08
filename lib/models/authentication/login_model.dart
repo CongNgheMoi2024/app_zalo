@@ -1,8 +1,12 @@
 class LoginModel {
+  // ignore: non_constant_identifier_names
   String? phone_number;
+  // ignore: non_constant_identifier_names
   String? access_token;
+  // ignore: non_constant_identifier_names
   String? refresh_token;
 
+  // ignore: non_constant_identifier_names
   LoginModel({this.phone_number, this.access_token, this.refresh_token});
 
   LoginModel.fromJson(Map<String, dynamic> json) {

@@ -1,6 +1,7 @@
 import 'package:app_zalo/constants/index.dart';
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class TextInputPassword extends StatefulWidget {
   String? title;
   Function? onChanged;
@@ -11,7 +12,7 @@ class TextInputPassword extends StatefulWidget {
 }
 
 class _TextInputPasswordState extends State<TextInputPassword> {
-  TextEditingController _controller = TextEditingController();
+  final TextEditingController _controller = TextEditingController();
   bool _obscureText = true;
   @override
   Widget build(BuildContext context) {
@@ -43,14 +44,14 @@ class _TextInputPasswordState extends State<TextInputPassword> {
                 hintStyle: text15.copyWith(color: greyIcTop.withOpacity(0.6)),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.sp),
-                  borderSide: BorderSide(
+                  borderSide: const BorderSide(
                     color: Colors.transparent,
                     width: 1,
                   ),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.sp),
-                  borderSide: BorderSide(
+                  borderSide: const BorderSide(
                     color: Colors.transparent,
                     width: 1,
                   ),

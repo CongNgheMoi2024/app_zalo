@@ -13,8 +13,6 @@ class EditProfileCubit extends Cubit<EditProfileState> {
     String accessToken = HiveStorage().token;
     emit(LoadingEditProfileState());
 
-    print(
-        "  editProfile: name: $name, dateOfBirth: $dateOfBirth, sex: $sex, phone: $phone");
     try {
       Dio dio = Dio();
       String apiUrl = "${Env.url}/api/v1/users/update/$phone";
@@ -24,13 +22,11 @@ class EditProfileCubit extends Cubit<EditProfileState> {
           data: {"name": name, "sex": sex, "birthday": dateOfBirth});
 
       if (response.statusCode == 200) {
-        print("Cập nhật thông tin thành công ${response.data}");
         emit(EditProfileSuccessState());
       } else {
         emit(ErrorEditProfileState("EditProfile failed.}"));
       }
     } catch (e) {
-      print("Looixiii ${e.toString()}");
       emit(ErrorEditProfileState(e.toString()));
     }
   }

@@ -5,6 +5,7 @@ import 'package:app_zalo/screens/upload_cover_image/bloc/upload_cover_state.dart
 import 'package:app_zalo/storages/storage.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+// ignore: depend_on_referenced_packages
 import 'package:http_parser/http_parser.dart';
 
 class UploadCoverCubit extends Cubit<UploadCoverState> {
@@ -16,7 +17,6 @@ class UploadCoverCubit extends Cubit<UploadCoverState> {
     String accessToken = HiveStorage().token;
     String idUser = HiveStorage().idUser;
     try {
-      print("UPP ANH BIA $imageCover");
       Dio dio = Dio();
       String apiUrl = "${Env.url}/api/v1/users/upload-image-cover/$idUser";
 
@@ -33,14 +33,11 @@ class UploadCoverCubit extends Cubit<UploadCoverState> {
       Response response = await dio.post(apiUrl, data: formData);
 
       if (response.statusCode == 200) {
-        print("Looixiii ${response.data}");
-
         emit(UploadCoverSuccessState());
       } else {
         emit(ErrorUploadCoverState("UploadCover failed. "));
       }
     } catch (e) {
-      print("Looixiii ${e.toString()}");
       emit(ErrorUploadCoverState(e.toString()));
     }
   }
