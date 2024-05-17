@@ -31,6 +31,7 @@ class ReciverMessItem extends StatefulWidget {
   String? userSendMess;
   Function? onDelete;
   String? name;
+  String? status;
 
   ReciverMessItem(
       {super.key,
@@ -48,7 +49,8 @@ class ReciverMessItem extends StatefulWidget {
       this.userSendMess,
       this.replyTo,
       this.onDelete,
-      this.name});
+      this.name,
+      this.status});
 
   @override
   State<ReciverMessItem> createState() => _ReciverMessItemState();
@@ -351,97 +353,139 @@ class _ReciverMessItemState extends State<ReciverMessItem> {
                           ),
                         )
                       : Container(),
-                  InkWell(
-                    onLongPress: () {
-                      _showMessageDetailsModal(context);
-                    },
-                    onDoubleTap: _onDoubleTap,
-                    onTap: () {
-                      setState(() {
-                        visibleDetail = !visibleDetail;
-                      });
-                    },
-                    child: BlocProvider(
-                      create: (BuildContext context) => DownloadCubit(),
-                      child: Container(
-                          constraints: BoxConstraints(
-                            minWidth: 0,
-                            maxWidth: width * 0.6,
-                          ),
-                          margin: EdgeInsets.only(left: 10.sp),
-                          padding: EdgeInsets.symmetric(
-                              vertical: 8.sp, horizontal: 15.sp),
-                          decoration: BoxDecoration(
-                            color:
-                                widget.type == "IMAGE" || widget.type == "VIDEO"
-                                    ? Colors.transparent
-                                    : primaryColor.withOpacity(0.1),
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(
-                                    !widget.showAvatar! ? 20.sp : 5.sp),
-                                topRight: Radius.circular(
-                                    !widget.showAvatar! ? 20.sp : 5.sp),
-                                bottomLeft: Radius.circular(5.sp),
-                                bottomRight: Radius.circular(5.sp)),
-                          ),
-                          child: widget.infoMessReply != null
-                              ? Column(
-                                  children: [
-                                    getWidgetByType(
-                                        widget.userMessReply!,
-                                        widget.infoMessReply!.type,
-                                        widget.infoMessReply!.fileName,
-                                        widget.infoMessReply!.content),
-                                    Text(
-                                      widget.message!,
-                                      style: text16.primary.regular,
-                                      softWrap: true,
-                                    )
-                                  ],
-                                )
-                              : widget.type == "IMAGE"
-                                  ? ExtendedImageCustom(url: widget.message!)
-                                  : widget.type == "VIDEO"
-                                      ? InkWell(
-                                          onTap: () {
-                                            setState(() {
-                                              if (_videoPalyerController
-                                                  .value.isPlaying) {
-                                                _videoPalyerController.pause();
-                                              } else {
-                                                _videoPalyerController.play();
-                                              }
-                                            });
-                                          },
-                                          child: FutureBuilder(
-                                            future:
-                                                _initializeVideoPlayerFuture,
-                                            builder: (context, snapshot) {
-                                              if (snapshot.connectionState ==
-                                                  ConnectionState.done) {
-                                                return AspectRatio(
-                                                  aspectRatio:
-                                                      _videoPalyerController
-                                                          .value.aspectRatio,
-                                                  child: VideoPlayer(
-                                                      _videoPalyerController),
-                                                );
-                                              } else {
-                                                return const CircularProgressIndicator();
-                                              }
-                                            },
-                                          ),
-                                        )
-                                      : widget.type == "FILE"
-                                          ? FileView(
-                                              url: widget.message!,
-                                              fileName: widget.fileName!,
-                                            )
-                                          : Text(
-                                              widget.message!,
-                                              style: text16.primary.regular,
-                                            )),
-                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      widget.status == "DELETED"
+                          ? Container(
+                              margin: EdgeInsets.only(right: 15.sp),
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 8.sp, horizontal: 16.sp),
+                              decoration: BoxDecoration(
+                                color: whiteColor,
+                                border: Border.all(
+                                    color: primaryColor, width: 1.sp),
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(20.sp),
+                                  topRight: Radius.circular(20.sp),
+                                  bottomLeft: Radius.circular(20.sp),
+                                ),
+                              ),
+                              child: Text(
+                                "Tin nhắn đã được thu hồi",
+                                style: text16.primary.regular
+                                    .copyWith(color: primaryColor),
+                              ),
+                            )
+                          : InkWell(
+                              onLongPress: () {
+                                _showMessageDetailsModal(context);
+                              },
+                              onDoubleTap: _onDoubleTap,
+                              onTap: () {
+                                setState(() {
+                                  visibleDetail = !visibleDetail;
+                                });
+                              },
+                              child: BlocProvider(
+                                create: (BuildContext context) =>
+                                    DownloadCubit(),
+                                child: Container(
+                                    constraints: BoxConstraints(
+                                      minWidth: 0,
+                                      maxWidth: width * 0.6,
+                                    ),
+                                    margin: EdgeInsets.only(left: 10.sp),
+                                    padding: EdgeInsets.symmetric(
+                                        vertical: 8.sp, horizontal: 15.sp),
+                                    decoration: BoxDecoration(
+                                      color: widget.type == "IMAGE" ||
+                                              widget.type == "VIDEO"
+                                          ? Colors.transparent
+                                          : primaryColor.withOpacity(0.1),
+                                      borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(
+                                              !widget.showAvatar!
+                                                  ? 20.sp
+                                                  : 5.sp),
+                                          topRight: Radius.circular(
+                                              !widget.showAvatar!
+                                                  ? 20.sp
+                                                  : 5.sp),
+                                          bottomLeft: Radius.circular(5.sp),
+                                          bottomRight: Radius.circular(5.sp)),
+                                    ),
+                                    child: widget.infoMessReply != null
+                                        ? Column(
+                                            children: [
+                                              getWidgetByType(
+                                                  widget.userMessReply!,
+                                                  widget.infoMessReply!.type,
+                                                  widget
+                                                      .infoMessReply!.fileName,
+                                                  widget
+                                                      .infoMessReply!.content),
+                                              Text(
+                                                widget.message!,
+                                                style: text16.primary.regular,
+                                                softWrap: true,
+                                              )
+                                            ],
+                                          )
+                                        : widget.type == "IMAGE"
+                                            ? ExtendedImageCustom(
+                                                url: widget.message!)
+                                            : widget.type == "VIDEO"
+                                                ? InkWell(
+                                                    onTap: () {
+                                                      setState(() {
+                                                        if (_videoPalyerController
+                                                            .value.isPlaying) {
+                                                          _videoPalyerController
+                                                              .pause();
+                                                        } else {
+                                                          _videoPalyerController
+                                                              .play();
+                                                        }
+                                                      });
+                                                    },
+                                                    child: FutureBuilder(
+                                                      future:
+                                                          _initializeVideoPlayerFuture,
+                                                      builder:
+                                                          (context, snapshot) {
+                                                        if (snapshot
+                                                                .connectionState ==
+                                                            ConnectionState
+                                                                .done) {
+                                                          return AspectRatio(
+                                                            aspectRatio:
+                                                                _videoPalyerController
+                                                                    .value
+                                                                    .aspectRatio,
+                                                            child: VideoPlayer(
+                                                                _videoPalyerController),
+                                                          );
+                                                        } else {
+                                                          return const CircularProgressIndicator();
+                                                        }
+                                                      },
+                                                    ),
+                                                  )
+                                                : widget.type == "FILE"
+                                                    ? FileView(
+                                                        url: widget.message!,
+                                                        fileName:
+                                                            widget.fileName!,
+                                                      )
+                                                    : Text(
+                                                        widget.message!,
+                                                        style: text16
+                                                            .primary.regular,
+                                                      )),
+                              ),
+                            ),
+                    ],
                   ),
                 ],
               ),

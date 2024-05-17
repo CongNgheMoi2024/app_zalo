@@ -286,7 +286,6 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                                         setState(() {
                                           listMessage.removeAt(index);
                                         });
-                                        print("Xoa thanh cong");
                                       } else {}
                                     } catch (e) {}
                                   },
@@ -313,8 +312,6 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                                                     .idUserRecipient,
                                                 widget.inforUserChat.isGroup!,
                                                 widget.inforUserChat.idGroup!);
-
-                                        print("Thu Hoi Thanh Cong");
                                       } else {}
                                     } catch (e) {}
                                   },
@@ -327,6 +324,7 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                                 }
 
                                 return ReciverMessItem(
+                                  status: e.status,
                                   name: widget.inforUserChat.isGroup! &&
                                           e.user != null
                                       ? e.user.name
