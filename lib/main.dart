@@ -1,7 +1,9 @@
+import 'package:app_zalo/firebase_options.dart';
 import 'package:app_zalo/routes/route_generate.dart';
 import 'package:app_zalo/routes/routes.dart';
 import 'package:app_zalo/screens/chatting_with/bloc/send_message_cubit.dart';
 import 'package:app_zalo/storages/key_storage.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/adapters.dart';
@@ -9,6 +11,10 @@ import 'package:hive_flutter/adapters.dart';
 void main() async {
   await Hive.initFlutter();
   await Hive.openBox(KeyStorage.setting);
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 

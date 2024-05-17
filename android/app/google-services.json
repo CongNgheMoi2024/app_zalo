@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "265552807388",
+    "project_id": "bezola-8e842",
+    "storage_bucket": "bezola-8e842.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:265552807388:android:2a6f94024b3c961a273b19",
+        "android_client_info": {
+          "package_name": "com.example.app_zalo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyARRnTOgkHIUw46DDzA_T3VZSdRA3N33Lk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
