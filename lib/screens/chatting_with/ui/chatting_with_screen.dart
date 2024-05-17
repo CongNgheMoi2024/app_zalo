@@ -290,20 +290,33 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                                       } else {}
                                     } catch (e) {}
                                   },
-                                  onRecall: () {
-                                    client.send(
-                                      destination: "/app/delete",
-                                      body: jsonEncode({
-                                        "id": e.idMessage,
-                                      }),
-                                    );
-                                    BlocProvider.of<GetAllMessageCubit>(context)
-                                        .GetAllMessageenticate(
-                                            idUser,
-                                            widget
-                                                .inforUserChat.idUserRecipient,
-                                            widget.inforUserChat.isGroup!,
-                                            widget.inforUserChat.idGroup!);
+                                  onRecall: () async {
+                                    try {
+                                      String accToken = HiveStorage().token;
+                                      Dio dio = Dio();
+                                      String apiUrl =
+                                          "${Env.url}/api/v1/recall-messages/${e.idMessage}";
+
+                                      Response response = await dio.delete(
+                                          apiUrl,
+                                          options: Options(headers: {
+                                            "Content-Type": "application/json",
+                                            "Authorization": "Bearer $accToken",
+                                          }));
+                                      if (response.statusCode == 200) {
+                                        // ignore: use_build_context_synchronously
+                                        BlocProvider.of<GetAllMessageCubit>(
+                                                context)
+                                            .GetAllMessageenticate(
+                                                idUser,
+                                                widget.inforUserChat
+                                                    .idUserRecipient,
+                                                widget.inforUserChat.isGroup!,
+                                                widget.inforUserChat.idGroup!);
+
+                                        print("Thu Hoi Thanh Cong");
+                                      } else {}
+                                    } catch (e) {}
                                   },
                                 );
                               } else {

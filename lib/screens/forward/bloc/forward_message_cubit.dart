@@ -23,12 +23,14 @@ class ForwardMessageCubit extends Cubit<ForwardMessageState> {
           }),
           data: listUser);
       if (response.statusCode == 200) {
+        print("Thuuu Hồi thành công");
         emit(ForwardSuccessState());
       } else {
+        print("Looixiii THUUUU hOiii ${response.data.toString()}");
         emit(ErrorForwardMessageState("ForwardMessage failed. }"));
       }
     } catch (e) {
-      print("Looixiii ${e.toString()}");
+      print("Looixiii THUUUU hOiii ${e.toString()}");
       emit(ErrorForwardMessageState(e.toString()));
     }
   }
