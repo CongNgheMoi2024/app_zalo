@@ -1,6 +1,7 @@
 import 'package:app_zalo/env.dart';
 import 'package:app_zalo/screens/login/bloc/login_state.dart';
 import 'package:app_zalo/storages/hive_storage.dart';
+import 'package:app_zalo/utils/save_token_firebase/save_token_firebase.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -25,9 +26,7 @@ class LoginCubit extends Cubit<LoginState> {
         HiveStorage().updateToken(accessToken);
         HiveStorage().updateRefreshToken(refreshToken);
         HiveStorage().updateIdUser(result['user']['id']);
-        String? token = await FirebaseMessaging.instance.getToken();
-        print("Login success $accessToken, token: $token");
-
+        SaveTokenFirebase().saveTokenFirebase();
         emit(LoginenticatedState(refreshToken, phoneNumber));
       } else {
         emit(ErrorLoginState("Login failed. ${response.data['message']}"));
