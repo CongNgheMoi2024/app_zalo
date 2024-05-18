@@ -7,6 +7,7 @@ import 'package:app_zalo/screens/chatting_with/bloc/get_all_message_cubit.dart';
 import 'package:app_zalo/screens/chatting_with/bloc/get_all_message_state.dart';
 import 'package:app_zalo/screens/chatting_with/bloc/send_message_cubit.dart';
 import 'package:app_zalo/screens/chatting_with/bloc/send_message_state.dart';
+import 'package:app_zalo/screens/infor_chat_simple/infor_chat_simple.dart';
 import 'package:app_zalo/screens/member_group/bloc/get_members_cubit.dart';
 import 'package:app_zalo/screens/more_chatting/bloc/delete_room_cubit.dart';
 import 'package:app_zalo/screens/more_chatting/bloc/leave_group_cubit.dart';
@@ -149,46 +150,57 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                   urlAvatar: widget.inforUserChat.avatar,
                   sex: widget.inforUserChat.sex,
                   actionMenuMore: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => MultiBlocProvider(
-                                    providers: [
-                                      BlocProvider<DeleteRoomCubit>(
-                                          create: (BuildContext context) =>
-                                              DeleteRoomCubit()),
-                                      BlocProvider<LeaveGroupCubit>(
-                                          create: (BuildContext context) =>
-                                              LeaveGroupCubit()),
-                                      BlocProvider<GetMembersCubit>(
-                                          create: (BuildContext context) =>
-                                              GetMembersCubit()),
-                                    ],
-                                    child: MoreChattingScreen(
-                                      nameGroup: widget.inforUserChat.nameGroup,
-                                      deactivate: () {
-                                        client.deactivate();
-                                      },
-                                      inforUserChat: widget.inforUserChat,
-                                      sendAddMember: () {
-                                        for (var element
-                                            in HiveStorage().listMembers) {
-                                          client.send(
-                                            destination:
-                                                "/app/group/add-member",
-                                            body: jsonEncode({
-                                              "chatId":
-                                                  widget.inforUserChat.idGroup,
-                                              "senderId": idUser,
-                                              "recipientId": "",
-                                              "content": element, // BE handle
-                                              "timestamp": DateTime.now()
-                                                  .millisecondsSinceEpoch,
-                                            }),
-                                          );
-                                        }
-                                      },
-                                    ))));
+                    widget.inforUserChat.isGroup == true
+                        ? Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => MultiBlocProvider(
+                                        providers: [
+                                          BlocProvider<DeleteRoomCubit>(
+                                              create: (BuildContext context) =>
+                                                  DeleteRoomCubit()),
+                                          BlocProvider<LeaveGroupCubit>(
+                                              create: (BuildContext context) =>
+                                                  LeaveGroupCubit()),
+                                          BlocProvider<GetMembersCubit>(
+                                              create: (BuildContext context) =>
+                                                  GetMembersCubit()),
+                                        ],
+                                        child: MoreChattingScreen(
+                                          nameGroup:
+                                              widget.inforUserChat.nameGroup,
+                                          deactivate: () {
+                                            client.deactivate();
+                                          },
+                                          inforUserChat: widget.inforUserChat,
+                                          sendAddMember: () {
+                                            for (var element
+                                                in HiveStorage().listMembers) {
+                                              client.send(
+                                                destination:
+                                                    "/app/group/add-member",
+                                                body: jsonEncode({
+                                                  "chatId": widget
+                                                      .inforUserChat.idGroup,
+                                                  "senderId": idUser,
+                                                  "recipientId": "",
+                                                  "content":
+                                                      element, // BE handle
+                                                  "timestamp": DateTime.now()
+                                                      .millisecondsSinceEpoch,
+                                                }),
+                                              );
+                                            }
+                                          },
+                                        ))))
+                        : Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => InforChatSimple(
+                                      avatar: widget.inforUserChat.avatar,
+                                      name: widget.inforUserChat.name,
+                                      sex: widget.inforUserChat.sex,
+                                    )));
                   },
                   isGroup: widget.inforUserChat.isGroup,
                 ),
