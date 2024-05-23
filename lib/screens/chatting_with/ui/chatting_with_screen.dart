@@ -545,14 +545,14 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                                               "replyTo": state.idMessageReply,
                                             }),
                                           );
-                                          if (widget.inforUserChat.isGroup!) {
+                                          if (!widget.inforUserChat.isGroup!) {
                                             setState(() {
                                               listMessage.add(MessageOfList(
                                                   fileName: "",
                                                   replyTo:
                                                       state.idMessageReply!,
                                                   idMessage: widget
-                                                      .inforUserChat.idGroup!,
+                                                      .inforUserChat.idUserRecipient,
                                                   idChat: "",
                                                   idSender: idUser,
                                                   idReceiver: widget
