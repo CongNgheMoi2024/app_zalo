@@ -1,6 +1,7 @@
 import 'package:app_zalo/env.dart';
 import 'package:app_zalo/screens/register/bloc/register_state.dart';
 import 'package:app_zalo/storages/hive_storage.dart';
+import 'package:app_zalo/utils/save_token_firebase/save_token_firebase.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -29,6 +30,7 @@ class RegisterCubit extends Cubit<RegisterState> {
         HiveStorage()
             .updateRefreshToken("${response.data['data']['refresh_token']}");
         HiveStorage().updateIdUser(response.data['data']['user']['id']);
+        SaveTokenFirebase().saveTokenFirebase();
         emit(SuccessRegisterState());
       } else {
         emit(
