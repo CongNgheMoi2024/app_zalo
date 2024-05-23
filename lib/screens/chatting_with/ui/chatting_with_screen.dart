@@ -552,7 +552,8 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                                                   replyTo:
                                                       state.idMessageReply!,
                                                   idMessage: widget
-                                                      .inforUserChat.idUserRecipient,
+                                                      .inforUserChat
+                                                      .idUserRecipient,
                                                   idChat: "",
                                                   idSender: idUser,
                                                   idReceiver: widget
@@ -672,7 +673,8 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                                   widget.inforUserChat.idUserRecipient,
                                   widget.inforUserChat.idGroup!,
                                   files,
-                                  widget.inforUserChat.isGroup!);
+                                  widget.inforUserChat.isGroup!,
+                                  context);
                               if (data.isEmpty) {
                                 const AlertDialog(
                                   title: Text("Thông báo"),
@@ -687,7 +689,8 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
                                   widget.inforUserChat.idUserRecipient,
                                   widget.inforUserChat.idGroup!,
                                   files,
-                                  widget.inforUserChat.isGroup!);
+                                  widget.inforUserChat.isGroup!,
+                                  context);
                               for (var element in data2) {
                                 setState(() {
                                   listMessage.add(MessageOfList(

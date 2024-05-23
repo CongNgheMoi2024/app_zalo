@@ -1,15 +1,23 @@
 import 'dart:io';
 
+import 'package:app_zalo/constants/index.dart';
 import 'package:app_zalo/env.dart';
 import 'package:app_zalo/storages/hive_storage.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 
 class SendFile {
-  Future<List<dynamic>> sendFile(String senderId, String recipientId,
-      String chatId, List<File> files, bool isGroup) async {
+  Future<List<dynamic>> sendFile(
+      String senderId,
+      String recipientId,
+      String chatId,
+      List<File> files,
+      bool isGroup,
+      BuildContext context) async {
     print(
         "Grouppp is $isGroup, chatId is $chatId, recipientId is $recipientId, files is $files, isGroup is $isGroup");
     String token = HiveStorage().token;
+    print("Người gửi $senderId, người nhận $recipientId, chatId $chatId");
     try {
       Dio dio = Dio();
       String apiUrl;
@@ -40,13 +48,35 @@ class SendFile {
         }),
         data: formData,
       );
+
       if (response.statusCode == 200) {
+        print("Gửi file thành công ${response.data}");
         List<dynamic> data = response.data["data"];
         return data;
       } else {
+        print("Gửi file thất bại ${response.statusCode}");
         return [];
       }
-    } catch (error) {
+    } on DioException catch (error) {
+      if (error.response!.statusCode == 413) {
+        showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+                  title: Text("Thông báo", style: text18.semiBold.primary),
+                  content: Text("File quá lớn, vui lòng chọn file nhỏ hơn 1MB",
+                      style: text18.regular.primary),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Text("OK"),
+                    ),
+                  ],
+                ));
+        return [];
+      }
+      print("Gửi file thất bại 222 ${error.response!.statusCode}");
       return [];
     }
   }
