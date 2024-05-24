@@ -14,7 +14,6 @@ import 'package:app_zalo/screens/more_chatting/bloc/leave_group_state.dart';
 import 'package:app_zalo/widget/header/header_trans.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hive/hive.dart';
 
 // ignore: must_be_immutable
 class MoreChattingScreen extends StatefulWidget {
@@ -160,8 +159,6 @@ class _MoreChattingScreenState extends State<MoreChattingScreen> {
                                                       widget.sendAddMember!,
                                                   idGroup: widget
                                                       .inforUserChat!.idGroup!,
-                                                  members: widget
-                                                      .inforUserChat!.members,
                                                 ))));
                               },
                               child: Column(

@@ -1,4 +1,5 @@
 import 'package:app_zalo/constants/index.dart';
+import 'package:app_zalo/env.dart';
 import 'package:app_zalo/screens/add_member_group/bloc/add_member_cubit.dart';
 import 'package:app_zalo/screens/add_member_group/bloc/add_member_state.dart';
 import 'package:app_zalo/screens/fast_contact/bloc/fast_contact_cubit.dart';
@@ -8,17 +9,16 @@ import 'package:app_zalo/widget/button/button_bottom_navigated.dart';
 import 'package:app_zalo/widget/dismiss_keyboard_widget.dart';
 import 'package:app_zalo/widget/header/header_trans.dart';
 import 'package:app_zalo/widget/text_input/text_input_widget.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 // ignore: must_be_immutable
 class AddMemberGroupScreen extends StatefulWidget {
   String? idGroup;
-  List<String>? members;
   Function? sendAddMember;
 
-  AddMemberGroupScreen(
-      {super.key, this.members, this.idGroup, this.sendAddMember});
+  AddMemberGroupScreen({super.key, this.idGroup, this.sendAddMember});
 
   @override
   State<AddMemberGroupScreen> createState() => _AddMemberGroupScreenState();
@@ -26,6 +26,30 @@ class AddMemberGroupScreen extends StatefulWidget {
 
 class _AddMemberGroupScreenState extends State<AddMemberGroupScreen> {
   String? filter = '';
+  List<String> members = [];
+
+  Future<void> getMembers(String idGroup) async {
+    String accToken = HiveStorage().token;
+    try {
+      Dio dio = Dio();
+      dio.options.headers['content-Type'] = 'application/json';
+      dio.options.headers["Authorization"] = "Bearer $accToken";
+      Response response = await dio.get(
+        "${Env.url}/api/v1/rooms/members/$idGroup",
+      );
+      if (response.statusCode == 200) {
+        var data = response.data['data'];
+        var memberList = data['members'] as List;
+        setState(() {
+          members = memberList.map((member) => member['id'] as String).toList();
+        });
+      } else {
+        print("LỖI 444444444 TRONG GET MEMBER CUBIT ${response.data}");
+      }
+    } catch (e) {
+      print("LỖI TRONG GET MEMBER CUBIT $e");
+    }
+  }
 
   @override
   void initState() {
@@ -38,6 +62,7 @@ class _AddMemberGroupScreenState extends State<AddMemberGroupScreen> {
   List<String> selectedIds = [];
   @override
   Widget build(BuildContext context) {
+    getMembers(widget.idGroup!);
     double width = MediaQuery.of(context).size.width;
     return DismissKeyboard(
         child: SafeArea(
@@ -107,26 +132,18 @@ class _AddMemberGroupScreenState extends State<AddMemberGroupScreen> {
                                                     bottom: 12.sp),
                                                 child: Checkbox(
                                                   checkColor: whiteColor,
-                                                  activeColor: widget.members !=
-                                                              null &&
-                                                          widget.members!
-                                                              .contains(entry
-                                                                  .value.id)
+                                                  activeColor: members.contains(
+                                                          entry.value.id)
                                                       ? primaryColor
                                                           .withOpacity(0.6)
                                                       : primaryColor,
-                                                  value: widget.members !=
-                                                              null &&
-                                                          widget.members!
-                                                              .contains(entry
-                                                                  .value.id)
+                                                  value: members.contains(
+                                                          entry.value.id)
                                                       ? true
                                                       : listChecked[entry.key],
                                                   onChanged: (value) {
-                                                    widget.members != null &&
-                                                            widget.members!
-                                                                .contains(entry
-                                                                    .value.id)
+                                                    members.contains(
+                                                            entry.value.id)
                                                         ? null
                                                         : setState(() {
                                                             listChecked[entry
@@ -163,11 +180,8 @@ class _AddMemberGroupScreenState extends State<AddMemberGroupScreen> {
                                               Expanded(
                                                 child: Text(
                                                   entry.value.name,
-                                                  style: widget.members !=
-                                                              null &&
-                                                          widget.members!
-                                                              .contains(entry
-                                                                  .value.id)
+                                                  style: members.contains(
+                                                          entry.value.id)
                                                       ? text16.medium.copyWith(
                                                           color: primaryColor
                                                               .withOpacity(0.6))
