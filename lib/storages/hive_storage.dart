@@ -16,6 +16,7 @@ class HiveStorage extends KeyStorage {
   String get idUser => box.get(KeyStorage.idUser, defaultValue: '');
   List<String> get listMembers =>
       box.get(KeyStorage.listMembers, defaultValue: []);
+  String get nameUser => box.get(KeyStorage.nameUser, defaultValue: '');
 
 // Update data
   void updateToken(String value) => box.put(KeyStorage.accessToken, value);
@@ -25,10 +26,12 @@ class HiveStorage extends KeyStorage {
   void updateIdUser(String value) => box.put(KeyStorage.idUser, value);
   void updateListMembers(List<String> value) =>
       box.put(KeyStorage.listMembers, value);
+  void updateNameUser(String value) => box.put(KeyStorage.nameUser, value);
 
 // Clear all data
   void clearTokenAccess() => box.delete(KeyStorage.accessToken);
   void clearRefreshToken() => box.delete(KeyStorage.refreshToken);
   void clearIdUser() => box.delete(KeyStorage.idUser);
   void clearListMembers() => box.delete(KeyStorage.listMembers);
+  void clearNameUser() => box.delete(KeyStorage.nameUser);
 }

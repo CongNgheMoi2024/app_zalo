@@ -5,4 +5,5 @@ abstract class KeyStorage {
   static const refreshToken = 'REFRESH_TOKEN';
   static const idUser = 'ID_USER';
   static const listMembers = 'LIST_MEMBERS';
+  static const nameUser = 'NAME_USER';
 }

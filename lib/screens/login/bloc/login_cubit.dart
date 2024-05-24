@@ -25,6 +25,7 @@ class LoginCubit extends Cubit<LoginState> {
         HiveStorage().updateToken(accessToken);
         HiveStorage().updateRefreshToken(refreshToken);
         HiveStorage().updateIdUser(result['user']['id']);
+        HiveStorage().updateNameUser(result['user']['name']);
         SaveTokenFirebase().saveTokenFirebase();
         emit(LoginenticatedState(refreshToken, phoneNumber));
       } else {

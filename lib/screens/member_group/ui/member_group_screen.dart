@@ -23,7 +23,9 @@ class MemberGroupScreen extends StatefulWidget {
 
 class _MemberGroupScreenState extends State<MemberGroupScreen> {
   late StompClient client;
-  String? nameYour;
+
+  String nameYour = HiveStorage().nameUser;
+
   @override
   void initState() {
     super.initState();
@@ -44,6 +46,7 @@ class _MemberGroupScreenState extends State<MemberGroupScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print("Nameeeeeeeee Youe $nameYour");
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     Member user;
@@ -69,7 +72,6 @@ class _MemberGroupScreenState extends State<MemberGroupScreen> {
 
           return Wrap(
               children: members.map((entry) {
-            entry.id == user.id ? nameYour = entry.name : nameYour = "";
             return Padding(
               padding: EdgeInsets.all(5.sp),
               child: ListTile(
