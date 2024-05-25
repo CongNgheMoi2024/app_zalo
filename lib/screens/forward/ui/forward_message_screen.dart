@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:app_zalo/constants/index.dart';
 import 'package:app_zalo/models/chat/infor_user_chat.dart';
 import 'package:app_zalo/screens/chatting_with/bloc/get_all_message_cubit.dart';
@@ -33,6 +35,7 @@ class _ForwardMessageScreenState extends State<ForwardMessageScreen> {
   InforUserChat? inforUserChat;
   List<bool> listChecked = [];
   List<String> listIdRecipient = [];
+  List<String> listIdGroupForward = [];
 
   @override
   Widget build(BuildContext context) {
@@ -110,18 +113,20 @@ class _ForwardMessageScreenState extends State<ForwardMessageScreen> {
                                                     .idRecipient ==
                                                 widget.idReceiver) {
                                               inforUserChat = InforUserChat(
-                                                  idUserRecipient: entry
-                                                      .value
-                                                      .userRecipient
-                                                      .idRecipient,
-                                                  name: entry
-                                                      .value.userRecipient.name,
-                                                  avatar: entry.value
-                                                      .userRecipient.avatar,
-                                                  timeActive: timeAgoText,
-                                                  sex: entry
-                                                      .value.userRecipient.sex,
-                                                  members: []);
+                                                isGroup: entry.value.isGroup,
+                                                idUserRecipient: entry.value
+                                                    .userRecipient.idRecipient,
+                                                name: entry
+                                                    .value.userRecipient.name,
+                                                avatar: entry
+                                                    .value.userRecipient.avatar,
+                                                timeActive: timeAgoText,
+                                                sex: entry
+                                                    .value.userRecipient.sex,
+                                                members: [],
+                                                idGroup: entry.value.idRoom,
+                                                idAdmin: entry.value.adminId,
+                                              );
                                             }
 
                                             List.generate(state.data.length,
@@ -129,9 +134,7 @@ class _ForwardMessageScreenState extends State<ForwardMessageScreen> {
                                               listChecked.add(false);
                                             });
 
-                                            return
-
-                                             Column(
+                                            return Column(
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
                                                 children: [
@@ -155,11 +158,17 @@ class _ForwardMessageScreenState extends State<ForwardMessageScreen> {
                                                                         .key] =
                                                                     value!;
                                                                 if (value) {
-                                                                  listIdRecipient.add(state
-                                                                      .data[entry
-                                                                          .key]
-                                                                      .userRecipient
-                                                                      .idRecipient);
+                                                                  entry.value
+                                                                          .isGroup
+                                                                      ? listIdGroupForward.add(state
+                                                                          .data[entry
+                                                                              .key]
+                                                                          .idRoom)
+                                                                      : listIdRecipient.add(state
+                                                                          .data[
+                                                                              entry.key]
+                                                                          .userRecipient
+                                                                          .idRecipient);
                                                                 } else {
                                                                   listIdRecipient.remove(state
                                                                       .data[entry
@@ -183,49 +192,44 @@ class _ForwardMessageScreenState extends State<ForwardMessageScreen> {
                                                                 BorderRadius
                                                                     .circular(
                                                                         60),
-                                                            child:entry.value.isGroup== true? ImageAssets.pngAsset(Png.icAvatarGroup,
-                                                                        width: 35
-                                                                            .sp,
-                                                                        height: 35
-                                                                            .sp,
-                                                                        fit: BoxFit
-                                                                            .cover)
-                                                            : entry.value.userRecipient.avatar == "" &&
-                                                                    entry.value.userRecipient.sex ==
-                                                                        true
-                                                                ? ImageAssets.pngAsset(Png.imgUserBoy,
+                                                            child: entry.value
+                                                                        .isGroup ==
+                                                                    true
+                                                                ? ImageAssets.pngAsset(
+                                                                    Png
+                                                                        .icAvatarGroup,
                                                                     width:
                                                                         35.sp,
                                                                     height:
                                                                         35.sp,
                                                                     fit: BoxFit
                                                                         .cover)
-                                                                : entry.value.userRecipient.avatar == "" &&
+                                                                : entry.value.userRecipient.avatar ==
+                                                                            "" &&
                                                                         entry.value.userRecipient.sex ==
-                                                                            false
-                                                                    ? ImageAssets.pngAsset(Png.imgUserGirl,
-                                                                        width: 35
-                                                                            .sp,
-                                                                        height: 35
-                                                                            .sp,
-                                                                        fit: BoxFit
-                                                                            .cover)
-                                                                    : ImageAssets.networkImage(
-                                                                        url: entry.value.userRecipient.avatar,
-                                                                        width: 35.sp,
+                                                                            true
+                                                                    ? ImageAssets.pngAsset(
+                                                                        Png
+                                                                            .imgUserBoy,
+                                                                        width:
+                                                                            35.sp,
                                                                         height: 35.sp,
-                                                                        fit: BoxFit.cover),
+                                                                        fit: BoxFit.cover)
+                                                                    : entry.value.userRecipient.avatar == "" && entry.value.userRecipient.sex == false
+                                                                        ? ImageAssets.pngAsset(Png.imgUserGirl, width: 35.sp, height: 35.sp, fit: BoxFit.cover)
+                                                                        : ImageAssets.networkImage(url: entry.value.userRecipient.avatar, width: 35.sp, height: 35.sp, fit: BoxFit.cover),
                                                           ),
                                                         ),
                                                         Expanded(
                                                           child: Text(
-                                                     entry
-                                                                .value.isGroup == true?
-                                                                entry
-                                                                .value.groupName :    entry
-                                                                .value
-                                                                .userRecipient
-                                                                .name,
+                                                            entry.value.isGroup ==
+                                                                    true
+                                                                ? entry.value
+                                                                    .groupName
+                                                                : entry
+                                                                    .value
+                                                                    .userRecipient
+                                                                    .name,
                                                             style: text16
                                                                 .black.medium,
                                                           ),
@@ -291,6 +295,9 @@ class _ForwardMessageScreenState extends State<ForwardMessageScreen> {
                           ButtonBottomNavigated(
                             title: "Chuyển tiếp",
                             onPressed: () {
+                              print(
+                                  "List ID GROUPPPP: $listIdGroupForward, ${inforUserChat!.idGroup}");
+                              print("List ID RECIPIENTTT: $listIdRecipient");
                               BlocProvider.of<ForwardMessageCubit>(context)
                                   .forwardMessageenticate(
                                       listIdRecipient, widget.idMessage!);
