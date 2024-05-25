@@ -11,7 +11,7 @@ class ForwardMessageCubit extends Cubit<ForwardMessageState> {
       List<String> listUser, String idMessage) async {
     String accToken = HiveStorage().token;
     emit(LoadingForwardMessageState());
-
+    print("List Userr : $listUser, $idMessage");
     try {
       Dio dio = Dio();
       String apiUrl = "${Env.url}/api/v1/forward-messages/$idMessage";
@@ -23,7 +23,7 @@ class ForwardMessageCubit extends Cubit<ForwardMessageState> {
           }),
           data: listUser);
       if (response.statusCode == 200) {
-        print("Thuuu Hồi thành công");
+        print("Looixiii THUUUU hOiii ${response.data.toString()}");
         emit(ForwardSuccessState());
       } else {
         print("Looixiii THUUUU hOiii ${response.data.toString()}");

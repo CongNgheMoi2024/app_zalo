@@ -118,8 +118,8 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
     BlocProvider.of<GetAllMessageCubit>(context).GetAllMessageenticate(
         idUser,
         widget.inforUserChat.idUserRecipient,
-        widget.inforUserChat.isGroup!,
-        widget.inforUserChat.idGroup!);
+        widget.inforUserChat.isGroup ?? false,
+        widget.inforUserChat.idGroup ?? '');
   }
 
   @override
@@ -337,7 +337,7 @@ class _ChattingWithScreenState extends State<ChattingWithScreen> {
 
                                 return ReciverMessItem(
                                   status: e.status,
-                                  name: widget.inforUserChat.isGroup! &&
+                                  name: widget.inforUserChat.isGroup != null &&
                                           e.user != null
                                       ? e.user.name
                                       : widget.inforUserChat.name,
