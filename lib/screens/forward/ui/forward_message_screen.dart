@@ -129,7 +129,9 @@ class _ForwardMessageScreenState extends State<ForwardMessageScreen> {
                                               listChecked.add(false);
                                             });
 
-                                            return Column(
+                                            return
+
+                                             Column(
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
                                                 children: [
@@ -181,7 +183,14 @@ class _ForwardMessageScreenState extends State<ForwardMessageScreen> {
                                                                 BorderRadius
                                                                     .circular(
                                                                         60),
-                                                            child: entry.value.userRecipient.avatar == "" &&
+                                                            child:entry.value.isGroup== true? ImageAssets.pngAsset(Png.icAvatarGroup,
+                                                                        width: 35
+                                                                            .sp,
+                                                                        height: 35
+                                                                            .sp,
+                                                                        fit: BoxFit
+                                                                            .cover)
+                                                            : entry.value.userRecipient.avatar == "" &&
                                                                     entry.value.userRecipient.sex ==
                                                                         true
                                                                 ? ImageAssets.pngAsset(Png.imgUserBoy,
@@ -210,7 +219,10 @@ class _ForwardMessageScreenState extends State<ForwardMessageScreen> {
                                                         ),
                                                         Expanded(
                                                           child: Text(
-                                                            entry
+                                                     entry
+                                                                .value.isGroup == true?
+                                                                entry
+                                                                .value.groupName :    entry
                                                                 .value
                                                                 .userRecipient
                                                                 .name,
