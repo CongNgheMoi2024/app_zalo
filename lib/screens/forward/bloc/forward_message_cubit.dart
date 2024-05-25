@@ -7,6 +7,25 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class ForwardMessageCubit extends Cubit<ForwardMessageState> {
   ForwardMessageCubit() : super(InitialForwardMessageState());
 
+  Future<void> forwardGroups(List<String> listGroup, String idMessage) async {
+    String accToken = HiveStorage().token;
+    emit(LoadingForwardMessageState());
+    try {
+      Dio dio = Dio();
+      String apiUrl = "${Env.url}/api/v1/forward-messages-group/$idMessage";
+
+      Response response = await dio.post(apiUrl,
+          options: Options(headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer $accToken",
+          }),
+          data: listGroup);
+      if (response.statusCode == 200) {
+        print("Chuyenn Tiepp Group Thanh cong");
+      } else {}
+    } catch (e) {}
+  }
+
   Future<void> forwardMessageenticate(
       List<String> listUser, String idMessage) async {
     String accToken = HiveStorage().token;

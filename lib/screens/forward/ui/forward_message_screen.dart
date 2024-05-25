@@ -298,6 +298,9 @@ class _ForwardMessageScreenState extends State<ForwardMessageScreen> {
                               print(
                                   "List ID GROUPPPP: $listIdGroupForward, ${inforUserChat!.idGroup}");
                               print("List ID RECIPIENTTT: $listIdRecipient");
+                               BlocProvider.of<ForwardMessageCubit>(context)
+                                  .forwardGroups(
+                                      listIdGroupForward, widget.idMessage!);
                               BlocProvider.of<ForwardMessageCubit>(context)
                                   .forwardMessageenticate(
                                       listIdRecipient, widget.idMessage!);
